@@ -1,8 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/lista_de_arboles.dart';
 import 'package:flutterapparbol/features/arbol/domain/repositories/arbol_repositorio.dart';
-import 'package:flutterapparbol/features/arbol/domain/usecases/get_lista_arboles_cercanos.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutterapparbol/features/arbol/domain/usecases/get_arbol_por_idnfc.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -13,30 +12,29 @@ class MockListaArbolRepositorio extends Mock implements ListaArbolRepositorio {}
 void main() {
   ///Abajo van los nombres de las variables que me interesan
   MockListaArbolRepositorio mockListaArbolRepositorio;
-  GetListaArbolesCercanos usecase;
+  GetArbolPorIdNFC usecase;
 
   ///Primer método en correr donde inicializo todos los objetos que voy a utilizar
   ///
   setUp(() {
     mockListaArbolRepositorio = MockListaArbolRepositorio();
-    usecase = GetListaArbolesCercanos(mockListaArbolRepositorio);
+    usecase = GetArbolPorIdNFC(mockListaArbolRepositorio);
   });
-  final coordenadasTest = LatLng(-33.40022111646666, -70.59898554630922);
+  final String idNFC = '54sue93G80HAT';
   final ListaDeArboles listaDeArboles =
       ListaDeArboles.fromJson(listaDeArbolesTest);
 
   test(
-    'debería traer un listado de arboles basado en una reference geográfica del repositario',
+    'Trae un árbol (una lista con uno solo) basado en un IdNFC',
     () async {
       // arrange
-      when(mockListaArbolRepositorio.getListadoArbolesCercanos(any))
+      when(mockListaArbolRepositorio.getArbolPorIdNFC(any))
           .thenAnswer((_) async => Right(listaDeArboles));
       // act
-      final result = await usecase.call(Params(coordenada: coordenadasTest));
+      final result = await usecase.call(ParamsIdNFC(idNFC: idNFC));
       // assert
       expect(result, Right(listaDeArboles));
-      verify(
-          mockListaArbolRepositorio.getListadoArbolesCercanos(coordenadasTest));
+      verify(mockListaArbolRepositorio.getArbolPorIdNFC(idNFC));
       verifyNoMoreInteractions(mockListaArbolRepositorio);
     },
   );

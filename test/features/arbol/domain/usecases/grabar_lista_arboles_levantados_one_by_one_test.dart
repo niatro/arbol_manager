@@ -1,49 +1,43 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutterapparbol/core/success/success.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/lista_de_arboles.dart';
 import 'package:flutterapparbol/features/arbol/domain/repositories/arbol_repositorio.dart';
-import 'package:flutterapparbol/features/arbol/domain/usecases/grabar_listado_de_arboles_levantados.dart';
+import 'package:flutterapparbol/features/arbol/domain/usecases/grabar_listado_de_arboles_levantados_one_by_one.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../data/lista_de_arboles_test.dart';
 
-class MockListaArbolRepositorio extends Mock implements ArbolRepositorio {}
-
-class Exito implements Success {
-  @override
-  // TODO: implement props
-  List get props => throw UnimplementedError();
-}
+class MockListaArbolRepositorio extends Mock implements ListaArbolRepositorio {}
 
 void main() {
   ///Abajo van los nombres de las variables que me interesan
   MockListaArbolRepositorio mockListaArbolRepositorio;
-  GrabarListaDeArbolesLevantados usecase;
+  GrabarListaDeArbolesLevantadosOneByOne usecase;
 
   ///Primer método en correr donde inicializo todos los objetos que voy a utilizar
   ///
   setUp(() {
     mockListaArbolRepositorio = MockListaArbolRepositorio();
-    usecase = GrabarListaDeArbolesLevantados(mockListaArbolRepositorio);
+    usecase = GrabarListaDeArbolesLevantadosOneByOne(mockListaArbolRepositorio);
   });
-  final Exito exito = Exito();
 
   final ListaDeArboles listaDeArboles =
       ListaDeArboles.fromJson(listaDeArbolesTest);
+  final bool existe = true;
   test(
-    'debería pasar un listado de arboles al repositorio para luego grabarlo en BD',
+    'debería pasar un listado de arboles al repositorio para luego grabarlo en BD, una vez operación se ha realizado debería devolver un true',
     () async {
       // arrange
-      when(mockListaArbolRepositorio.grabarListaDeArbolesLevantados(any))
-          .thenAnswer((_) async => Right(listaDeArboles));
+      when(mockListaArbolRepositorio
+              .grabarListaDeArbolesLevantadosOneByOne(any))
+          .thenAnswer((_) async => Right(existe));
       // act
       final result =
           await usecase.call(ParamsGrabar(listaDeArboles: listaDeArboles));
       // assert
-      expect(result, Right(listaDeArboles));
+      expect(result, Right(existe));
       verify(mockListaArbolRepositorio
-          .grabarListaDeArbolesLevantados(listaDeArboles));
+          .grabarListaDeArbolesLevantadosOneByOne(listaDeArboles));
       verifyNoMoreInteractions(mockListaArbolRepositorio);
     },
   );

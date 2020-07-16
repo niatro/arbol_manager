@@ -7,16 +7,16 @@ import '../../../../core/usecases/usecase.dart';
 import '../entities/lista_de_arboles.dart';
 import '../repositories/arbol_repositorio.dart';
 
-class GrabarListaDeArbolesLevantados
-    implements UseCase<ListaDeArboles, ParamsGrabar> {
-  final ArbolRepositorio repositorio;
-  GrabarListaDeArbolesLevantados(this.repositorio);
+class GrabarListaDeArbolesLevantadosOneByOne
+    implements UseCase<bool, ParamsGrabar> {
+  final ListaArbolRepositorio repositorio;
+  GrabarListaDeArbolesLevantadosOneByOne(this.repositorio);
   @override
-  Future<Either<Failure, ListaDeArboles>> call(
+  Future<Either<Failure, bool>> call(
     ParamsGrabar params,
   ) async {
     return await repositorio
-        .grabarListaDeArbolesLevantados(params.listaDeArboles);
+        .grabarListaDeArbolesLevantadosOneByOne(params.listaDeArboles);
   }
 }
 

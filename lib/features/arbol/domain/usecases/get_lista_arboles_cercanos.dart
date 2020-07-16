@@ -9,7 +9,7 @@ import '../entities/lista_de_arboles.dart';
 import '../repositories/arbol_repositorio.dart';
 
 class GetListaArbolesCercanos implements UseCase<ListaDeArboles, Params> {
-  final ArbolRepositorio repositorio;
+  final ListaArbolRepositorio repositorio;
 //api de mysql
   GetListaArbolesCercanos(this.repositorio);
 
