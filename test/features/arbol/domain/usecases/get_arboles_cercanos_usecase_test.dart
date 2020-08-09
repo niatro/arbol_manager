@@ -1,42 +1,41 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutterapparbol/features/arbol/domain/entities/lista_de_arboles.dart';
-import 'package:flutterapparbol/features/arbol/domain/repositories/arbol_repositorio.dart';
-import 'package:flutterapparbol/features/arbol/domain/usecases/get_lista_arboles_cercanos.dart';
+import 'package:flutterapparbol/core/usecases/usecase.dart';
+import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
+import 'package:flutterapparbol/features/arbol/domain/repositories/arboles_repositorio.dart';
+import 'package:flutterapparbol/features/arbol/domain/usecases/get_arboles_cercanos_usecase.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../data/lista_de_arboles_test.dart';
 
-class MockListaArbolRepositorio extends Mock implements ListaArbolRepositorio {}
+class MockListaArbolRepositorio extends Mock implements ArbolesRepositorio {}
 
 void main() {
   ///Abajo van los nombres de las variables que me interesan
   MockListaArbolRepositorio mockListaArbolRepositorio;
-  GetListaArbolesCercanos usecase;
+  GetArbolesCercanosUseCase usecase;
 
   ///Primer método en correr donde inicializo todos los objetos que voy a utilizar
   ///
   setUp(() {
     mockListaArbolRepositorio = MockListaArbolRepositorio();
-    usecase = GetListaArbolesCercanos(mockListaArbolRepositorio);
+    usecase = GetArbolesCercanosUseCase(mockListaArbolRepositorio);
   });
   final coordenadasTest = LatLng(-33.40022111646666, -70.59898554630922);
-  final ListaDeArboles listaDeArboles =
-      ListaDeArboles.fromJson(listaDeArbolesTest);
+  final ArbolesEntity listaDeArbolesEntity = arbolesEntityTest;
 
   test(
     'debería traer un listado de arboles basado en una reference geográfica del repositario',
     () async {
       // arrange
-      when(mockListaArbolRepositorio.getListadoArbolesCercanos(any))
-          .thenAnswer((_) async => Right(listaDeArboles));
+      when(mockListaArbolRepositorio.getArbolesCercanos(any))
+          .thenAnswer((_) async => Right(listaDeArbolesEntity));
       // act
       final result = await usecase.call(Params(coordenada: coordenadasTest));
       // assert
-      expect(result, Right(listaDeArboles));
-      verify(
-          mockListaArbolRepositorio.getListadoArbolesCercanos(coordenadasTest));
+      expect(result, Right(listaDeArbolesEntity));
+      verify(mockListaArbolRepositorio.getArbolesCercanos(coordenadasTest));
       verifyNoMoreInteractions(mockListaArbolRepositorio);
     },
   );
