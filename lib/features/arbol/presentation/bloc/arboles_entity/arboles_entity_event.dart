@@ -5,14 +5,14 @@ abstract class ArbolesEntityEvent extends Equatable {
   ArbolesEntityEvent([List props = const <dynamic>[]]) : super(props);
 }
 
-class GetArbolesEntityCercanosPorCoordenada extends ArbolesEntityEvent {
+class GetArbolesEntityCercanosEvent extends ArbolesEntityEvent {
   final String coordenada;
 
-  GetArbolesEntityCercanosPorCoordenada(this.coordenada) : super([coordenada]);
+  GetArbolesEntityCercanosEvent(this.coordenada) : super([coordenada]);
 }
 
-class GetArbolesEntityCercanosPorIdNFC extends ArbolesEntityEvent {
+class GetArbolesEntityPorIdNFCEvent extends ArbolesEntityEvent {
   final String idNFC;
 
-  GetArbolesEntityCercanosPorIdNFC(this.idNFC) : super([idNFC]);
+  GetArbolesEntityPorIdNFCEvent(this.idNFC) : super([idNFC]);
 }

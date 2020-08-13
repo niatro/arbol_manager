@@ -1,5 +1,3 @@
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 final List<Map> listaMapDeArbolesSerializadosTest = [
   {
     "guiArbol": "044a7252d96480",

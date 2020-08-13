@@ -13,7 +13,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../lista_de_arboles_test.dart';
+import '../../../../../lib/core/constants/lista_de_arboles_test.dart';
 
 class MockArbolesEntityRemoteDataSource extends Mock
     implements ArbolesRemoteDataSource {}
@@ -65,7 +65,9 @@ void main() {
         ArbolesEntityModelo(listaArbolesEntity: [arbolUno, arbolDos]);
     final ArbolesEntity tArbolesEntity = tArbolesEntityModel;
 
-    test('deberia revisar si el dispositivo esta online', () async {
+    test(
+        '''DEBERÍA revisar que el repositorio pueda obtener datos de arboles'''
+        '''CUANDO esta conectado a la red''', () async {
       // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       // act
@@ -76,8 +78,8 @@ void main() {
     });
     runTestsOnline(() {
       test(
-          'DEBERIA retornar data remota CUANDO la llamada a la data remota es exitosa',
-          () async {
+          ''''DEBERIA el repositorio debe retornar datos de arboles '''
+          ''' CUANDO el RemoteDataSource obtiene datos''', () async {
         // arrange
         when(mockRemoteDataSource.getArbolesCercanos(
                 coordenadas: anyNamed("coordenadas")))
@@ -169,7 +171,7 @@ void main() {
       });
     });
   });
-//// TESTS PARA EL MÉTODO getArbolPorIdNFC
+// TESTS PARA EL MÉTODO getArbolPorIdNFC
   group('getArbolPorIdNFC', () {
     final String tIdNFC = "JJS97GB2300T43a";
     final ArbolesEntityModelo tArbolesEntityModel =
@@ -298,19 +300,21 @@ void main() {
     final String idUsuario = "usuarioPrueba";
     final String idNFC = "AS4576";
 
-    runTestsOffline(() {
+    runTestsOnline(() {
       //TODO: implementar este metodo  implementar los otros del repositorio hasta que sea cristal clear
       test(
-          'DEBERIA retornar data remota CUANDO la llamada a la RemoteDataSource es exitosa',
+          'DEBERIA retornar data del Chip CUANDO la llamada a la RemoteDataSource es exitosa',
           () async {
         // arrange
         when(mockRemoteDataSource.fromChipReadAndGetIdNFC(idUsuario: idUsuario))
             .thenAnswer((_) async => idNFC);
         // act
-        final result = await repositorio.fromChipReadAndGetIdNFC(idNFC);
+        final result = await repositorio.fromChipReadAndGetIdNFC(idUsuario);
         // assert
-//        verify(mockRemoteDataSource.fromChipReadAndGetIdNFC());
-//            expect(result, equals(Right(tArbolesEntity)));
+        //TODO: revisar el repositorio y que pasa ahi
+        verify(
+            mockRemoteDataSource.fromChipReadAndGetIdNFC(idUsuario: idUsuario));
+        expect(result, equals(Right(idNFCEntity)));
       });
     });
   });

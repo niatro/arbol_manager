@@ -5,6 +5,7 @@ import 'package:flutterapparbol/core/error/exceptions.dart';
 import 'package:flutterapparbol/features/arbol/data/models/arboles_entity_modelo.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_nfc_reader/flutter_nfc_reader.dart';
 import 'package:meta/meta.dart';
 
 abstract class ArbolesRemoteDataSource {
@@ -47,9 +48,9 @@ abstract class ArbolesRemoteDataSource {
 
 class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
   final http.Client client;
-
   ArbolesRemoteDataSourceImpl({@required this.client});
   final String _url = urlPruebas;
+
   @override
   Future<ArbolesEntityModelo> getArbolesCercanos({LatLng coordenadas}) async {
     final response = await client.post(
@@ -93,9 +94,9 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
   }
 
   @override
-  Future<String> fromChipReadAndGetIdNFC({String idUsuario}) {
-    // TODO: implement fromChipReadAndGetIdNFC
-    throw UnimplementedError();
+  Future<String> fromChipReadAndGetIdNFC({String idUsuario}) async {
+    final response = await FlutterNfcReader.read();
+    return response.id;
   }
 
   @override

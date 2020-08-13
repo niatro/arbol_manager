@@ -30,6 +30,10 @@ dependencies:
   shared_preferences: ^0.5.3+4
   # Google Maps
   google_maps_flutter: ^0.5.28+1
+  # NFC funcionalidades
+  flutter_nfc_reader: ^0.1.0
+  # NFC funcionalidades otro paquete
+  nfc_in_flutter: ^2.0.5
 
 dev_dependencies:
   flutter_test:

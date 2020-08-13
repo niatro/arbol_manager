@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutterapparbol/core/error/failure.dart';
+import 'package:flutterapparbol/core/usecases/usecase.dart';
 import 'package:flutterapparbol/core/util/input_converter.dart';
 import 'package:meta/meta.dart';
 
@@ -51,16 +52,34 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
   Stream<ArbolesEntityState> mapEventToState(
     ArbolesEntityEvent event,
   ) async* {
-    // TODO: Add your event logic
-    if (event is GetArbolesEntityCercanosPorCoordenada) {
+    if (event is GetArbolesEntityCercanosEvent) {
       final inputEither =
           inputConverter.stringToUnsignedLatLng(event.coordenada);
       yield* inputEither.fold(
         (Failure) async* {
           yield Error(message: INVALID_INPUT_FAILURE_MESSAGE);
         },
-        (coordenada) => throw UnimplementedError(),
+        (coordenada) async* {
+          yield Loading();
+          final failureOrArboles =
+              await getArbolesCercanosUseCase(Params(coordenada: coordenada));
+          yield failureOrArboles.fold(
+            (failure) => Error(message: _mapFailureToMessage(failure)),
+            (arboles) => Loaded(arboles: arboles),
+          );
+        },
       );
+    }
+  }
+
+  String _mapFailureToMessage(Failure failure) {
+    switch (failure.runtimeType) {
+      case ServerFailure:
+        return SERVER_FAILURE_MESSAGE;
+      case CacheFailure:
+        return CACHE_FAILURE_MESSAGE;
+      default:
+        return 'Unexpected error';
     }
   }
 }

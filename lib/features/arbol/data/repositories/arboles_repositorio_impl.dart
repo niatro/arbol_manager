@@ -49,8 +49,10 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
   Future<Either<Failure, IdNFCEntity>> fromChipReadAndGetIdNFC(
       String idUsuario) async {
     // TODO: implement fromChipReadAndGetIdNFC
-    final IdNFCEntity idNFCEntity =  IdNFCEntity(idNfc: "8jewj8q");
-    return  Right(idNFCEntity);
+    String idNFC =
+        await remoteDataSource.fromChipReadAndGetIdNFC(idUsuario: idUsuario);
+    final IdNFCEntity idNFCEntity = IdNFCEntity(idNfc: idNFC);
+    return Right(idNFCEntity);
   }
 
   @override

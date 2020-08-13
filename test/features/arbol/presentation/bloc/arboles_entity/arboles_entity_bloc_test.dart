@@ -1,4 +1,6 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutterapparbol/core/error/failure.dart';
+import 'package:flutterapparbol/core/usecases/usecase.dart';
 import 'package:flutterapparbol/core/util/input_converter.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/usecases/comprobar_idnfc_usecase.dart';
@@ -11,40 +13,39 @@ import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:dartz/dartz.dart';
 
-import '../../../data/lista_de_arboles_test.dart';
+import '../../../../../../lib/core/constants/lista_de_arboles_test.dart';
 
-class MockGetArbolesCercanos extends Mock implements GetArbolesCercanosUseCase {
-}
+class MockGetArbolesCercanosUseCase extends Mock
+    implements GetArbolesCercanosUseCase {}
 
-class MockGetArbolPorIdNFC extends Mock implements GetArbolPorIdNFCUseCase {}
+class MockGetArbolPorIdNFCUseCase extends Mock
+    implements GetArbolPorIdNFCUseCase {}
 
-class MockGrabarArbolesLevantadosOneByOne extends Mock
-    implements GrabarArbolesUseCase {}
+class MockGrabarArbolesUseCase extends Mock implements GrabarArbolesUseCase {}
 
-class MockComprobarExistenciaIdNFC extends Mock
-    implements ComprobarIdNFCUseCase {}
+class MockComprobarIdNFCUseCase extends Mock implements ComprobarIdNFCUseCase {}
 
 class MockInputConverter extends Mock implements InputConverter {}
 
 void main() {
-  MockGetArbolesCercanos mockGetArbolesCercanos;
-  MockGetArbolPorIdNFC mockGetArbolPorIdNFC;
-  MockGrabarArbolesLevantadosOneByOne mockGrabarArbolesLevantadosOneByOne;
-  MockComprobarExistenciaIdNFC mockComprobarExistenciaIdNFC;
+  MockGetArbolesCercanosUseCase mockGetArbolesCercanosUseCase;
+  MockGetArbolPorIdNFCUseCase mockGetArbolPorIdNFCUseCase;
+  MockGrabarArbolesUseCase mockGrabarArbolesUseCase;
+  MockComprobarIdNFCUseCase mockComprobarIdNFCUseCase;
   MockInputConverter mockInputConverter;
   ArbolesEntityBloc arbolesEntityBloc;
 
   setUp(() {
-    mockGetArbolesCercanos = MockGetArbolesCercanos();
-    mockGetArbolPorIdNFC = MockGetArbolPorIdNFC();
-    mockGrabarArbolesLevantadosOneByOne = MockGrabarArbolesLevantadosOneByOne();
-    mockComprobarExistenciaIdNFC = MockComprobarExistenciaIdNFC();
+    mockGetArbolesCercanosUseCase = MockGetArbolesCercanosUseCase();
+    mockGetArbolPorIdNFCUseCase = MockGetArbolPorIdNFCUseCase();
+    mockGrabarArbolesUseCase = MockGrabarArbolesUseCase();
+    mockComprobarIdNFCUseCase = MockComprobarIdNFCUseCase();
     mockInputConverter = MockInputConverter();
     arbolesEntityBloc = ArbolesEntityBloc(
-        arbolesCercanosUseCase: mockGetArbolesCercanos,
-        grabarArbolesUseCase: mockGrabarArbolesLevantadosOneByOne,
-        comprobarIdNFCUseCase: mockComprobarExistenciaIdNFC,
-        arbolPorIdNFCUseCase: mockGetArbolPorIdNFC,
+        arbolesCercanosUseCase: mockGetArbolesCercanosUseCase,
+        grabarArbolesUseCase: mockGrabarArbolesUseCase,
+        comprobarIdNFCUseCase: mockComprobarIdNFCUseCase,
+        arbolPorIdNFCUseCase: mockGetArbolPorIdNFCUseCase,
         inputConverter: mockInputConverter);
   });
 
@@ -52,27 +53,31 @@ void main() {
     // assert
     expect(arbolesEntityBloc.initialState, Empty());
   });
+  // Testea la funcionalidad de árboles cercanos a una coordenada
   group('GetArbolesCercanos Event es lo primero que probamos', () {
     final String tCoordenadasStr = "-33.398827188275405,-70.59860965002224";
     final LatLng tCoordenadasParseada =
         LatLng(-33.398827188275405, -70.59860965002224);
-    final ArbolesEntity arbolesEntity =
+    final ArbolesEntity tArbolesEntity =
         ArbolesEntity(listaArbolEntity: [arbolUno, arbolDos]);
+    void setUpinputCoverterSuccess() =>
+        when(mockInputConverter.stringToUnsignedLatLng(any))
+            .thenReturn(Right(tCoordenadasParseada));
     test(
         '''DEBERIA llamar al InputConverter para validar y convertir'''
         '''el String en un unsigned LatLong''', () async {
       // arrange
-      when(mockInputConverter.stringToUnsignedLatLng(any))
-          .thenReturn(Right(tCoordenadasParseada));
+      setUpinputCoverterSuccess();
+
       // act
       arbolesEntityBloc
-          .dispatch(GetArbolesEntityCercanosPorCoordenada(tCoordenadasStr));
+          .dispatch(GetArbolesEntityCercanosEvent(tCoordenadasStr));
       await untilCalled(mockInputConverter.stringToUnsignedLatLng(any));
 
       // assert
       verify(mockInputConverter.stringToUnsignedLatLng(tCoordenadasStr));
     });
-    test('DEBERIA emitir [Error] CUANDO el input es valido', () async {
+    test('DEBERIA emitir [Error] CUANDO el input es invalido', () async {
       // arrange
       when(mockInputConverter.stringToUnsignedLatLng(any))
           .thenReturn(Left(InvalidInputFailure()));
@@ -86,8 +91,75 @@ void main() {
       // stream
       // act
       arbolesEntityBloc
-          .dispatch(GetArbolesEntityCercanosPorCoordenada(tCoordenadasStr));
+          .dispatch(GetArbolesEntityCercanosEvent(tCoordenadasStr));
 //      await untilCalled(mockInputConverter.stringToUnsignedLatLng(any));
+    });
+    test('DEBERIA emitir data de un CUANDO tenemos llega un UseCase Success',
+        () async {
+      // arrange
+      setUpinputCoverterSuccess();
+      when(mockGetArbolesCercanosUseCase(any))
+          .thenAnswer((_) async => Right(tArbolesEntity));
+      // act
+      arbolesEntityBloc
+          .dispatch(GetArbolesEntityCercanosEvent(tCoordenadasStr));
+      await untilCalled(mockGetArbolesCercanosUseCase(any));
+      // assert
+      verify(mockGetArbolesCercanosUseCase(
+          Params(coordenada: tCoordenadasParseada)));
+    });
+    test(
+        'DEBERIA emitir [Loading, Loaded] cuando la data es reunida exitosamente',
+        () async {
+      // arrange
+      setUpinputCoverterSuccess();
+      when(mockGetArbolesCercanosUseCase(any))
+          .thenAnswer((_) async => Right(tArbolesEntity));
+      // assert later
+      final expected = [
+        Empty(),
+        Loading(),
+        Loaded(arboles: tArbolesEntity),
+      ];
+      expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
+      //
+      arbolesEntityBloc
+          .dispatch(GetArbolesEntityCercanosEvent(tCoordenadasStr));
+    });
+    test('DEBERIA emitir [Loading, Error] cuando la data no pudo ser colectada',
+        () async {
+      // arrange
+      setUpinputCoverterSuccess();
+      when(mockGetArbolesCercanosUseCase(any))
+          .thenAnswer((_) async => Left(ServerFailure()));
+      // assert later
+      final expected = [
+        Empty(),
+        Loading(),
+        Error(message: SERVER_FAILURE_MESSAGE),
+      ];
+      expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
+      //
+      arbolesEntityBloc
+          .dispatch(GetArbolesEntityCercanosEvent(tCoordenadasStr));
+    });
+    test(
+        'DEBERIA emitir [Loading, Error] con el mensaje correcto cuando la data falla ',
+        () async {
+      // arrange
+      setUpinputCoverterSuccess();
+      when(mockGetArbolesCercanosUseCase(any))
+          .thenAnswer((_) async => Left(CacheFailure()));
+      // assert later
+      final expected = [
+        Empty(),
+        Loading(),
+        Error(message: CACHE_FAILURE_MESSAGE),
+      ];
+      expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
+      //
+      arbolesEntityBloc
+          .dispatch(GetArbolesEntityCercanosEvent(tCoordenadasStr));
     });
   });
 }

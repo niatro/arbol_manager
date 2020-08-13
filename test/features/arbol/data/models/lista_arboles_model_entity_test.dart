@@ -4,15 +4,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutterapparbol/features/arbol/data/models/arboles_entity_modelo.dart';
 
 import '../../../../fixtures/fixture_reader.dart';
-import '../lista_de_arboles_test.dart';
-import '../lista_de_maps_test.dart';
+import '../../../../../lib/core/constants/lista_de_arboles_test.dart';
+import '../../../../../lib/core/constants/lista_de_maps_test.dart';
 
 void main() {
   final tArbolesEntityModelo =
       ArbolesEntityModelo(listaArbolesEntity: [arbolUnoModel, arbolDosModel]);
 
   test(
-    'El modelo ingresando una <List<ArbolEntity>> deberia entregar un objeto ListaDeArbolesModelo',
+    'CUANDO inicializo un ArbolesEntityModelo DEBERIA generar un objeto ArbolesModeloEntity',
     () async {
       expect(tArbolesEntityModelo, isA<ArbolesEntityModelo>());
     },

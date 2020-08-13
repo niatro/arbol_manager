@@ -6,7 +6,7 @@ import 'package:flutterapparbol/features/arbol/domain/usecases/grabar_arboles_us
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../data/lista_de_arboles_test.dart';
+import '../../../../../lib/core/constants/lista_de_arboles_test.dart';
 
 class MockListaArbolRepositorio extends Mock implements ArbolesRepositorio {}
 

@@ -6,7 +6,7 @@ import 'package:flutterapparbol/features/arbol/domain/usecases/get_arbol_por_idn
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../data/lista_de_arboles_test.dart';
+import '../../../../../lib/core/constants/lista_de_arboles_test.dart';
 
 class MockArbolesRepositorio extends Mock implements ArbolesRepositorio {}
 
