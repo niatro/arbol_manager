@@ -59,8 +59,10 @@ ArbolEntity arbolDos = ArbolEntity(
     fechaUltimaModArbol: DateTime(2019, 4, 22),
     alertaArbol: "No",
     revisionArbol: "Si");
-ArbolesEntity arbolesEntityTest =
-    ArbolesEntity(listaArbolEntity: [arbolUno, arbolDos]);
+ArbolesEntity arbolesEntityTest = ArbolesEntity(listaArbolEntity: [
+  arbolUno,
+  arbolDos,
+]);
 
 ArbolEntityModelo arbolUnoModel = ArbolEntityModelo(
     guiArbol: "044a7252d96480",

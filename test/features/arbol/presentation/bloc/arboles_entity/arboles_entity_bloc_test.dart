@@ -1,4 +1,3 @@
-import 'package:flutter/rendering.dart';
 import 'package:flutterapparbol/core/error/failure.dart';
 import 'package:flutterapparbol/core/usecases/usecase.dart';
 import 'package:flutterapparbol/core/util/input_converter.dart';
@@ -25,14 +24,19 @@ class MockGrabarArbolesUseCase extends Mock implements GrabarArbolesUseCase {}
 
 class MockComprobarIdNFCUseCase extends Mock implements ComprobarIdNFCUseCase {}
 
-class MockInputConverter extends Mock implements InputConverter {}
+class MockInputConverterStrToLatLng extends Mock
+    implements InputConverterStrToLatLng {}
+
+class MockInputConverterFromIdNFCToStr extends Mock
+    implements InputConverterIdNFCToStr {}
 
 void main() {
   MockGetArbolesCercanosUseCase mockGetArbolesCercanosUseCase;
   MockGetArbolPorIdNFCUseCase mockGetArbolPorIdNFCUseCase;
   MockGrabarArbolesUseCase mockGrabarArbolesUseCase;
   MockComprobarIdNFCUseCase mockComprobarIdNFCUseCase;
-  MockInputConverter mockInputConverter;
+  MockInputConverterStrToLatLng mockInputConverter;
+  MockInputConverterFromIdNFCToStr mockInputConverterFromIdNFCToStr;
   ArbolesEntityBloc arbolesEntityBloc;
 
   setUp(() {
@@ -40,13 +44,15 @@ void main() {
     mockGetArbolPorIdNFCUseCase = MockGetArbolPorIdNFCUseCase();
     mockGrabarArbolesUseCase = MockGrabarArbolesUseCase();
     mockComprobarIdNFCUseCase = MockComprobarIdNFCUseCase();
-    mockInputConverter = MockInputConverter();
+    mockInputConverter = MockInputConverterStrToLatLng();
+    mockInputConverterFromIdNFCToStr = MockInputConverterFromIdNFCToStr();
     arbolesEntityBloc = ArbolesEntityBloc(
         arbolesCercanosUseCase: mockGetArbolesCercanosUseCase,
         grabarArbolesUseCase: mockGrabarArbolesUseCase,
         comprobarIdNFCUseCase: mockComprobarIdNFCUseCase,
         arbolPorIdNFCUseCase: mockGetArbolPorIdNFCUseCase,
-        inputConverter: mockInputConverter);
+        inputConverter: mockInputConverter,
+        inputConverterFromIdNFCToStr: mockInputConverterFromIdNFCToStr);
   });
 
   test('DEBERIA emitir un estado inicial de empty', () async {
@@ -58,11 +64,13 @@ void main() {
     final String tCoordenadasStr = "-33.398827188275405,-70.59860965002224";
     final LatLng tCoordenadasParseada =
         LatLng(-33.398827188275405, -70.59860965002224);
+
     final ArbolesEntity tArbolesEntity =
         ArbolesEntity(listaArbolEntity: [arbolUno, arbolDos]);
     void setUpinputCoverterSuccess() =>
-        when(mockInputConverter.stringToUnsignedLatLng(any))
+        when(mockInputConverter.stringToLatLng(any))
             .thenReturn(Right(tCoordenadasParseada));
+
     test(
         '''DEBERIA llamar al InputConverter para validar y convertir'''
         '''el String en un unsigned LatLong''', () async {
@@ -72,14 +80,14 @@ void main() {
       // act
       arbolesEntityBloc
           .dispatch(GetArbolesEntityCercanosEvent(tCoordenadasStr));
-      await untilCalled(mockInputConverter.stringToUnsignedLatLng(any));
+      await untilCalled(mockInputConverter.stringToLatLng(any));
 
       // assert
-      verify(mockInputConverter.stringToUnsignedLatLng(tCoordenadasStr));
+      verify(mockInputConverter.stringToLatLng(tCoordenadasStr));
     });
-    test('DEBERIA emitir [Error] CUANDO el input es invalido', () async {
+    test('DEBERIA emitir [Error] CUANDO el input LatLng es invalido', () async {
       // arrange
-      when(mockInputConverter.stringToUnsignedLatLng(any))
+      when(mockInputConverter.stringToLatLng(any))
           .thenReturn(Left(InvalidInputFailure()));
       // assert later
       final expected = [
@@ -160,6 +168,79 @@ void main() {
       //
       arbolesEntityBloc
           .dispatch(GetArbolesEntityCercanosEvent(tCoordenadasStr));
+    });
+  });
+  // Testea la funcionalidad de arboles por idNFC
+  group('GetArbolesPorIdNFC Event es lo primero que probamos', () {
+    final ArbolesEntity tArbolesEntity =
+        ArbolesEntity(listaArbolEntity: [arbolUno, arbolDos]);
+    final String tIdNFC = "uh387qs123J4";
+    void setUpinputCoverterFromIdNFCToStrSuccess() =>
+        when(mockInputConverterFromIdNFCToStr.idNFCToStr(any))
+            .thenReturn(Right(tIdNFC));
+
+    test(
+        'DEBERIA emitir data de un CUANDO llega un getArbolporIdNFCUseCase Success',
+        () async {
+      // arrange
+      setUpinputCoverterFromIdNFCToStrSuccess();
+      when(mockGetArbolPorIdNFCUseCase(any))
+          .thenAnswer((_) async => Right(tArbolesEntity));
+      // act
+      arbolesEntityBloc.dispatch(GetArbolesEntityPorIdNFCEvent(tIdNFC));
+      await untilCalled(mockGetArbolPorIdNFCUseCase(any));
+      // assert
+      verify(mockGetArbolPorIdNFCUseCase(Params(idNFC: tIdNFC)));
+    });
+    test(
+        'DEBERIA emitir [Loading, Loaded] cuando la data es reunida exitosamente',
+        () async {
+      // arrange
+      setUpinputCoverterFromIdNFCToStrSuccess();
+      when(mockGetArbolPorIdNFCUseCase(any))
+          .thenAnswer((_) async => Right(tArbolesEntity));
+      // assert later
+      final expected = [
+        Empty(),
+        Loading(),
+        Loaded(arboles: tArbolesEntity),
+      ];
+      expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
+      //
+      arbolesEntityBloc.dispatch(GetArbolesEntityPorIdNFCEvent(tIdNFC));
+    });
+    test('DEBERIA emitir [Loading, Error] cuando la data no pudo ser colectada',
+        () async {
+      // arrange
+      setUpinputCoverterFromIdNFCToStrSuccess();
+      when(mockGetArbolPorIdNFCUseCase(any))
+          .thenAnswer((_) async => Left(ServerFailure()));
+      // assert later
+      final expected = [
+        Empty(),
+        Loading(),
+        Error(message: SERVER_FAILURE_MESSAGE),
+      ];
+      expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
+      //
+      arbolesEntityBloc.dispatch(GetArbolesEntityPorIdNFCEvent(tIdNFC));
+    });
+    test(
+        'DEBERIA emitir [Loading, Error] con el mensaje correcto cuando la data falla ',
+        () async {
+      // arrange
+      setUpinputCoverterFromIdNFCToStrSuccess();
+      when(mockGetArbolPorIdNFCUseCase(any))
+          .thenAnswer((_) async => Left(CacheFailure()));
+      // assert later
+      final expected = [
+        Empty(),
+        Loading(),
+        Error(message: CACHE_FAILURE_MESSAGE),
+      ];
+      expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
+      //
+      arbolesEntityBloc.dispatch(GetArbolesEntityPorIdNFCEvent(tIdNFC));
     });
   });
 }

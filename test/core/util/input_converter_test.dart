@@ -4,9 +4,9 @@ import 'package:flutterapparbol/core/util/input_converter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 void main() {
-  InputConverter inputConverter;
+  InputConverterStrToLatLng inputConverter;
   setUp(() {
-    inputConverter = InputConverter();
+    inputConverter = InputConverterStrToLatLng();
   });
   group('String To Unsigned LatLng', () {
     test(
@@ -15,7 +15,7 @@ void main() {
       // arrange
       final strCoordenadas = "-33.398827188275405,-70.59860965002224";
       // act
-      final result = inputConverter.stringToUnsignedLatLng(strCoordenadas);
+      final result = inputConverter.stringToLatLng(strCoordenadas);
       // assert
       expect(result, Right(LatLng(-33.398827188275405, -70.59860965002224)));
     });
@@ -24,7 +24,7 @@ void main() {
       // arrange
       final strCoordenadas = "dsfergeh";
       // act
-      final result = inputConverter.stringToUnsignedLatLng(strCoordenadas);
+      final result = inputConverter.stringToLatLng(strCoordenadas);
       // assert
       expect(result, Left(InvalidInputFailure()));
     });
@@ -32,7 +32,7 @@ void main() {
       // arrange
       final strCoordenadas = "";
       // act
-      final result = inputConverter.stringToUnsignedLatLng(strCoordenadas);
+      final result = inputConverter.stringToLatLng(strCoordenadas);
       // assert
       expect(result, Left(InvalidInputFailure()));
     });

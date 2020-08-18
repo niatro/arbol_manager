@@ -4,9 +4,11 @@ import '../../../../core/error/failure.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../repositories/arboles_repositorio.dart';
 
+//
 class ComprobarIdNFCUseCase implements UseCase<bool, Params> {
   final ArbolesRepositorio repositorio;
-//api de mysql
+//api de mysql, se refiere a comprobar que un idNFC leído desde un chip
+// esta en la base de datos, por eso el UseCase devolvera un bool,
   ComprobarIdNFCUseCase(this.repositorio);
 
   @override

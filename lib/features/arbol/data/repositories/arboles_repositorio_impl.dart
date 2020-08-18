@@ -83,4 +83,10 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
       }
     }
   }
+
+  @override
+  Future<Either<Failure, LatLng>> getCoordenadas(String idUsuario) {
+    // TODO: implement getCoordenadas
+    throw UnimplementedError();
+  }
 }
