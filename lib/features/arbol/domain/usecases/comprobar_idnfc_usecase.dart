@@ -15,6 +15,6 @@ class ComprobarIdNFCUseCase implements UseCase<bool, Params> {
   Future<Either<Failure, bool>> call(
     Params params,
   ) async {
-    return await repositorio.comprobarIdNFC(params.idNFC);
+    return await repositorio.comprobarIdNFC(idNFC: params.idNFC);
   }
 }

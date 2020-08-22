@@ -4,3 +4,7 @@ class ServerException implements Exception {}
 class CacheException implements Exception {}
 
 /// Cuando ocurren errores con la data en la parte local
+///
+class NfcException implements Exception {}
+
+/// Cuando ocurren errores con la lectura del NFC

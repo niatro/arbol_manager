@@ -9,6 +9,7 @@ class MockListaArbolRepositorio extends Mock implements ArbolesRepositorio {}
 
 void main() {
   MockListaArbolRepositorio mockListaArbolRepositorio;
+  //OJO: este use case es lo que estamos testeando, el repositorio le pasa parámetros
   ComprobarIdNFCUseCase usecase;
   setUp(() {
     mockListaArbolRepositorio = MockListaArbolRepositorio();
@@ -22,13 +23,13 @@ void main() {
       'Deberia entregarme un valor bool que me diga si el chip esta o no en la BD',
       () async {
     // arrange
-    when(mockListaArbolRepositorio.comprobarIdNFC(any))
+    when(mockListaArbolRepositorio.comprobarIdNFC(idNFC: anyNamed('idNFC')))
         .thenAnswer((_) async => Right(existe));
     // act
     final result = await usecase.call(Params(idNFC: idNFC));
     // assert
     expect(result, Right(existe));
-    verify(mockListaArbolRepositorio.comprobarIdNFC(idNFC));
+    verify(mockListaArbolRepositorio.comprobarIdNFC(idNFC: idNFC));
     verifyNoMoreInteractions(mockListaArbolRepositorio);
   });
 }

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter_nfc_reader/flutter_nfc_reader.dart';
 import 'package:flutterapparbol/core/error/exceptions.dart';
-import 'package:flutterapparbol/features/arbol/domain/entities/idnfc_entity.dart';
 
 import '../models/arboles_entity_modelo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,10 +10,11 @@ import 'package:meta/meta.dart';
 abstract class ArbolesLocalDataSource {
   /// Va al cache  del dispositivo para obtener [ArbolesEntityModelo] si no
   ///  lo consigue arroja una excepción [CacheExeption] para todos los errores
-  Future<ArbolesEntityModelo> getCacheArboles();
+  Future<ArbolesEntityModelo> getCacheArbolesLocalData();
 
-  Future<void> cacheArbolesEntityModelo(ArbolesEntityModelo arbolesToCache);
-  Future<IdNFCEntity> getIdNFC();
+  Future<void> cacheArbEntDeArbEntModLocalData(
+      ArbolesEntityModelo arbolesToCache);
+  Future<String> leerIdNFCLocalData({String idUsuario});
 }
 
 const CACHED_ARBOLES_ENTITY_MODEL = 'CACHED_ARBOLES_ENTITY_MODEL';
@@ -21,9 +22,22 @@ const CACHED_ARBOLES_ENTITY_MODEL = 'CACHED_ARBOLES_ENTITY_MODEL';
 class ArbolesLocalDataSourceImpl implements ArbolesLocalDataSource {
   final SharedPreferences sharedPreferences;
 
-  ArbolesLocalDataSourceImpl({@required this.sharedPreferences});
+  ArbolesLocalDataSourceImpl({
+    @required this.sharedPreferences,
+  });
+
   @override
-  Future<ArbolesEntityModelo> getCacheArboles() {
+  Future<String> leerIdNFCLocalData({String idUsuario}) async {
+    final NfcData response = await FlutterNfcReader.read();
+    if (response != null) {
+      return response.id;
+    } else {
+      throw NfcException();
+    }
+  }
+
+  @override
+  Future<ArbolesEntityModelo> getCacheArbolesLocalData() {
     final jsonString = sharedPreferences.getString(CACHED_ARBOLES_ENTITY_MODEL);
     // Pero el valor de arriba no es futuro asi que tenemos que convertirlo
     // TODO: Deberia implementar un try catch en caso que no se pueda convertir
@@ -40,16 +54,11 @@ class ArbolesLocalDataSourceImpl implements ArbolesLocalDataSource {
   }
 
   @override
-  Future<void> cacheArbolesEntityModelo(ArbolesEntityModelo arbolesToCache) {
+  Future<void> cacheArbEntDeArbEntModLocalData(
+      ArbolesEntityModelo arbolesToCache) {
     final stringArboles = arbolesToCache.toJsonFromArbolesEntityModelo();
 
     return sharedPreferences.setString(
         CACHED_ARBOLES_ENTITY_MODEL, json.encode(stringArboles));
-  }
-
-  @override
-  Future<IdNFCEntity> getIdNFC() {
-    // TODO: implement getIdNFC
-    throw UnimplementedError();
   }
 }

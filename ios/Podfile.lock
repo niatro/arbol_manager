@@ -3,14 +3,18 @@ PODS:
   - flutter_nfc_reader (0.0.1):
     - Flutter
     - VYNFCKit
+  - geolocator (4.0.3):
+    - Flutter
   - google_maps_flutter (0.0.1):
     - Flutter
-    - GoogleMaps
+    - GoogleMaps (< 3.10)
   - GoogleMaps (2.7.0):
     - GoogleMaps/Maps (= 2.7.0)
   - GoogleMaps/Base (2.7.0)
   - GoogleMaps/Maps (2.7.0):
     - GoogleMaps/Base
+  - location_permissions (2.0.5):
+    - Flutter
   - nfc_in_flutter (1.0.0):
     - Flutter
   - shared_preferences (0.0.1):
@@ -20,7 +24,9 @@ PODS:
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_nfc_reader (from `.symlinks/plugins/flutter_nfc_reader/ios`)
+  - geolocator (from `.symlinks/plugins/geolocator/ios`)
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
+  - location_permissions (from `.symlinks/plugins/location_permissions/ios`)
   - nfc_in_flutter (from `.symlinks/plugins/nfc_in_flutter/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
 
@@ -34,8 +40,12 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_nfc_reader:
     :path: ".symlinks/plugins/flutter_nfc_reader/ios"
+  geolocator:
+    :path: ".symlinks/plugins/geolocator/ios"
   google_maps_flutter:
     :path: ".symlinks/plugins/google_maps_flutter/ios"
+  location_permissions:
+    :path: ".symlinks/plugins/location_permissions/ios"
   nfc_in_flutter:
     :path: ".symlinks/plugins/nfc_in_flutter/ios"
   shared_preferences:
@@ -44,8 +54,10 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_nfc_reader: 67d71071d779d28b827ea50dcbe00d09286f253d
-  google_maps_flutter: df4e7de95264aa0a2f11aac0fc7e313acb8ffc7e
+  geolocator: 857074f794a14d158fc01b2b68caae9cb7beb72d
+  google_maps_flutter: c7f9c73576de1fbe152a227bfd6e6c4ae8088619
   GoogleMaps: f79af95cb24d869457b1f961c93d3ce8b2f3b848
+  location_permissions: 4a49d4e5bec5b653643e551ab77963cc99bb0e4a
   nfc_in_flutter: c656fbfb1ec5b9d021da87b0c87629d62fd5264d
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   VYNFCKit: 86a9b711fd1f34f6f7128a2a883cd58dbd781b9d

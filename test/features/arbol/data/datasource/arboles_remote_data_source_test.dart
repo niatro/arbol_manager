@@ -47,7 +47,8 @@ void main() {
       // arrange
       setUpMockHttpSuccess200('arboles.json');
       // act
-      remoteDataSource.getArbolesCercanos(coordenadas: coordenadasTest);
+      remoteDataSource.getArbolesCercanosRemoteData(
+          coordenadas: coordenadasTest);
 
       // assert
       verify(mockHttpClient.post(
@@ -65,7 +66,7 @@ void main() {
       setUpMockHttpSuccess200('arboles.json');
       // act
       final ArbolesEntityModelo result = await remoteDataSource
-          .getArbolesCercanos(coordenadas: coordenadasTest);
+          .getArbolesCercanosRemoteData(coordenadas: coordenadasTest);
       // assert
       expect(result, equals(tArbolesTestModelo));
     });
@@ -74,7 +75,7 @@ void main() {
       // arrange
       setUpMockHttpFailure404();
       // act
-      final call = remoteDataSource.getArbolesCercanos;
+      final call = remoteDataSource.getArbolesCercanosRemoteData;
       // assert
       expect(() => call(coordenadas: coordenadasTest),
           throwsA(TypeMatcher<ServerException>()));
@@ -92,7 +93,7 @@ void main() {
       // arrange
       setUpMockHttpSuccess200('arbol.json');
       // act
-      remoteDataSource.getArbolPorIdNFC(idNFC: idNFC);
+      remoteDataSource.getArbolPorIdNFCRemoteData(idNFC: idNFC);
       // assert
       verify(mockHttpClient.post(
         _url + "/bd/getArbolPorIdNFC.php",
@@ -108,7 +109,7 @@ void main() {
       setUpMockHttpSuccess200('arbol.json');
       // act
       final ArbolesEntityModelo result =
-          await remoteDataSource.getArbolPorIdNFC(idNFC: idNFC);
+          await remoteDataSource.getArbolPorIdNFCRemoteData(idNFC: idNFC);
       // assert
       expect(result, equals(tArbolesTestModelo));
     });
@@ -117,7 +118,7 @@ void main() {
       // arrange
       setUpMockHttpFailure404();
       // act
-      final call = remoteDataSource.getArbolPorIdNFC;
+      final call = remoteDataSource.getArbolPorIdNFCRemoteData;
       // assert
       expect(() => call(idNFC: idNFC), throwsA(TypeMatcher<ServerException>()));
     });

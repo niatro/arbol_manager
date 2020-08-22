@@ -36,7 +36,7 @@ void main() {
       when(mockSharedPreferences.getString(any))
           .thenReturn(fixture('arboles_cached.json'));
       // act
-      final result = await localDataSource.getCacheArboles();
+      final result = await localDataSource.getCacheArbolesLocalData();
       // assert
       verify(mockSharedPreferences.getString(CACHED_ARBOLES_ENTITY_MODEL));
       expect(result, equals(tArbolesEntityModel));
@@ -47,7 +47,7 @@ void main() {
       when(mockSharedPreferences.getString(any)).thenReturn(null);
       // esto finalmente me sirve para saber si un objeto contiene cierta info
       // act
-      final call = localDataSource.getCacheArboles;
+      final call = localDataSource.getCacheArbolesLocalData;
       // interesante porque almacenamos el método adentro de una variable
 
       // assert
@@ -62,7 +62,7 @@ void main() {
       // arrange
 
       // act
-      localDataSource.cacheArbolesEntityModelo(tArbolesEntityModelo);
+      localDataSource.cacheArbEntDeArbEntModLocalData(tArbolesEntityModelo);
 
       // assert
       final expectedJsonString =

@@ -12,6 +12,7 @@ import 'package:flutterapparbol/features/arbol/domain/entities/idnfc_entity.dart
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:nfc_in_flutter/nfc_in_flutter.dart';
 
 import '../../../../../lib/core/constants/lista_de_arboles_test.dart';
 
@@ -58,6 +59,7 @@ void main() {
     });
   }
 
+//OJO: repositorio getArbolesCercanos Test
   group('getArbolesCercanos', () {
     final tCoordenadas = LatLng(-33.40022111646666, -70.59898554630922);
     final String tIdNFC = "JJS97GB2300T43a";
@@ -80,55 +82,55 @@ void main() {
       test(
           ''''DEBERIA el repositorio debe retornar datos de arboles '''
           ''' CUANDO el RemoteDataSource obtiene datos''', () async {
-        // arrange
-        when(mockRemoteDataSource.getArbolesCercanos(
+        // arrange, se activa de donde viene la data y se dice lo que produce
+        when(mockRemoteDataSource.getArbolesCercanosRemoteData(
                 coordenadas: anyNamed("coordenadas")))
             .thenAnswer((_) async => tArbolesEntityModel);
-        // act
+        // act, se representa el objeto recibiendo la data
         final result = await repositorio.getArbolesCercanos(tCoordenadas);
-        // assert
-        verify(
-            mockRemoteDataSource.getArbolesCercanos(coordenadas: tCoordenadas));
+        // assert, se verifica que que lo que sale del objeto recibiendo data
+        // sea lo que se espera "expect(result, equals(Right(tArbolesEntity)));"
+        verify(mockRemoteDataSource.getArbolesCercanosRemoteData(
+            coordenadas: tCoordenadas));
         expect(result, equals(Right(tArbolesEntity)));
       });
       test(
           'DEBERIA retornar un Server failure CUANDO la llamada a la data remota no exitosa',
           () async {
         // arrange
-        when(mockRemoteDataSource.getArbolesCercanos(
+        when(mockRemoteDataSource.getArbolesCercanosRemoteData(
                 coordenadas: anyNamed("coordenadas")))
             .thenThrow(ServerException());
         // act
         final result = await repositorio.getArbolesCercanos(tCoordenadas);
         // assert
-        verify(
-            mockRemoteDataSource.getArbolesCercanos(coordenadas: tCoordenadas));
+        verify(mockRemoteDataSource.getArbolesCercanosRemoteData(
+            coordenadas: tCoordenadas));
         verifyZeroInteractions(mockLocalDataSource);
         //como no llegan Arboles porque fallo la comunicación con el servidor se
         // no debería haber interacciones en lado del LocalDataSource (nada que guardar)
         expect(result, equals(Left(ServerFailure())));
       });
       test(
-          'DEBERIA retornar data del cache CUANDO la llamada a la data de cache remota es exitosa',
+          'DEBERIA poner data al cache CUANDO la llamada a la data de cache remota es exitosa',
           () async {
-        // arrange
-        when(mockRemoteDataSource.getArbolesCercanos(
+        // arrange, la conexión remota es exitosa y trae los ArbolesEntidad
+        when(mockRemoteDataSource.getArbolesCercanosRemoteData(
                 coordenadas: anyNamed("coordenadas")))
             .thenAnswer((_) async => tArbolesEntityModel);
         // act
-
-        await repositorio.getArbolesCercanos(tCoordenadas);
         // en el repositorio junto con llamar el método se consiguen los arboles
         // y luego se pasan al método de ponerlos en el cache
+        await repositorio.getArbolesCercanos(tCoordenadas);
+
         // assert
-
-        verify(
-            mockRemoteDataSource.getArbolesCercanos(coordenadas: tCoordenadas));
-
-        verify(
-            mockLocalDataSource.cacheArbolesEntityModelo(tArbolesEntityModel));
         // Aquí es donde se hace la llamada al local data source que debería tener
         // guardados los arboles una vez que se definieron con las coordenadas
+        verify(mockRemoteDataSource.getArbolesCercanosRemoteData(
+            coordenadas: tCoordenadas));
+
+        verify(mockLocalDataSource
+            .cacheArbEntDeArbEntModLocalData(tArbolesEntityModel));
       });
     });
 
@@ -136,7 +138,7 @@ void main() {
       test('DEBERIA retornar la cache local  CUANDO la data esta presente',
           () async {
         // arrange
-        when(mockLocalDataSource.getCacheArboles())
+        when(mockLocalDataSource.getCacheArbolesLocalData())
             .thenAnswer((_) async => tArbolesEntityModel);
         // act
 
@@ -147,7 +149,7 @@ void main() {
 
         verifyZeroInteractions(mockRemoteDataSource);
         // verificar que el remote datasource no se activo
-        verify(mockLocalDataSource.getCacheArboles());
+        verify(mockLocalDataSource.getCacheArbolesLocalData());
         // Verificar que esto se activo una vez
         expect(result, equals(Right(tArbolesEntity)));
       });
@@ -155,7 +157,8 @@ void main() {
       test('DEBERIA retornar la CacheFailure l  CUANDO no hay data presente',
           () async {
         // arrange
-        when(mockLocalDataSource.getCacheArboles()).thenThrow(CacheException());
+        when(mockLocalDataSource.getCacheArbolesLocalData())
+            .thenThrow(CacheException());
         // act
 
         final result = await repositorio.getArbolesCercanos(tCoordenadas);
@@ -165,13 +168,13 @@ void main() {
 
         verifyZeroInteractions(mockRemoteDataSource);
         // verificar que el remote datasource no se activo
-        verify(mockLocalDataSource.getCacheArboles());
+        verify(mockLocalDataSource.getCacheArbolesLocalData());
         // Verificar que esto se activo una vez
         expect(result, equals(Left(CacheFailure())));
       });
     });
   });
-// TESTS PARA EL MÉTODO getArbolPorIdNFC
+  //OJO: repositorio getArbolPorIdNFC Test
   group('getArbolPorIdNFC', () {
     final String tIdNFC = "JJS97GB2300T43a";
     final ArbolesEntityModelo tArbolesEntityModel =
@@ -194,37 +197,40 @@ void main() {
           'DEBERIA retornar data remota CUANDO la llamada a la data remota es exitosa',
           () async {
         // arrange
-        when(mockRemoteDataSource.getArbolPorIdNFC(idNFC: anyNamed("idNFC")))
+        when(mockRemoteDataSource.getArbolPorIdNFCRemoteData(
+                idNFC: anyNamed("idNFC")))
             .thenAnswer((_) async => tArbolesEntity);
         // act
         final result = await repositorio.getArbolPorIdNFC(tIdNFC);
         // assert
-        verify(mockRemoteDataSource.getArbolPorIdNFC(idNFC: tIdNFC));
+        verify(mockRemoteDataSource.getArbolPorIdNFCRemoteData(idNFC: tIdNFC));
         expect(result, equals(Right(tArbolesEntity)));
       });
       test(
-          'DEBERIA retornar algo sin datos CUANDO la llamada a la data remota es exitosa',
+          'DEBERIA retornar algo sin datos CUANDO la llamada a la data remota es exitosa y no hay datos',
           () async {
         // arrange
-        when(mockRemoteDataSource.getArbolPorIdNFC(idNFC: anyNamed("idNFC")))
+        when(mockRemoteDataSource.getArbolPorIdNFCRemoteData(
+                idNFC: anyNamed("idNFC")))
             .thenAnswer((_) async => null);
         // act
         final result = await repositorio.getArbolPorIdNFC(tIdNFC);
         // assert
-        verify(mockRemoteDataSource.getArbolPorIdNFC(idNFC: tIdNFC));
+        verify(mockRemoteDataSource.getArbolPorIdNFCRemoteData(idNFC: tIdNFC));
         expect(result, equals(Right(null)));
       });
 
       test(
-          'DEBERIA retornar un Server failure CUANDO la llamada a la data remota no exitosa',
+          'DEBERIA retornar un Server failure CUANDO la llamada a la data remota no es exitosa',
           () async {
         // arrange
-        when(mockRemoteDataSource.getArbolPorIdNFC(idNFC: anyNamed("idNFC")))
+        when(mockRemoteDataSource.getArbolPorIdNFCRemoteData(
+                idNFC: anyNamed("idNFC")))
             .thenThrow(ServerException());
         // act
         final result = await repositorio.getArbolPorIdNFC(tIdNFC);
         // assert
-        verify(mockRemoteDataSource.getArbolPorIdNFC(idNFC: tIdNFC));
+        verify(mockRemoteDataSource.getArbolPorIdNFCRemoteData(idNFC: tIdNFC));
         verifyZeroInteractions(mockLocalDataSource);
         //como no llegan Arboles porque fallo la comunicación con el servidor
         // no debería haber interacciones en lado del LocalDataSource (nada que guardar)
@@ -235,7 +241,8 @@ void main() {
           'DEBERIA almacenar data del cache CUANDO la llamada a la data de cache remota es exitosa',
           () async {
         // arrange
-        when(mockRemoteDataSource.getArbolPorIdNFC(idNFC: anyNamed("idNFC")))
+        when(mockRemoteDataSource.getArbolPorIdNFCRemoteData(
+                idNFC: anyNamed("idNFC")))
             .thenAnswer((_) async => tArbolesEntityModel);
         // act
 
@@ -244,34 +251,34 @@ void main() {
         // y luego se pasan al método de ponerlos en el cache
         // assert
 
-        verify(mockRemoteDataSource.getArbolPorIdNFC(idNFC: tIdNFC));
+        verify(mockRemoteDataSource.getArbolPorIdNFCRemoteData(idNFC: tIdNFC));
         // Se verifica que se ejecuto el proceso en el remote server Data Source
         // en este caso que se le paso una variable iIdNfc
 
-        verify(
-            mockLocalDataSource.cacheArbolesEntityModelo(tArbolesEntityModel));
+        verify(mockLocalDataSource
+            .cacheArbEntDeArbEntModLocalData(tArbolesEntityModel));
         // Se verifica que al local data source se le paso una entidad de arboles
       });
     });
-    //TODO: Seguir implementando el metodo getArbolPorIdNFC
+
     runTestsOffline(() {
       test(
           'DEBERIA retornar la última cache local  CUANDO la data esta presente',
           () async {
         // arrange
-        when(mockLocalDataSource.getCacheArboles())
+        when(mockLocalDataSource.getCacheArbolesLocalData())
             .thenAnswer((_) async => tArbolesEntityModel);
         // act
 
         final result = await repositorio.getArbolPorIdNFC(tIdNFC);
-        // en el repositorio junto con llamar el método se consiguen los arboles
+        // en el repositorio junto con llamar el método se consiguen los árboles
         // y luego se pasan al método de ponerlos en el cache
         // assert
 
         verifyZeroInteractions(mockRemoteDataSource);
         // verificar que el remote datasource no se activo porque se activo solo
         // el localdatasource
-        verify(mockLocalDataSource.getCacheArboles());
+        verify(mockLocalDataSource.getCacheArbolesLocalData());
         // Verificar que esto se activo una vez
         expect(result, equals(Right(tArbolesEntity)));
       });
@@ -279,7 +286,8 @@ void main() {
       test('DEBERIA retornar la CacheFailure  CUANDO no hay data presente',
           () async {
         // arrange
-        when(mockLocalDataSource.getCacheArboles()).thenThrow(CacheException());
+        when(mockLocalDataSource.getCacheArbolesLocalData())
+            .thenThrow(CacheException());
         // act
 
         final result = await repositorio.getArbolPorIdNFC(tIdNFC);
@@ -289,32 +297,152 @@ void main() {
 
         verifyZeroInteractions(mockRemoteDataSource);
         // verificar que el remote datasource no se activo
-        verify(mockLocalDataSource.getCacheArboles());
+        verify(mockLocalDataSource.getCacheArbolesLocalData());
         // Verificar que esto se activo una vez
         expect(result, equals(Left(CacheFailure())));
       });
     });
   });
-  group('fromChipReadAndGetIdNFC', () {
+
+  //OJO: repositorio leerIdNFC Test
+  group('leerIdNFC', () {
     final IdNFCEntity idNFCEntity = IdNFCEntity(idNfc: "AS4576");
     final String idUsuario = "usuarioPrueba";
     final String idNFC = "AS4576";
 
+    test(
+        'Solo quiero verificar que el método devuelve un Either cuando es llamado',
+        () async {
+      // arrange
+      when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      // act
+      final Future result = repositorio.leerIdNFC(idUsuario: idUsuario);
+      // assert
+      expect(result, isA<Future<Either>>());
+    });
     runTestsOnline(() {
-      //TODO: implementar este metodo  implementar los otros del repositorio hasta que sea cristal clear
+      //TODO: implementar este método  y los otros del repositorio hasta que sea cristal clear
       test(
-          'DEBERIA retornar data del Chip CUANDO la llamada a la RemoteDataSource es exitosa',
+          'DEBERIA retornar data del Chip CUANDO la llamada a la LocalDataSource es exitosa',
           () async {
         // arrange
-        when(mockRemoteDataSource.fromChipReadAndGetIdNFC(idUsuario: idUsuario))
+        when(mockLocalDataSource.leerIdNFCLocalData(idUsuario: idUsuario))
             .thenAnswer((_) async => idNFC);
         // act
-        final result = await repositorio.fromChipReadAndGetIdNFC(idUsuario);
+        final result = await repositorio.leerIdNFC(idUsuario: idUsuario);
         // assert
         //TODO: revisar el repositorio y que pasa ahi
-        verify(
-            mockRemoteDataSource.fromChipReadAndGetIdNFC(idUsuario: idUsuario));
+        verify(mockLocalDataSource.leerIdNFCLocalData(idUsuario: idUsuario));
         expect(result, equals(Right(idNFCEntity)));
+      });
+      test(
+          'DEBERIA retornar failure CUANDO la llamada a la LocalDataSource NO es exitosa',
+          () async {
+        // arrange
+        when(mockLocalDataSource.leerIdNFCLocalData(
+                idUsuario: anyNamed("idUsuario")))
+            .thenThrow(NfcException());
+        // act
+        final result = await repositorio.leerIdNFC(idUsuario: idUsuario);
+        // assert
+        verify(mockLocalDataSource.leerIdNFCLocalData(
+            idUsuario: anyNamed("idUsuario")));
+        expect(result, equals(Left(NfcFailure())));
+      });
+    });
+    runTestsOffline(() {
+      //TODO: implementar este método  y los otros del repositorio hasta que sea cristal clear
+      test(
+          'DEBERIA retornar data del Chip CUANDO la llamada a la LocalDataSource es exitosa',
+          () async {
+        // arrange
+        when(mockLocalDataSource.leerIdNFCLocalData(idUsuario: idUsuario))
+            .thenAnswer((_) async => idNFC);
+        // act
+        final result = await repositorio.leerIdNFC(idUsuario: idUsuario);
+        // assert
+        //TODO: revisar el repositorio y que pasa ahi
+        verify(mockLocalDataSource.leerIdNFCLocalData(idUsuario: idUsuario));
+        expect(result, equals(Right(idNFCEntity)));
+      });
+      test(
+          'DEBERIA retornar failure CUANDO la llamada a la LocalDataSource NO es exitosa',
+          () async {
+        // arrange
+        when(mockLocalDataSource.leerIdNFCLocalData(
+                idUsuario: anyNamed("idUsuario")))
+            .thenThrow(NfcException());
+        // act
+        final result = await repositorio.leerIdNFC(idUsuario: idUsuario);
+        // assert
+        verify(mockLocalDataSource.leerIdNFCLocalData(
+            idUsuario: anyNamed("idUsuario")));
+        expect(result, equals(Left(NfcFailure())));
+      });
+    });
+  });
+  //OJO: repositorio comprobarIdNFC Test
+
+  group('leerIdNFC', () {
+    final String idUsuario = "usuarioPrueba";
+    final String idNFC = "AS4576";
+
+    test(
+        'Solo quiero verificar que el método devuelve un Either cuando es llamado',
+        () async {
+      // arrange
+      when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      // act
+      final Future result = repositorio.comprobarIdNFC(idNFC: idNFC);
+      // assert
+      expect(result, isA<Future<Either>>());
+    });
+    runTestsOnline(() {
+      test(
+          'DEBERIA retornar un valor true CUANDO encuentra el idNFC en el servidor',
+          () async {
+        // arrange
+        when(mockRemoteDataSource.verificarIdNFCRemoteData(
+                idNFC: anyNamed('idNFC')))
+            .thenAnswer((_) async => true);
+        // act
+        final result = await repositorio.comprobarIdNFC(idNFC: idNFC);
+
+        // assert
+        verify(mockRemoteDataSource.verificarIdNFCRemoteData(
+            idNFC: anyNamed('idNFC')));
+        expect(result, equals(Right(true)));
+      });
+      test(
+          'DEBERIA retornar un valor false CUANDO no encuentra el idNFC en el servidor',
+          () async {
+        // arrange
+        when(mockRemoteDataSource.verificarIdNFCRemoteData(
+                idNFC: anyNamed('idNFC')))
+            .thenAnswer((_) async => false);
+        // act
+        final result = await repositorio.comprobarIdNFC(idNFC: idNFC);
+
+        // assert
+        verify(mockRemoteDataSource.verificarIdNFCRemoteData(
+            idNFC: anyNamed('idNFC')));
+        expect(result, equals(Right(false)));
+      });
+
+      test(
+          'DEBERIA retornar un Server failure CUANDO la llamada a la data remota no exitosa',
+          () async {
+        // arrange
+        when(mockRemoteDataSource.verificarIdNFCRemoteData(
+                idNFC: anyNamed('idNFC')))
+            .thenThrow(ServerException());
+        // act
+        final result = await repositorio.comprobarIdNFC(idNFC: idNFC);
+        // assert
+        verify(mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: idNFC));
+        verifyZeroInteractions(mockLocalDataSource);
+
+        expect(result, equals(Left(ServerFailure())));
       });
     });
   });

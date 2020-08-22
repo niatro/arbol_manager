@@ -13,6 +13,6 @@ class LeerIdNFCUseCase implements UseCase<IdNFCEntity, Params> {
   Future<Either<Failure, IdNFCEntity>> call(
     Params params,
   ) async {
-    return await repositorio.fromChipReadAndGetIdNFC(params.idUsuario);
+    return await repositorio.leerIdNFC(idUsuario: params.idUsuario);
   }
 }

@@ -11,7 +11,7 @@ import '../../domain/repositories/arboles_repositorio.dart';
 import '../datasources/arboles_local_data_source.dart';
 import '../datasources/arboles_remote_data_source.dart';
 
-typedef Future<ArbolesEntity> _CoordenadasOIdNfcSelect();
+typedef Future<ArbolesEntity> _ArbolesEntityPorCoordOIdNFC();
 typedef Future<IdNFCEntity> _LecturaChip();
 
 class ArbolesRepositorioImpl implements ArbolesRepositorio {
@@ -26,33 +26,44 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
   });
   @override
   Future<Either<Failure, ArbolesEntity>> getArbolPorIdNFC(String idNFC) async {
-    return await _getARbolesEntity(() {
-      return remoteDataSource.getArbolPorIdNFC(idNFC: idNFC);
+    return await _getArbolesEntity(() {
+      return remoteDataSource.getArbolPorIdNFCRemoteData(idNFC: idNFC);
     });
   }
 
   @override
   Future<Either<Failure, ArbolesEntity>> getArbolesCercanos(
       LatLng coordenadas) async {
-    return await _getARbolesEntity(() {
-      return remoteDataSource.getArbolesCercanos(coordenadas: coordenadas);
+    return await _getArbolesEntity(() {
+      return remoteDataSource.getArbolesCercanosRemoteData(
+          coordenadas: coordenadas);
     });
   }
 
   @override
-  Future<Either<Failure, bool>> comprobarIdNFC(String idNFC) {
+  Future<Either<Failure, bool>> comprobarIdNFC({String idNFC}) async {
     // TODO: implement comprobarExistenciaIdNFC
-    throw UnimplementedError();
+    try {
+      bool verdaderoOfalso =
+          await remoteDataSource.verificarIdNFCRemoteData(idNFC: idNFC);
+      return Right(verdaderoOfalso);
+    } on ServerException {
+      return Left(ServerFailure());
+    }
+    return Right(true);
   }
 
   @override
-  Future<Either<Failure, IdNFCEntity>> fromChipReadAndGetIdNFC(
-      String idUsuario) async {
+  Future<Either<Failure, IdNFCEntity>> leerIdNFC({String idUsuario}) async {
     // TODO: implement fromChipReadAndGetIdNFC
-    String idNFC =
-        await remoteDataSource.fromChipReadAndGetIdNFC(idUsuario: idUsuario);
-    final IdNFCEntity idNFCEntity = IdNFCEntity(idNfc: idNFC);
-    return Right(idNFCEntity);
+    try {
+      String idNFC =
+          await localDatasource.leerIdNFCLocalData(idUsuario: idUsuario);
+      final IdNFCEntity idNFCEntity = IdNFCEntity(idNfc: idNFC);
+      return Right(idNFCEntity);
+    } on NfcException {
+      return Left(NfcFailure());
+    }
   }
 
   @override
@@ -61,20 +72,20 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
     throw UnimplementedError();
   }
 
-  Future<Either<Failure, ArbolesEntity>> _getARbolesEntity(
-    _CoordenadasOIdNfcSelect getArbolesPorCoordenadasOIdNFC,
+  Future<Either<Failure, ArbolesEntity>> _getArbolesEntity(
+    _ArbolesEntityPorCoordOIdNFC getArbolesPrometidosPorCoordenadasOIdNFC,
   ) async {
     if (await netWorkInfo.isConnected) {
       try {
-        final remoteArbolesEntityModel = await getArbolesPorCoordenadasOIdNFC();
-        localDatasource.cacheArbolesEntityModelo(remoteArbolesEntityModel);
-        return Right(remoteArbolesEntityModel);
+        final arbolesEntity = await getArbolesPrometidosPorCoordenadasOIdNFC();
+        localDatasource.cacheArbEntDeArbEntModLocalData(arbolesEntity);
+        return Right(arbolesEntity);
       } on ServerException {
         return Left(ServerFailure());
       }
     } else {
       try {
-        final arbolesLocales = await localDatasource.getCacheArboles();
+        final arbolesLocales = await localDatasource.getCacheArbolesLocalData();
         return Right(arbolesLocales);
       } on CacheException {
         return Left(CacheFailure());

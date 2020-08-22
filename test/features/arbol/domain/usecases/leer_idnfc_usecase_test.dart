@@ -29,13 +29,13 @@ void main() {
     'DEBERIA pasar un idUsuario y recibir un IdNFCEntity',
     () async {
       // arrange
-      when(mockArbolesRepositorio.fromChipReadAndGetIdNFC(any))
+      when(mockArbolesRepositorio.leerIdNFC(idUsuario: anyNamed("idUsuario")))
           .thenAnswer((_) async => Right(idNFCEntity));
       // act
       final result = await usecase.call(Params(idUsuario: idUsuario));
       // assert
       expect(result, Right(idNFCEntity));
-      verify(mockArbolesRepositorio.fromChipReadAndGetIdNFC(idUsuario));
+      verify(mockArbolesRepositorio.leerIdNFC(idUsuario: idUsuario));
       verifyNoMoreInteractions(mockArbolesRepositorio);
     },
   );

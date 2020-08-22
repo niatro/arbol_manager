@@ -19,8 +19,9 @@ dependencies:
   get_it: ^2.0.1
   # Bloc for state management
   flutter_bloc: ^0.21.0
-  # Value equality
+  # Value equality NO CAMBIAR A VERSION NUEVA PORQUE DESTRUYE GEOLOCATOR
   equatable: ^0.4.0
+#  equatable: ^1.2.3
   # Functional programming thingies
   dartz: ^0.8.6
   # Remote API
@@ -34,6 +35,8 @@ dependencies:
   flutter_nfc_reader: ^0.1.0
   # NFC funcionalidades otro paquete
   nfc_in_flutter: ^2.0.5
+  # Geolocator funcionalidades
+  geolocator: ^4.0.0
 
 dev_dependencies:
   flutter_test:

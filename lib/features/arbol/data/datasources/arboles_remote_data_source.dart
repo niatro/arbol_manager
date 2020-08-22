@@ -13,37 +13,19 @@ abstract class ArbolesRemoteDataSource {
   ///   http://35.224.182.198 y si funciona obtiene [ArbolesEntityModelo] si no
   ///  Arroja una excepcion [ServiceException] para todos los errores
   ///  Finalmente en implementación debería ir a  http://35.225.91.186
-  Future<ArbolesEntityModelo> getArbolesCercanos({LatLng coordenadas});
+  Future<ArbolesEntityModelo> getArbolesCercanosRemoteData(
+      {LatLng coordenadas});
 
-  ///class ServParaBaseDatosMySql {
-  //  String direccion = "http://35.224.182.198/";
-  //  Future<ListaDeArbolMasterMySql> getArbolFromArbolMaster(menor, mayor) async {
-  //    try {
-  //      final response =
-//            await http.post(direccion + "/bd/getArbolMaster.php", body: {
-//          "id_arbol_menor": menor.toString(),
-//          "id_arbol_mayor": mayor.toString(),
-//        });
-  //      final result = json.decode(response.body);
-  //      ListaDeArbolMasterMySql arbolMasterList =
-  //          ListaDeArbolMasterMySql.fromJson(result);
-  //      return arbolMasterList;
-  //    } catch (e) {
-  //      print('Error en el futuro del metodo getArbolFromArbolMasterMySql: ' +
-  //          e.toString());
-  //      return null;
-  //    }
-  //  }
   // Esto esta mal porque no se necesita devolver una entidad de ListaDeArboles
   // Solo necesito que la operación se haya realizado correctamente
-  Future<bool> grabarArbolesLevantadosOneByOne(ArbolesEntityModelo arboles);
-  Future<bool> comprobarExistenciaIdNFC(String idNFC);
-  Future<ArbolesEntityModelo> getArbolPorIdNFC({String idNFC});
+  Future<bool> grabarArbolesRemoteData(ArbolesEntityModelo arboles);
+  Future<bool> verificarIdNFCRemoteData({String idNFC});
+  Future<ArbolesEntityModelo> getArbolPorIdNFCRemoteData({String idNFC});
 
   // Este contrato no ha sido testeado pero me da la impresion que no deber
   //ia ser un UseCase, debería activarse a nivel de modelo cuando esta acce
   //diendo a una data específica
-  Future<String> fromChipReadAndGetIdNFC({String idUsuario});
+
 }
 
 class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
@@ -52,7 +34,8 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
   final String _url = urlPruebas;
 
   @override
-  Future<ArbolesEntityModelo> getArbolesCercanos({LatLng coordenadas}) async {
+  Future<ArbolesEntityModelo> getArbolesCercanosRemoteData(
+      {LatLng coordenadas}) async {
     final response = await client.post(
       _url + "/bd/getArbolPorCoordenadas.php",
       body: {
@@ -64,7 +47,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
   }
 
   @override
-  Future<ArbolesEntityModelo> getArbolPorIdNFC({String idNFC}) async {
+  Future<ArbolesEntityModelo> getArbolPorIdNFCRemoteData({String idNFC}) async {
     final response = await client.post(
       _url + "/bd/getArbolPorIdNFC.php",
       body: {
@@ -88,20 +71,37 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
   }
 
   @override
-  Future<bool> comprobarExistenciaIdNFC(String idNFC) {
+  Future<bool> verificarIdNFCRemoteData({String idNFC}) async {
     // TODO: implement comprobarExistenciaIdNFC
     throw UnimplementedError();
   }
 
   @override
-  Future<String> fromChipReadAndGetIdNFC({String idUsuario}) async {
-    final response = await FlutterNfcReader.read();
-    return response.id;
-  }
-
-  @override
-  Future<bool> grabarArbolesLevantadosOneByOne(ArbolesEntityModelo arboles) {
+  Future<bool> grabarArbolesRemoteData(ArbolesEntityModelo arboles) {
     // TODO: implement grabarArbolesLevantadosOneByOne
     throw UnimplementedError();
   }
 }
+
+/*
+class ServParaBaseDatosMySql {
+  String direccion = "http://35.224.182.198/";
+
+  Future<ArbolEntityModelo> getArbolFromArbolMaster(menor, mayor) async {
+    try {
+      final response =
+      await http.post(direccion + "/bd/getArbolMaster.php", body: {
+        "id_arbol_menor": menor.toString(),
+        "id_arbol_mayor": mayor.toString(),
+      });
+      final result = json.decode(response.body);
+      ListaDeArbolMasterMySql arbolMasterList =
+      ListaDeArbolMasterMySql.fromJson(result);
+      return arbolMasterList;
+    } catch (e) {
+      print('Error en el futuro del metodo getArbolFromArbolMasterMySql: ' +
+          e.toString());
+      return null;
+    }
+  }
+}*/
