@@ -11,3 +11,5 @@ class ServerFailure extends Failure {}
 class CacheFailure extends Failure {}
 
 class NfcFailure extends Failure {}
+
+class DataBaseFailure extends Failure {}

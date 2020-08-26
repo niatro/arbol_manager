@@ -7,4 +7,6 @@ class CacheException implements Exception {}
 ///
 class NfcException implements Exception {}
 
+class DataBaseException implements Exception {}
+
 /// Cuando ocurren errores con la lectura del NFC

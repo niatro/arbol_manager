@@ -12,6 +12,7 @@ class GrabarArbolesUseCase implements UseCase<bool, Params> {
   Future<Either<Failure, bool>> call(
     Params params,
   ) async {
-    return await repositorio.grabarArboles(params.arbolesEntity);
+    return await repositorio.grabarArboles(
+        arboles: params.arbolesEntity, nArbol: params.nArbol);
   }
 }

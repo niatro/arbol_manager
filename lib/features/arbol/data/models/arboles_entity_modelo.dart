@@ -16,19 +16,6 @@ class ArbolesEntityModelo extends ArbolesEntity {
     return ArbolesEntityModelo(listaArbolesEntity: _listaDeArbol);
   }
 
-//  List<Map<String, dynamic>> toJson(
-//      {List<ArbolEntityModelo> listaArbolEntityModelo}) {
-//    // variable de salida
-//
-//    List<Map<String, dynamic>> _listaMaps = List<Map<String, dynamic>>();
-//    for (ArbolEntityModelo arbol in listaArbolEntityModelo) {
-//      _listaMaps.add(arbol.toJson());
-//    }
-//
-////    _listaMaps = listArboles.map((i) => ArbolEntityModelo.toJson(i)).toList();
-//    return _listaMaps;
-//  }
-
   List<Map<String, dynamic>> toJsonFromArbolesEntityModelo() {
     List<ArbolEntityModelo> data = List<ArbolEntityModelo>();
     data = [];
@@ -65,6 +52,7 @@ class ArbolesEntityModelo extends ArbolesEntity {
         fechaUltimaModArbol: this.listaArbolEntity[i].fechaUltimaModArbol,
         alertaArbol: this.listaArbolEntity[i].alertaArbol,
         revisionArbol: this.listaArbolEntity[i].revisionArbol,
+        fotosArbol: this.listaArbolEntity[i].fotosArbol,
       );
       data.add(arbolEntityModelo);
     }
@@ -105,74 +93,79 @@ class ArbolEntityModelo extends ArbolEntity {
     @required DateTime fechaUltimaModArbol,
     @required String alertaArbol,
     @required String revisionArbol,
+    @required List<dynamic> fotosArbol,
   }) : super(
-            guiArbol: guiArbol,
-            idArbol: idArbol,
-            idNfcHistoria: idNfcHistoria,
-            clienteArbol: clienteArbol,
-            zonaArbol: zonaArbol,
-            calleArbol: calleArbol,
-            nCalleArbol: nCalleArbol,
-            esquinaCalleArbol: esquinaCalleArbol,
-            especieArbol: especieArbol,
-            diametroTroncoArbolCm: diametroTroncoArbolCm,
-            diametroCopaNsArbolMt: diametroCopaNsArbolMt,
-            diametroCopaEoArbolMt: diametroCopaEoArbolMt,
-            alturaArbolArbolMt: alturaArbolArbolMt,
-            alturaCopaArbolMt: alturaCopaArbolMt,
-            estadoGeneralArbol: estadoGeneralArbol,
-            estadoSanitarioArbol: estadoSanitarioArbol,
-            inclinacionTroncoArbol: inclinacionTroncoArbol,
-            orientacionInclinacionArbol: orientacionInclinacionArbol,
-            obsArbolHistoria: obsArbolHistoria,
-            accionObsArbol: accionObsArbol,
-            geoReferenciaCapturaArbol: geoReferenciaCapturaArbol,
-            nombreUsuarioCreacionArbol: nombreUsuarioCreacionArbol,
-            usuarioModificaArbol: usuarioModificaArbol,
-            fechaCreacionArbol: fechaCreacionArbol,
-            fechaUltimaModArbol: fechaUltimaModArbol,
-            alertaArbol: alertaArbol,
-            revisionArbol: revisionArbol);
+          guiArbol: guiArbol,
+          idArbol: idArbol,
+          idNfcHistoria: idNfcHistoria,
+          clienteArbol: clienteArbol,
+          zonaArbol: zonaArbol,
+          calleArbol: calleArbol,
+          nCalleArbol: nCalleArbol,
+          esquinaCalleArbol: esquinaCalleArbol,
+          especieArbol: especieArbol,
+          diametroTroncoArbolCm: diametroTroncoArbolCm,
+          diametroCopaNsArbolMt: diametroCopaNsArbolMt,
+          diametroCopaEoArbolMt: diametroCopaEoArbolMt,
+          alturaArbolArbolMt: alturaArbolArbolMt,
+          alturaCopaArbolMt: alturaCopaArbolMt,
+          estadoGeneralArbol: estadoGeneralArbol,
+          estadoSanitarioArbol: estadoSanitarioArbol,
+          inclinacionTroncoArbol: inclinacionTroncoArbol,
+          orientacionInclinacionArbol: orientacionInclinacionArbol,
+          obsArbolHistoria: obsArbolHistoria,
+          accionObsArbol: accionObsArbol,
+          geoReferenciaCapturaArbol: geoReferenciaCapturaArbol,
+          nombreUsuarioCreacionArbol: nombreUsuarioCreacionArbol,
+          usuarioModificaArbol: usuarioModificaArbol,
+          fechaCreacionArbol: fechaCreacionArbol,
+          fechaUltimaModArbol: fechaUltimaModArbol,
+          alertaArbol: alertaArbol,
+          revisionArbol: revisionArbol,
+          fotosArbol: fotosArbol,
+        );
   factory ArbolEntityModelo.fromJson(Map<String, dynamic> json) {
     return ArbolEntityModelo(
-      guiArbol: json["guiArbol"],
-      idArbol: int.parse(json["idArbol"]),
-      idNfcHistoria: json["idNfcHistoria"],
-      clienteArbol: json["clienteArbol"],
-      zonaArbol: json["zonaArbol"],
-      calleArbol: json["calleArbol"],
-      nCalleArbol: int.parse(json["nCalleArbol"]) != null
-          ? int.parse(json["nCalleArbol"])
-          : 0,
-      esquinaCalleArbol: json["esquinaCalleArbol"] != null
-          ? json["esquinaCalleArbol"]
-          : 'No es arbol esquina contraria',
-      especieArbol: json["especieArbol"],
-      diametroTroncoArbolCm: int.parse(json["diametroTroncoArbolCm"]),
-      diametroCopaNsArbolMt: double.parse(json["diametroCopaNsArbolMt"]),
-      diametroCopaEoArbolMt: double.parse(json["diametroCopaEoArbolMt"]),
-      alturaArbolArbolMt: double.parse(json["alturaArbolArbolMt"]),
-      alturaCopaArbolMt: double.parse(json["alturaCopaArbolMt"]),
-      estadoGeneralArbol: json["estadoGeneralArbol"],
-      estadoSanitarioArbol: json["estadoSanitarioArbol"],
-      inclinacionTroncoArbol: json["inclinacionTroncoArbol"],
-      orientacionInclinacionArbol: json["orientacionInclinacionArbol"],
-      obsArbolHistoria: json["obsArbolHistoria"], // tabla: observaciones_arbol
-      accionObsArbol: json["accionObsArbol"],
-      geoReferenciaCapturaArbol: json["geoReferenciaCapturaArbol"] != null
-          ? LatLng(
-              double.parse(json["geoReferenciaCapturaArbol"].split(',')[0]),
-              double.parse(json["geoReferenciaCapturaArbol"].split(',')[1]))
-          : LatLng(0, 0),
-      nombreUsuarioCreacionArbol: json["nombreUsuarioCreacionArbol"],
-      usuarioModificaArbol: json["usuarioModificaArbol"], // Tabla: usuario
-      fechaCreacionArbol:
-          DateTime.parse(json["fechaCreacionArbol"]), // Tabla: arbol_master
-      fechaUltimaModArbol:
-          DateTime.parse(json["fechaUltimaModArbol"]), // Tabla: arbol_master
-      alertaArbol: json["alertaArbol"], // Tabla: arbol_master
-      revisionArbol: json["revisionArbol"], // Tabla: arbol_master
-    );
+        guiArbol: json["guiArbol"],
+        idArbol: int.parse(json["idArbol"]),
+        idNfcHistoria: json["idNfcHistoria"],
+        clienteArbol: json["clienteArbol"],
+        zonaArbol: json["zonaArbol"],
+        calleArbol: json["calleArbol"],
+        nCalleArbol: int.parse(json["nCalleArbol"]) != null
+            ? int.parse(json["nCalleArbol"])
+            : 0,
+        esquinaCalleArbol: json["esquinaCalleArbol"] != null
+            ? json["esquinaCalleArbol"]
+            : 'No es arbol esquina contraria',
+        especieArbol: json["especieArbol"],
+        diametroTroncoArbolCm: int.parse(json["diametroTroncoArbolCm"]),
+        diametroCopaNsArbolMt: double.parse(json["diametroCopaNsArbolMt"]),
+        diametroCopaEoArbolMt: double.parse(json["diametroCopaEoArbolMt"]),
+        alturaArbolArbolMt: double.parse(json["alturaArbolArbolMt"]),
+        alturaCopaArbolMt: double.parse(json["alturaCopaArbolMt"]),
+        estadoGeneralArbol: json["estadoGeneralArbol"],
+        estadoSanitarioArbol: json["estadoSanitarioArbol"],
+        inclinacionTroncoArbol: json["inclinacionTroncoArbol"],
+        orientacionInclinacionArbol: json["orientacionInclinacionArbol"],
+        obsArbolHistoria:
+            json["obsArbolHistoria"], // tabla: observaciones_arbol
+        accionObsArbol: json["accionObsArbol"],
+        geoReferenciaCapturaArbol: json["geoReferenciaCapturaArbol"] != null
+            ? LatLng(
+                double.parse(json["geoReferenciaCapturaArbol"].split(',')[0]),
+                double.parse(json["geoReferenciaCapturaArbol"].split(',')[1]))
+            : LatLng(0, 0),
+        nombreUsuarioCreacionArbol: json["nombreUsuarioCreacionArbol"],
+        usuarioModificaArbol: json["usuarioModificaArbol"], // Tabla: usuario
+        fechaCreacionArbol:
+            DateTime.parse(json["fechaCreacionArbol"]), // Tabla: arbol_master
+        fechaUltimaModArbol:
+            DateTime.parse(json["fechaUltimaModArbol"]), // Tabla: arbol_master
+        alertaArbol: json["alertaArbol"], // Tabla: arbol_master
+        revisionArbol: json["revisionArbol"],
+        fotosArbol: json["fotosArbol"] // Tabla: arbol_master
+        );
   }
 //En el proseso de serialización estamos creando un mapa <String, dinamico>
   // que es diferente del JSON que recibimos que viene <Sting, String>
@@ -208,6 +201,7 @@ class ArbolEntityModelo extends ArbolEntity {
     data['fechaUltimaModArbol'] = this.fechaUltimaModArbol.toString();
     data['alertaArbol'] = this.alertaArbol;
     data['revisionArbol'] = this.revisionArbol;
+    data['fotosArbol'] = this.fotosArbol;
     return data;
   }
 }

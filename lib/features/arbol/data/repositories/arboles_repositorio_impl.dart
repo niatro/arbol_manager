@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutterapparbol/features/arbol/data/models/arboles_entity_modelo.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/idnfc_entity.dart';
 import 'package:meta/meta.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
@@ -67,9 +68,24 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
   }
 
   @override
-  Future<Either<Failure, bool>> grabarArboles(ArbolesEntity arboles) {
-    // TODO: implement grabarArbolesLevantadosOneByOne
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> grabarArboles(
+      {ArbolesEntity arboles, int nArbol}) async {
+    if (await netWorkInfo.isConnected) {
+      try {
+        bool existeNFC = await remoteDataSource.verificarIdNFCRemoteData(
+            idNFC: arboles.listaArbolEntity[nArbol].guiArbol);
+
+        if (existeNFC == false) {
+          bool result = await remoteDataSource.grabarArbolesRemoteData(
+              arbol: arboles.listaArbolEntity[nArbol]);
+          return Right(result);
+        } else {
+          return Right(false);
+        }
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    }
   }
 
   Future<Either<Failure, ArbolesEntity>> _getArbolesEntity(

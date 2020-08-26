@@ -1,8 +1,10 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutterapparbol/core/constants/lista_de_arboles_test.dart';
 import 'package:flutterapparbol/core/database/no_data.dart';
 import 'package:flutterapparbol/core/error/exceptions.dart';
 import 'package:flutterapparbol/core/error/failure.dart';
 import 'package:flutterapparbol/core/network/network_info.dart';
+import 'package:flutterapparbol/core/usecases/usecase.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/arboles_local_data_source.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/arboles_remote_data_source.dart';
 import 'package:flutterapparbol/features/arbol/data/models/arboles_entity_modelo.dart';
@@ -13,8 +15,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nfc_in_flutter/nfc_in_flutter.dart';
-
-import '../../../../../lib/core/constants/lista_de_arboles_test.dart';
 
 class MockArbolesEntityRemoteDataSource extends Mock
     implements ArbolesRemoteDataSource {}
@@ -111,6 +111,8 @@ void main() {
         // no debería haber interacciones en lado del LocalDataSource (nada que guardar)
         expect(result, equals(Left(ServerFailure())));
       });
+      //Fixme: nosotros solo deberiamos poner data en el cache cuando no hay conexion y queremos grabar arboles
+      //
       test(
           'DEBERIA poner data al cache CUANDO la llamada a la data de cache remota es exitosa',
           () async {
@@ -383,7 +385,7 @@ void main() {
   });
   //OJO: repositorio comprobarIdNFC Test
 
-  group('leerIdNFC', () {
+  group('comprobarIdNFC', () {
     final String idUsuario = "usuarioPrueba";
     final String idNFC = "AS4576";
 
@@ -443,6 +445,58 @@ void main() {
         verifyZeroInteractions(mockLocalDataSource);
 
         expect(result, equals(Left(ServerFailure())));
+      });
+    });
+  });
+  //OJO: Repositorio grabar árboles una vez que están capturados, si esta online
+  // OJO: se graba en la nube. Se entrega el parámetro que dice que arbol se debe guardar
+
+  group('grabarArboles', () {
+    final Params params = Params(nArbol: 0);
+    final String idUsuario = "usuarioPrueba";
+    final ArbolesEntityModelo tArbolesEntityModel =
+        ArbolesEntityModelo(listaArbolesEntity: [arbolUno, arbolDos]);
+    runTestsOnline(() {
+      test(
+          '''DEBERIA grabar el Arbol cuando se esta online y CUANDO el'''
+          ''' idNFC del arbol no esta en la base de datos''', () async {
+        // arrange
+        // Cuando el IdNFC no esta en la base de datos OnLine
+        when(mockRemoteDataSource.verificarIdNFCRemoteData(
+                idNFC: anyNamed('idNFC')))
+            .thenAnswer((_) async => false);
+        // Cuando se graban exitosamente  los datos
+        when(mockRemoteDataSource.grabarArbolesRemoteData(arbol: arbolUno))
+            .thenAnswer((_) async => true);
+
+        // act
+        final result = await repositorio.grabarArboles(
+            arboles: tArbolesEntityModel, nArbol: params.nArbol);
+        // assert
+        verify(mockRemoteDataSource.verificarIdNFCRemoteData(
+            idNFC: arbolUno.guiArbol));
+        verify(mockRemoteDataSource.grabarArbolesRemoteData(arbol: arbolUno));
+        verifyZeroInteractions(mockLocalDataSource);
+        expect(result, equals(Right(true)));
+      });
+      test(
+          '''DEBERIA NO grabar el Arbol cuando esta online y CUANDO el'''
+          ''' idNFC del arbol ya esta en la base de datos''', () async {
+        // arrange
+        // Cuando el IdNFC esta en la base de datos OnLine
+        when(mockRemoteDataSource.verificarIdNFCRemoteData(
+                idNFC: anyNamed('idNFC')))
+            .thenAnswer((_) async => true);
+        // act
+        // El proceso de grabar los datos dio falso
+        final result = await repositorio.grabarArboles(
+            arboles: tArbolesEntityModel, nArbol: params.nArbol);
+        // assert
+        //Se checkea que el procedimiento de verificación de datos alla sido llamado
+        verify(mockRemoteDataSource.verificarIdNFCRemoteData(
+            idNFC: arbolUno.guiArbol));
+        verifyZeroInteractions(mockLocalDataSource);
+        expect(result, equals(Right(false)));
       });
     });
   });

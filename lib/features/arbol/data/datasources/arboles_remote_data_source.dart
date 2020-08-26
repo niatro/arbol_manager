@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutterapparbol/core/constants/server_prueba.dart';
 import 'package:flutterapparbol/core/error/exceptions.dart';
 import 'package:flutterapparbol/features/arbol/data/models/arboles_entity_modelo.dart';
+import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_nfc_reader/flutter_nfc_reader.dart';
@@ -18,7 +19,7 @@ abstract class ArbolesRemoteDataSource {
 
   // Esto esta mal porque no se necesita devolver una entidad de ListaDeArboles
   // Solo necesito que la operación se haya realizado correctamente
-  Future<bool> grabarArbolesRemoteData(ArbolesEntityModelo arboles);
+  Future<bool> grabarArbolesRemoteData({ArbolEntity arbol});
   Future<bool> verificarIdNFCRemoteData({String idNFC});
   Future<ArbolesEntityModelo> getArbolPorIdNFCRemoteData({String idNFC});
 
@@ -72,14 +73,42 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
 
   @override
   Future<bool> verificarIdNFCRemoteData({String idNFC}) async {
-    // TODO: implement comprobarExistenciaIdNFC
-    throw UnimplementedError();
+    final _response = await client.post(
+      _url + "/bd/comprobarIdNFC.php",
+      body: {
+        "idNFC": idNFC,
+      },
+    );
+    return _respuestaIdNFC(_response);
   }
 
   @override
-  Future<bool> grabarArbolesRemoteData(ArbolesEntityModelo arboles) {
-    // TODO: implement grabarArbolesLevantadosOneByOne
-    throw UnimplementedError();
+  Future<bool> grabarArbolesRemoteData({ArbolEntity arbol}) async {
+    //OJO: esto solo comprueba que este el id del arbol
+    final _response = await client.post(
+      _url + "/bd/comprobarIdNFC.php",
+      body: {
+        "idNFC": arbol.guiArbol,
+      },
+    );
+    if (_response.statusCode == 200) {
+      return true;
+    } else {
+      throw ServerException();
+    }
+    //TODO: escribir el procedimiento para grabar el árbol
+  }
+
+  bool _respuestaIdNFC(http.Response response) {
+    if (response.statusCode == 200) {
+      if (response.body != "") {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      throw ServerException();
+    }
   }
 }
 

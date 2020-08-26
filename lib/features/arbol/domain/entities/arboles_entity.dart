@@ -30,36 +30,38 @@ class ArbolEntity extends Equatable {
   final DateTime fechaUltimaModArbol;
   final String alertaArbol;
   final String revisionArbol;
+  final List<dynamic> fotosArbol;
 
-  ArbolEntity(
-      {@required this.guiArbol,
-      @required this.idArbol,
-      @required this.idNfcHistoria,
-      @required this.clienteArbol,
-      @required this.zonaArbol,
-      @required this.calleArbol,
-      @required this.nCalleArbol,
-      @required this.esquinaCalleArbol,
-      @required this.especieArbol,
-      @required this.diametroTroncoArbolCm,
-      @required this.diametroCopaNsArbolMt,
-      @required this.diametroCopaEoArbolMt,
-      @required this.alturaArbolArbolMt,
-      @required this.alturaCopaArbolMt,
-      @required this.estadoGeneralArbol,
-      @required this.estadoSanitarioArbol,
-      @required this.inclinacionTroncoArbol,
-      @required this.orientacionInclinacionArbol,
-      @required this.obsArbolHistoria,
-      @required this.accionObsArbol,
-      @required this.geoReferenciaCapturaArbol,
-      @required this.nombreUsuarioCreacionArbol,
-      @required this.usuarioModificaArbol,
-      @required this.fechaCreacionArbol,
-      @required this.fechaUltimaModArbol,
-      @required this.alertaArbol,
-      @required this.revisionArbol})
-      : super([
+  ArbolEntity({
+    @required this.guiArbol,
+    @required this.idArbol,
+    @required this.idNfcHistoria,
+    @required this.clienteArbol,
+    @required this.zonaArbol,
+    @required this.calleArbol,
+    @required this.nCalleArbol,
+    @required this.esquinaCalleArbol,
+    @required this.especieArbol,
+    @required this.diametroTroncoArbolCm,
+    @required this.diametroCopaNsArbolMt,
+    @required this.diametroCopaEoArbolMt,
+    @required this.alturaArbolArbolMt,
+    @required this.alturaCopaArbolMt,
+    @required this.estadoGeneralArbol,
+    @required this.estadoSanitarioArbol,
+    @required this.inclinacionTroncoArbol,
+    @required this.orientacionInclinacionArbol,
+    @required this.obsArbolHistoria,
+    @required this.accionObsArbol,
+    @required this.geoReferenciaCapturaArbol,
+    @required this.nombreUsuarioCreacionArbol,
+    @required this.usuarioModificaArbol,
+    @required this.fechaCreacionArbol,
+    @required this.fechaUltimaModArbol,
+    @required this.alertaArbol,
+    @required this.revisionArbol,
+    @required this.fotosArbol,
+  }) : super([
           guiArbol,
           idArbol,
           idNfcHistoria,
@@ -87,6 +89,7 @@ class ArbolEntity extends Equatable {
           fechaUltimaModArbol,
           alertaArbol,
           revisionArbol,
+          fotosArbol,
         ]);
 }
 

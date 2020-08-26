@@ -26,7 +26,8 @@
     "fechaCreacionArbol": "2018-03-28 00:00:00.000",
     "fechaUltimaModArbol": "2019-04-22 00:00:00.000",
     "alertaArbol": "No",
-    "revisionArbol": "Si"
+    "revisionArbol": "Si",
+    "fotosArbol": ["foto1", "foto2"]
   },
   {
     "guiArbol": "044a75652d96480",
@@ -55,6 +56,7 @@
     "fechaCreacionArbol": "2018-03-28 00:00:00.000",
     "fechaUltimaModArbol": "2019-04-22 00:00:00.000",
     "alertaArbol": "No",
-    "revisionArbol": "Si"
+    "revisionArbol": "Si",
+    "fotosArbol": ["foto1", "foto2"]
   }
 ]
