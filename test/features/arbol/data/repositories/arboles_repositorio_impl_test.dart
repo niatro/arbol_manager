@@ -4,6 +4,7 @@ import 'package:flutterapparbol/core/database/no_data.dart';
 import 'package:flutterapparbol/core/error/exceptions.dart';
 import 'package:flutterapparbol/core/error/failure.dart';
 import 'package:flutterapparbol/core/network/network_info.dart';
+import 'package:flutterapparbol/core/success/success.dart';
 import 'package:flutterapparbol/core/usecases/usecase.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/arboles_local_data_source.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/arboles_remote_data_source.dart';
@@ -456,31 +457,38 @@ void main() {
     final String idUsuario = "usuarioPrueba";
     final ArbolesEntityModelo tArbolesEntityModel =
         ArbolesEntityModelo(listaArbolesEntity: [arbolUno, arbolDos]);
+    final int tNumeroArbolesInicial =
+        tArbolesEntityModel.listaArbolEntity.length;
     runTestsOnline(() {
       test(
-          '''DEBERIA grabar el Arbol cuando se esta online y CUANDO el'''
-          ''' idNFC del arbol no esta en la base de datos''', () async {
+          '''DEBERIA grabar el Arbol a la BD  CUANDO  esta online'''
+          ''' DEBERIA borrar el arbol grabado del listado de arboles'''
+          '''CUANDO el idNFC del arbol no esta registrado''', () async {
         // arrange
         // Cuando el IdNFC no esta en la base de datos OnLine
         when(mockRemoteDataSource.verificarIdNFCRemoteData(
                 idNFC: anyNamed('idNFC')))
             .thenAnswer((_) async => false);
         // Cuando se graban exitosamente  los datos
-        when(mockRemoteDataSource.grabarArbolesRemoteData(arbol: arbolUno))
+        when(mockRemoteDataSource.grabarArbolesRemoteData(
+                arbol: tArbolesEntityModel.listaArbolEntity[0]))
             .thenAnswer((_) async => true);
 
         // act
         final result = await repositorio.grabarArboles(
             arboles: tArbolesEntityModel, nArbol: params.nArbol);
         // assert
-        verify(mockRemoteDataSource.verificarIdNFCRemoteData(
-            idNFC: arbolUno.guiArbol));
-        verify(mockRemoteDataSource.grabarArbolesRemoteData(arbol: arbolUno));
+        verifyNever(mockRemoteDataSource.verificarIdNFCRemoteData(
+            idNFC: tArbolesEntityModel.listaArbolEntity[0].guiArbol));
+        verifyNever(mockRemoteDataSource.grabarArbolesRemoteData(
+            arbol: tArbolesEntityModel.listaArbolEntity[0]));
         verifyZeroInteractions(mockLocalDataSource);
-        expect(result, equals(Right(true)));
+        expect(result, equals(Right(ServerGrabarSuccess())));
+        expect(tArbolesEntityModel.listaArbolEntity.length,
+            tNumeroArbolesInicial - 1);
       });
       test(
-          '''DEBERIA NO grabar el Arbol cuando esta online y CUANDO el'''
+          '''DEBERIA no grabar el Arbol cuando esta online y CUANDO el'''
           ''' idNFC del arbol ya esta en la base de datos''', () async {
         // arrange
         // Cuando el IdNFC esta en la base de datos OnLine
@@ -494,9 +502,56 @@ void main() {
         // assert
         //Se checkea que el procedimiento de verificación de datos alla sido llamado
         verify(mockRemoteDataSource.verificarIdNFCRemoteData(
-            idNFC: arbolUno.guiArbol));
+            idNFC: tArbolesEntityModel.listaArbolEntity[0].guiArbol));
         verifyZeroInteractions(mockLocalDataSource);
-        expect(result, equals(Right(false)));
+      });
+      test(
+          '''DEBERIA arrojar ServerFailure CUANDO se esta online CUANDO el'''
+          ''' idNFC del arbol no esta en la base de datos y CUANDO no se pudo grabar''',
+          () async {
+        // arrange
+        // Cuando el IdNFC no esta en la base de datos OnLine
+        when(mockRemoteDataSource.verificarIdNFCRemoteData(
+                idNFC: anyNamed('idNFC')))
+            .thenAnswer((_) async => false);
+        // Cuando se graban exitosamente  los datos
+        when(mockRemoteDataSource.grabarArbolesRemoteData(
+                arbol: tArbolesEntityModel.listaArbolEntity[0]))
+            .thenThrow(ServerException());
+        // act
+        final result = await repositorio.grabarArboles(
+            arboles: tArbolesEntityModel, nArbol: params.nArbol);
+        // assert
+        verifyNever(mockRemoteDataSource.verificarIdNFCRemoteData(
+            idNFC: arbolUno.guiArbol));
+        verify(mockRemoteDataSource.grabarArbolesRemoteData(
+            arbol: tArbolesEntityModel.listaArbolEntity[0]));
+        verifyZeroInteractions(mockLocalDataSource);
+        expect(result, equals(Left(ServerFailure())));
+      });
+      test(
+          '''DEBERIA arrojar ServerFailure CUANDO se esta online CUANDO el'''
+          ''' idNFC del arbol no se pudo verificar si esta en la base de datos''',
+          () async {
+        // arrange
+        // Cuando el IdNFC no esta en la base de datos OnLine
+        when(mockRemoteDataSource.verificarIdNFCRemoteData(
+                idNFC: anyNamed('idNFC')))
+            .thenThrow(ServerException());
+        // Cuando se graban exitosamente  los datos
+        when(mockRemoteDataSource.grabarArbolesRemoteData(
+                arbol: tArbolesEntityModel.listaArbolEntity[0]))
+            .thenThrow(ServerException());
+        // act
+        final result = await repositorio.grabarArboles(
+            arboles: tArbolesEntityModel, nArbol: params.nArbol);
+        // assert
+        verify(mockRemoteDataSource.verificarIdNFCRemoteData(
+            idNFC: tArbolesEntityModel.listaArbolEntity[0].guiArbol));
+        verifyNever(mockRemoteDataSource.grabarArbolesRemoteData(
+            arbol: tArbolesEntityModel.listaArbolEntity[0]));
+        verifyZeroInteractions(mockLocalDataSource);
+        expect(result, equals(Left(ServerFailure())));
       });
     });
   });

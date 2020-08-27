@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutterapparbol/core/constants/lista_de_arboles_test.dart';
+import 'package:flutterapparbol/core/success/success.dart';
 import 'package:flutterapparbol/core/usecases/usecase.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/repositories/arboles_repositorio.dart';
@@ -20,7 +21,7 @@ void main() {
 
   final ArbolesEntity listaDeArbolesEntity = arbolesEntityTest;
   final ArbolEntity arbolEntity = arbolUno;
-  final bool existe = true;
+  final ServerGrabarSuccess existe = ServerGrabarSuccess();
   test(
     'debería pasar un listado de arboles al repositorio para luego grabarlo en BD, una vez operación se ha realizado debería devolver un true',
     () async {

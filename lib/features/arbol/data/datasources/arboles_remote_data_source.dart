@@ -22,11 +22,6 @@ abstract class ArbolesRemoteDataSource {
   Future<bool> grabarArbolesRemoteData({ArbolEntity arbol});
   Future<bool> verificarIdNFCRemoteData({String idNFC});
   Future<ArbolesEntityModelo> getArbolPorIdNFCRemoteData({String idNFC});
-
-  // Este contrato no ha sido testeado pero me da la impresion que no deber
-  //ia ser un UseCase, debería activarse a nivel de modelo cuando esta acce
-  //diendo a una data específica
-
 }
 
 class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
@@ -96,7 +91,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
     } else {
       throw ServerException();
     }
-    //TODO: escribir el procedimiento para grabar el árbol
+    //TODO: escribir el procedimiento para grabar el árbol 😥
   }
 
   bool _respuestaIdNFC(http.Response response) {

@@ -8,8 +8,12 @@ abstract class Failure extends Equatable {
 
 class ServerFailure extends Failure {}
 
+class ServerFailureGrabando extends Failure {}
+
 class CacheFailure extends Failure {}
 
 class NfcFailure extends Failure {}
 
 class DataBaseFailure extends Failure {}
+
+class IdNfcNoGrabaYaExisteFailure extends Failure {}

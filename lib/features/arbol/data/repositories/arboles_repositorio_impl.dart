@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutterapparbol/core/success/success.dart';
 import 'package:flutterapparbol/features/arbol/data/models/arboles_entity_modelo.dart';
+import 'package:flutterapparbol/features/arbol/domain/entities/form_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/idnfc_entity.dart';
 import 'package:meta/meta.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
@@ -51,7 +53,6 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
     } on ServerException {
       return Left(ServerFailure());
     }
-    return Right(true);
   }
 
   @override
@@ -68,19 +69,23 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
   }
 
   @override
-  Future<Either<Failure, bool>> grabarArboles(
+  Future<Either<Failure, ServerGrabarSuccess>> grabarArboles(
       {ArbolesEntity arboles, int nArbol}) async {
     if (await netWorkInfo.isConnected) {
       try {
-        bool existeNFC = await remoteDataSource.verificarIdNFCRemoteData(
+        bool verificado = await remoteDataSource.verificarIdNFCRemoteData(
             idNFC: arboles.listaArbolEntity[nArbol].guiArbol);
-
-        if (existeNFC == false) {
-          bool result = await remoteDataSource.grabarArbolesRemoteData(
+        if (verificado == false) {
+          bool grabadoSioNo = await remoteDataSource.grabarArbolesRemoteData(
               arbol: arboles.listaArbolEntity[nArbol]);
-          return Right(result);
+          if (grabadoSioNo == true) {
+            arboles.listaArbolEntity.removeAt(nArbol);
+            return Right(ServerGrabarSuccess());
+          } else {
+            return Left(ServerFailureGrabando());
+          }
         } else {
-          return Right(false);
+          return Left(IdNfcNoGrabaYaExisteFailure());
         }
       } on ServerException {
         return Left(ServerFailure());
@@ -114,6 +119,19 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
   @override
   Future<Either<Failure, LatLng>> getCoordenadas(String idUsuario) {
     // TODO: implement getCoordenadas
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, ServerActualizarFormSuccess>>
+      actualizarDatosFormulario(String idUsuario) {
+    // TODO: implement actualizarDatosFormulario
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, FormEntity>> getDatosFormulario(String idUsuario) {
+    // TODO: implement getDatosFormulario
     throw UnimplementedError();
   }
 }
