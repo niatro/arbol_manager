@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutterapparbol/core/success/success.dart';
-import 'package:flutterapparbol/features/arbol/data/models/arboles_entity_modelo.dart';
+import 'package:flutterapparbol/features/arbol/data/models/form_entity_modelo.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/form_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/idnfc_entity.dart';
 import 'package:meta/meta.dart';
@@ -16,6 +16,7 @@ import '../datasources/arboles_remote_data_source.dart';
 
 typedef Future<ArbolesEntity> _ArbolesEntityPorCoordOIdNFC();
 typedef Future<IdNFCEntity> _LecturaChip();
+typedef Future<FormEntity> _FormEntityPorActualizacion();
 
 class ArbolesRepositorioImpl implements ArbolesRepositorio {
   final ArbolesRemoteDataSource remoteDataSource;
@@ -93,6 +94,34 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
     }
   }
 
+  @override
+  Future<Either<Failure, LatLng>> getCoordenadas(String idUsuario) {
+    // TODO: implement getCoordenadas
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, ServerActualizarFormSuccess>> actualizarDatosForm(
+      {String idUsuario}) async {
+    if (await netWorkInfo.isConnected) {
+      return Right(ServerActualizarFormSuccess());
+    } else {
+      return Left(ConexionFailure());
+    }
+    // TODO: implement actualizarDatosFormulario
+  }
+
+  @override
+  Future<Either<Failure, FormEntity>> getDatosFormRepo(
+      {String idUsuario}) async {
+    if (await netWorkInfo.isConnected) {
+      final result = await remoteDataSource.getDatosForm(idUsuario: idUsuario);
+      return Right(result);
+    } else {
+      return Left(ConexionFailure());
+    }
+  }
+
   Future<Either<Failure, ArbolesEntity>> _getArbolesEntity(
     _ArbolesEntityPorCoordOIdNFC getArbolesPrometidosPorCoordenadasOIdNFC,
   ) async {
@@ -114,24 +143,5 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
         // el método getArbolesCercanos
       }
     }
-  }
-
-  @override
-  Future<Either<Failure, LatLng>> getCoordenadas(String idUsuario) {
-    // TODO: implement getCoordenadas
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, ServerActualizarFormSuccess>>
-      actualizarDatosFormulario(String idUsuario) {
-    // TODO: implement actualizarDatosFormulario
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, FormEntity>> getDatosFormulario(String idUsuario) {
-    // TODO: implement getDatosFormulario
-    throw UnimplementedError();
   }
 }

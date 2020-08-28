@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutterapparbol/core/constants/form_entity_test.dart';
 import 'package:flutterapparbol/core/constants/lista_de_arboles_test.dart';
 import 'package:flutterapparbol/core/database/no_data.dart';
 import 'package:flutterapparbol/core/error/exceptions.dart';
@@ -9,8 +10,10 @@ import 'package:flutterapparbol/core/usecases/usecase.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/arboles_local_data_source.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/arboles_remote_data_source.dart';
 import 'package:flutterapparbol/features/arbol/data/models/arboles_entity_modelo.dart';
+import 'package:flutterapparbol/features/arbol/data/models/form_entity_modelo.dart';
 import 'package:flutterapparbol/features/arbol/data/repositories/arboles_repositorio_impl.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
+import 'package:flutterapparbol/features/arbol/domain/entities/form_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/idnfc_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mockito/mockito.dart';
@@ -449,12 +452,12 @@ void main() {
       });
     });
   });
-  //OJO: Repositorio grabar árboles una vez que están capturados, si esta online
-  // OJO: se graba en la nube. Se entrega el parámetro que dice que arbol se debe guardar
+  //OJO: Repositorio grabar árboles una vez que están capturados,
+  // Si se esta online se graba en la nube, si se esta ofline debe arrojar un error
+  // Se debe entrega el parámetro que dic que árbol se debe guardar de la lista
 
   group('grabarArboles', () {
     final Params params = Params(nArbol: 0);
-    final String idUsuario = "usuarioPrueba";
     final ArbolesEntityModelo tArbolesEntityModel =
         ArbolesEntityModelo(listaArbolesEntity: [arbolUno, arbolDos]);
     final int tNumeroArbolesInicial =
@@ -554,5 +557,64 @@ void main() {
         expect(result, equals(Left(ServerFailure())));
       });
     });
+    //TODO: falta escribir los test offline del repositorio
+    runTestsOffline(() {});
+  });
+  //OJO: Repositorio actualizar Datos Form si se esta online y el usuario lo solicita 🔃
+
+  group('actualizarDatosForm', () {
+    final Params params = Params(nArbol: 0);
+    final String idUsuario = "usuarioPrueba";
+    final FormEntityModelo tFormEntityModelo = formTestModelo;
+    final ArbolesEntityModelo tArbolesEntityModel =
+        ArbolesEntityModelo(listaArbolesEntity: [arbolUno, arbolDos]);
+    final int tNumeroArbolesInicial =
+        tArbolesEntityModel.listaArbolEntity.length;
+    test(
+        '''DEBERÍA revisar que el repositorio pueda obtener datos para  el form'''
+        '''CUANDO esta conectado a la red''', () async {
+      // arrange
+      when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      // act
+      final result = repositorio.actualizarDatosForm(idUsuario: idUsuario);
+      // assert
+      verify(mockNetworkInfo.isConnected);
+      expect(result, isA<Future<Either>>());
+    });
+    test(
+        '''DEBERÍA revisar que el repositorio obtenga un Failure'''
+        '''CUANDO no esta conectado a la red''', () async {
+      // arrange
+      when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+      // act
+      final result = repositorio.actualizarDatosForm(idUsuario: idUsuario);
+      // assert
+      verify(mockNetworkInfo.isConnected);
+      expect(result, isA<Future<Either>>());
+    });
+    runTestsOnline(() {
+      test(
+          'DEBERIA actualizar la Base Datos Interna CUANDO la llamada remota devuelve data ',
+          () async {
+        // arrange
+        when(mockRemoteDataSource.getDatosForm(
+                idUsuario: anyNamed('idUsuario')))
+            .thenAnswer((_) async => tFormEntityModelo);
+        // act
+        final result = await repositorio.getDatosFormRepo(idUsuario: idUsuario);
+        verify(mockRemoteDataSource.getDatosForm(idUsuario: idUsuario));
+        // assert
+        expect(result, equals(Right(tFormEntityModelo)));
+      });
+      test('DEDERIA', () async {
+        // arrange
+
+        // act
+
+        // assert
+      });
+    });
+
+    runTestsOffline(() {});
   });
 }

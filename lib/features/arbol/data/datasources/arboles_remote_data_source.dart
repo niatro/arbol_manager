@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutterapparbol/core/constants/server_prueba.dart';
 import 'package:flutterapparbol/core/error/exceptions.dart';
 import 'package:flutterapparbol/features/arbol/data/models/arboles_entity_modelo.dart';
+import 'package:flutterapparbol/features/arbol/data/models/form_entity_modelo.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_nfc_reader/flutter_nfc_reader.dart';
 import 'package:meta/meta.dart';
 
 abstract class ArbolesRemoteDataSource {
@@ -22,12 +22,19 @@ abstract class ArbolesRemoteDataSource {
   Future<bool> grabarArbolesRemoteData({ArbolEntity arbol});
   Future<bool> verificarIdNFCRemoteData({String idNFC});
   Future<ArbolesEntityModelo> getArbolPorIdNFCRemoteData({String idNFC});
+  Future<FormEntityModelo> getDatosForm({String idUsuario});
 }
 
 class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
   final http.Client client;
   ArbolesRemoteDataSourceImpl({@required this.client});
   final String _url = urlPruebas;
+
+  @override
+  Future<FormEntityModelo> getDatosForm({String idUsuario}) async {
+    // TODO: implement getDatosForm
+    throw UnimplementedError();
+  }
 
   @override
   Future<ArbolesEntityModelo> getArbolesCercanosRemoteData(

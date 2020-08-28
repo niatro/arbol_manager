@@ -17,3 +17,7 @@ class NfcFailure extends Failure {}
 class DataBaseFailure extends Failure {}
 
 class IdNfcNoGrabaYaExisteFailure extends Failure {}
+
+class LocalDataBaseFailure extends Failure {}
+
+class ConexionFailure extends Failure {}

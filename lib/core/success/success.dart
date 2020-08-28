@@ -7,3 +7,5 @@ abstract class Success extends Equatable {
 class ServerGrabarSuccess extends Success {}
 
 class ServerActualizarFormSuccess extends Success {}
+
+class SqfliteGrabarSuccess extends Success {}
