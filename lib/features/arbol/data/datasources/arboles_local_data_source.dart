@@ -19,6 +19,7 @@ abstract class ArbolesLocalDataSource {
 
 const CACHED_ARBOLES_ENTITY_MODEL = 'CACHED_ARBOLES_ENTITY_MODEL';
 
+//OJO: Implementacion abajo 👀
 class ArbolesLocalDataSourceImpl implements ArbolesLocalDataSource {
   final SharedPreferences sharedPreferences;
 

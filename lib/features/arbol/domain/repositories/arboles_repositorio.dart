@@ -18,8 +18,9 @@ abstract class ArbolesRepositorio {
   Future<Either<Failure, LatLng>> getCoordenadas(String idUsuario);
   Future<Either<Failure, Success>> grabarArboles(
       {ArbolesEntity arboles, int nArbol});
-  Future<Either<Failure, FormEntity>> getDatosFormRepo({String idUsuario});
+  Future<Either<Failure, FormEntity>> getDatosForm({String idUsuario});
   Future<Either<Failure, Success>> actualizarDatosForm({String idUsuario});
+  Future<Either<Failure, Success>> crearDatosForm();
 
 // Los métodos abajo deberían ir en el layer de presentación
 /*Future<Either<Failure, Success>> agregarArbolPorNFC(String idNFC);

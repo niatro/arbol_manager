@@ -1,18 +1,19 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutterapparbol/features/arbol/data/models/form_entity_modelo.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 
 class FormEntity extends Equatable {
-  final List<Cliente> clienteArbol;
-  final List<Zona> zonaArbol;
-  final List<Calle> calleArbol;
-  final List<CalleEsquina> esquinaCalleArbol;
-  final List<Especie> especieArbol;
-  final List<EstadoGeneral> estadoGeneralArbol;
-  final List<EstadoSanitario> estadoSanitarioArbol;
-  final List<InclinacionTronco> inclinacionTroncoArbol;
-  final List<OrientacionInclinacion> orientacionInclinacionArbol;
-  final List<AccionObs> accionObsArbol;
+  final List<ClienteEntity> clienteArbol;
+  final List<ZonaEntity> zonaArbol;
+  final List<CalleEntity> calleArbol;
+  final List<CalleEsquinaEntity> esquinaCalleArbol;
+  final List<EspecieEntity> especieArbol;
+  final List<EstadoGeneralEntity> estadoGeneralArbol;
+  final List<EstadoSanitarioEntity> estadoSanitarioArbol;
+  final List<InclinacionTroncoEntity> inclinacionTroncoArbol;
+  final List<OrientacionInclinacionEntity> orientacionInclinacionArbol;
+  final List<AccionObsEntity> accionObsArbol;
 
   FormEntity({
     @required this.clienteArbol,
@@ -39,53 +40,47 @@ class FormEntity extends Equatable {
         ]);
 }
 
-class Cliente extends Equatable {
-  final int clienteId;
-  final String clienteNombre;
-  Cliente({@required this.clienteId, @required this.clienteNombre});
-  Map<String, dynamic> toMap() {
-    return {
-      'clienteId': clienteId,
-      'clienteNombre': clienteNombre,
-    };
-  }
+class ClienteEntity {
+  int clienteId;
+  String clienteNombre;
+  ClienteEntity({
+    @required this.clienteId,
+    @required this.clienteNombre,
+  });
 }
 
-class Zona extends Equatable {
+class ZonaEntity {
   final int zonaId;
   final String zonaNombre;
-  Zona({@required this.zonaId, @required this.zonaNombre});
-  Map<String, dynamic> toMap() {
-    return {
-      'zonaId': zonaId,
-      'zonaNombre': zonaNombre,
-    };
-  }
+  ZonaEntity({
+    @required this.zonaId,
+    @required this.zonaNombre,
+  });
 }
 
-class Calle extends Equatable {
+class CalleEntity {
   final int calleId;
   final int calleZonaId;
   final String calleNombre;
-  Calle({
+  CalleEntity({
     @required this.calleId,
     @required this.calleZonaId,
     @required this.calleNombre,
   });
 }
 
-class CalleEsquina extends Equatable {
+class CalleEsquinaEntity {
   final int calleEsquinaId;
   final int calleEsquinaZonaId;
   final String calleEsquinaNombre;
-  CalleEsquina({
+  CalleEsquinaEntity({
     @required this.calleEsquinaId,
     @required this.calleEsquinaZonaId,
     @required this.calleEsquinaNombre,
   });
 }
 
-class Especie extends Equatable {
+class EspecieEntity {
   final int especieId;
   final String especieNombreComun;
   final String especieNombreCientifico;
@@ -95,7 +90,7 @@ class Especie extends Equatable {
   final String fotoGenerica;
   final String descripcion;
 
-  Especie({
+  EspecieEntity({
     @required this.especieId,
     @required this.especieNombreComun,
     @required this.especieNombreCientifico,
@@ -107,44 +102,44 @@ class Especie extends Equatable {
   });
 }
 
-class EstadoGeneral extends Equatable {
+class EstadoGeneralEntity {
   final int estadoGeneralId;
   final String estadoGeneralIdDesc;
-  EstadoGeneral(
+  EstadoGeneralEntity(
       {@required this.estadoGeneralId, @required this.estadoGeneralIdDesc});
 }
 
-class EstadoSanitario extends Equatable {
+class EstadoSanitarioEntity {
   final int estadoSanitarioId;
   final String estadoSanitarioDesc;
-  EstadoSanitario({
+  EstadoSanitarioEntity({
     @required this.estadoSanitarioId,
     @required this.estadoSanitarioDesc,
   });
 }
 
-class InclinacionTronco extends Equatable {
+class InclinacionTroncoEntity {
   final int inclinacionTroncoId;
   final String inclinacionTroncoDesc;
-  InclinacionTronco(
+  InclinacionTroncoEntity(
       {@required this.inclinacionTroncoId,
       @required this.inclinacionTroncoDesc});
 }
 
-class OrientacionInclinacion extends Equatable {
+class OrientacionInclinacionEntity {
   final int orientacionInclinacionId;
   final String orientacionInclinacionDesc;
-  OrientacionInclinacion(
+  OrientacionInclinacionEntity(
       {@required this.orientacionInclinacionId,
       @required this.orientacionInclinacionDesc});
 }
 
-class AccionObs extends Equatable {
+class AccionObsEntity {
   final int accionObsId;
   final String accionObsDesc;
   final int accionObsOrden;
 
-  AccionObs({
+  AccionObsEntity({
     @required this.accionObsId,
     @required this.accionObsDesc,
     @required this.accionObsOrden,

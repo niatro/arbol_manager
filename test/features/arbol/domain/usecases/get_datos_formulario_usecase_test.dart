@@ -25,28 +25,26 @@ void main() {
       'DEBERIA entregar un GrabarSuccess CUANDO se actualizan los datos llamados desde el UseCase',
       () async {
     // arrange
-    when(mockArbolesRepositorio.getDatosFormRepo(
-            idUsuario: anyNamed('idUsuario')))
+    when(mockArbolesRepositorio.getDatosForm(idUsuario: anyNamed('idUsuario')))
         .thenAnswer((_) async => Right(formTest));
     // act
     final result = await usecase.call(Params(idUsuario: idUsuario));
     // assert
     expect(result, Right(formTest));
-    verify(mockArbolesRepositorio.getDatosFormRepo(idUsuario: idUsuario));
+    verify(mockArbolesRepositorio.getDatosForm(idUsuario: idUsuario));
     verifyNoMoreInteractions(mockArbolesRepositorio);
   });
   test(
       'DEBERIA entregar un Failure CUANDO no se actualizan los datos llamados desde el UseCase',
       () async {
     // arrange
-    when(mockArbolesRepositorio.getDatosFormRepo(
-            idUsuario: anyNamed('idUsuario')))
+    when(mockArbolesRepositorio.getDatosForm(idUsuario: anyNamed('idUsuario')))
         .thenAnswer((_) async => Left(LocalDataBaseFailure()));
     // act
     final result = await usecase.call(Params(idUsuario: idUsuario));
     // assert
     expect(result, Left(LocalDataBaseFailure()));
-    verify(mockArbolesRepositorio.getDatosFormRepo(idUsuario: idUsuario));
+    verify(mockArbolesRepositorio.getDatosForm(idUsuario: idUsuario));
     verifyNoMoreInteractions(mockArbolesRepositorio);
   });
 }

@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutterapparbol/core/success/success.dart';
+import 'package:flutterapparbol/features/arbol/data/datasources/form_local_source_sql.dart';
 import 'package:flutterapparbol/features/arbol/data/models/form_entity_modelo.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/form_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/idnfc_entity.dart';
@@ -112,14 +113,19 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
   }
 
   @override
-  Future<Either<Failure, FormEntity>> getDatosFormRepo(
-      {String idUsuario}) async {
+  Future<Either<Failure, FormEntity>> getDatosForm({String idUsuario}) async {
     if (await netWorkInfo.isConnected) {
       final result = await remoteDataSource.getDatosForm(idUsuario: idUsuario);
       return Right(result);
     } else {
       return Left(ConexionFailure());
     }
+  }
+
+  @override
+  Future<Either<Failure, Success>> crearDatosForm() {
+    // TODO: implement crearDatosForm
+    throw UnimplementedError();
   }
 
   Future<Either<Failure, ArbolesEntity>> _getArbolesEntity(

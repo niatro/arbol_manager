@@ -14,6 +14,6 @@ class GetDatosFormUseCase implements UseCase<FormEntity, Params> {
   Future<Either<Failure, FormEntity>> call(
     Params params,
   ) async {
-    return await repositorio.getDatosFormRepo(idUsuario: params.idUsuario);
+    return await repositorio.getDatosForm(idUsuario: params.idUsuario);
   }
 }
