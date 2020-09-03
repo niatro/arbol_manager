@@ -23,6 +23,7 @@ abstract class ArbolesRemoteDataSource {
   Future<bool> verificarIdNFCRemoteData({String idNFC});
   Future<ArbolesEntityModelo> getArbolPorIdNFCRemoteData({String idNFC});
   Future<FormEntityModelo> getDatosForm({String idUsuario});
+  Future<ObjetoFila> llenarTablaFormulario({String tabla});
 }
 
 class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
@@ -112,27 +113,53 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
       throw ServerException();
     }
   }
-}
 
-/*
-class ServParaBaseDatosMySql {
-  String direccion = "http://35.224.182.198/";
-
-  Future<ArbolEntityModelo> getArbolFromArbolMaster(menor, mayor) async {
-    try {
-      final response =
-      await http.post(direccion + "/bd/getArbolMaster.php", body: {
-        "id_arbol_menor": menor.toString(),
-        "id_arbol_mayor": mayor.toString(),
-      });
-      final result = json.decode(response.body);
-      ListaDeArbolMasterMySql arbolMasterList =
-      ListaDeArbolMasterMySql.fromJson(result);
-      return arbolMasterList;
-    } catch (e) {
-      print('Error en el futuro del metodo getArbolFromArbolMasterMySql: ' +
-          e.toString());
-      return null;
-    }
+  @override
+  Future<ObjetoFila> llenarTablaFormulario({String tabla}) async {
+    final _response = await client.post(
+      _url + "/bd/getTablas.php",
+      body: {
+        "tabla": tabla,
+      },
+    );
+//    switch(tabla){
+//      case 'tablaCliente' : {
+//       ClienteModelo objetoFila = ClienteModelo.fromMapToObject(map);
+//       Map<String, dynamic> result =objetoFila.fromMapToObject(_response);
+//      }
+//      break;
+//
+//    }
+//
+//    if (_response.statusCode == 200) {
+//      final respuestaDecodificada = json.decode(_response.body);
+//      result =  objetoFila.
+//      return  tablaLlenada;
+//    }
+//
+//    } else {
+//    throw ServerException();
+//    }
   }
-}*/
+
+//class ServParaBaseDatosMySql {
+//  String direccion = "http://35.224.182.198/";
+//
+//  Future<ArbolEntityModelo> getArbolFromArbolMaster(menor, mayor) async {
+//    try {
+//      final response =
+//      await http.post(direccion + "/bd/getArbolMaster.php", body: {
+//        "id_arbol_menor": menor.toString(),
+//        "id_arbol_mayor": mayor.toString(),
+//      });
+//      final result = json.decode(response.body);
+//      ListaDeArbolMasterMySql arbolMasterList =
+//      ListaDeArbolMasterMySql.fromJson(result);
+//      return arbolMasterList;
+//    } catch (e) {
+//      print('Error en el futuro del metodo getArbolFromArbolMasterMySql: ' +
+//          e.toString());
+//      return null;
+//    }
+//  }
+}

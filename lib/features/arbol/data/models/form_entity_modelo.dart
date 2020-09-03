@@ -73,15 +73,21 @@ class FormEntityModelo extends FormEntity {
   }
 }
 
-abstract class ObjetoTabla {
+abstract class ObjetoFila {
+  int idFila;
   Map<String, dynamic> toMap();
-  ObjetoTabla.fromMapToObject(Map<String, dynamic> map);
+  ObjetoFila.fromMapToObject(Map<String, dynamic> map);
 }
 
-class ClienteModelo extends ClienteEntity implements ObjetoTabla {
+//TODO: falta el modelo para agente patogeno 😱
+//TODO: falta el modelo para lugar de plaga patogeno 😱
+//TODO: falta el modelo para  para  plaga 😱
+
+//OJO: Cliente
+class ClienteModelo extends ClienteEntity implements ObjetoFila {
   int _clienteId;
   String _clienteNombre;
-  ClienteModelo(this._clienteNombre);
+  ClienteModelo({clienteNombre}) : this._clienteNombre = clienteNombre;
   ClienteModelo.conId(this._clienteId, this._clienteNombre)
       : super(
           clienteId: _clienteId,
@@ -90,18 +96,19 @@ class ClienteModelo extends ClienteEntity implements ObjetoTabla {
   int get clienteId => _clienteId;
   String get clienteNombre => _clienteNombre;
 
-  set clienteNombre(String cliente) {
-    if (cliente.length <= 255) {
-      this._clienteNombre = cliente;
-    }
+  @override
+  int get idFila => _clienteId;
+  @override
+  set idFila(int clienteId) {
+    this.idFila = clienteId;
   }
 
   @override
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
-    if (clienteId != null) {
-      map['clienteId'] = _clienteId;
-    }
+//    if (clienteId != null) {
+//      map['clienteId'] = _clienteId;
+//    }
     map['clienteNombre'] = _clienteNombre;
     return map;
   }
@@ -111,9 +118,26 @@ class ClienteModelo extends ClienteEntity implements ObjetoTabla {
     this._clienteId = map['clienteId'];
     this._clienteNombre = map['clienteNombre'];
   }
+
+  factory ClienteModelo.fromJson(Map<String, dynamic> json) {
+    return ClienteModelo(clienteNombre: json["detalle_entidad"]);
+  }
 }
 
-class ZonaModelo extends ZonaEntity implements ObjetoTabla {
+class ListaClienteModelo {
+  final List<ClienteModelo> listaClientes;
+  ListaClienteModelo({
+    @required this.listaClientes,
+  });
+  factory ListaClienteModelo.fromJson(List<dynamic> parsedJson) {
+    List<ClienteModelo> _listaClientes = List<ClienteModelo>();
+    _listaClientes = parsedJson.map((i) => ClienteModelo.fromJson(i)).toList();
+    return ListaClienteModelo(listaClientes: _listaClientes);
+  }
+}
+
+//OJO: Zona
+class ZonaModelo extends ZonaEntity implements ObjetoFila {
   int _clienteId;
   int _zonaId;
   String _zonaNombre;
@@ -124,6 +148,7 @@ class ZonaModelo extends ZonaEntity implements ObjetoTabla {
       : super(
           zonaId: _zonaId,
           zonaNombre: _zonaNombre,
+          clienteId: _clienteId,
         );
   @required
   int get clienteId => _clienteId;
@@ -132,13 +157,20 @@ class ZonaModelo extends ZonaEntity implements ObjetoTabla {
   @required
   String get zonaNombre => _zonaNombre;
 
+  @override
+  int get idFila => _zonaId;
+  @override
+  set idFila(int zonaId) {
+    this._zonaId = zonaId;
+  }
+
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
     if (zonaId != null) {
       map['zonaId'] = _zonaId;
     }
-    map['clienteId'] = _clienteId;
     map['zonaNombre'] = _zonaNombre;
+    map['clienteId'] = _clienteId;
     return map;
   }
 
@@ -165,17 +197,96 @@ class CalleEsquinaModelo extends CalleEsquinaEntity {
   });
 }
 
-class EspecieModelo extends EspecieEntity {
+//OJO: Especie
+class EspecieModelo extends EspecieEntity implements ObjetoFila {
+  int _especieOrigenId;
+  String _especieNombreComun;
+  String _especieNombreCientifico;
+  int _especieOrden;
+  String _especieIcono;
+  String _especieHojaGenerica;
+  String _especieFotoGenerica;
+  String _especieDescripcion;
   EspecieModelo({
-    @required int especieId,
+    @required int especieOrigenId,
     @required String especieNombreComun,
     @required String especieNombreCientifico,
-    @required int orden,
-    @required String icono,
-    @required String hojaGenerica,
-    @required String fotoGenerica,
-    @required String descripcion,
+    @required int especieOrden,
+    @required String especieIcono,
+    @required String especieHojaGenerica,
+    @required String especieFotoGenerica,
+    @required String especieDescripcion,
+  })  : this._especieOrigenId = especieOrigenId,
+        this._especieNombreComun = especieNombreComun,
+        this._especieNombreCientifico = especieNombreCientifico,
+        this._especieOrden = especieOrden,
+        this._especieIcono = especieIcono,
+        this._especieHojaGenerica = especieHojaGenerica,
+        this._especieFotoGenerica = especieFotoGenerica,
+        this._especieDescripcion = especieDescripcion;
+
+  int get especieOrigenId => _especieOrigenId;
+  String get especieNombreComun => _especieNombreComun;
+  String get especieNombreCientifico => _especieNombreCientifico;
+  int get especieOrden => _especieOrden;
+  String get especieIcono => _especieIcono;
+  String get especieHojaGenerica => _especieHojaGenerica;
+  String get especieFotoGenerica => _especieFotoGenerica;
+  String get especieDescripcion => _especieDescripcion;
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    var map = Map<String, dynamic>();
+    map['especieOrigenId'] = _especieOrigenId;
+    map['especieNombreComun'] = _especieNombreComun;
+    map['especieNombreCientifico'] = _especieNombreCientifico;
+    map['especieOrden'] = _especieOrden;
+    map['especieIcono'] = _especieIcono;
+    map['especieHojaGenerica'] = _especieHojaGenerica;
+    map['especieFotoGenerica'] = _especieFotoGenerica;
+    map['especieDescripcion'] = especieDescripcion;
+    return map;
+  }
+
+  @override
+  EspecieModelo.fromMapToObject(Map<String, dynamic> map) {
+    this._especieOrigenId = map['especieOrigenId'];
+    this._especieNombreComun = map['especieNombreComun'];
+    this._especieNombreCientifico = map['especieNombreCientifico'];
+    this._especieOrden = map['especieOrden'];
+    this._especieIcono = map['especieIcono'];
+    this._especieHojaGenerica = map['especieHojaGenerica'];
+    this._especieFotoGenerica = map['especieFotoGenerica'];
+    this._especieDescripcion = map['especieDescripcion'];
+  }
+
+  factory EspecieModelo.fromJson(Map<String, dynamic> json) {
+    return EspecieModelo(
+      especieOrigenId: json['id_especie'],
+      especieNombreComun: json['detalle_especie'],
+      especieNombreCientifico: json['detalle_cientifico_especie'],
+      especieOrden: json['orden_especie'],
+      especieIcono: json['especie_icono'],
+      especieHojaGenerica: json['especie_hoja'] ?? 'Falta link a la imagen',
+      especieFotoGenerica: json['especie_foto'] ?? 'Falta link a la imagen',
+      especieDescripcion: json['especie_descr'] ?? 'Falta la descripcion',
+    );
+  }
+}
+
+class ListaEspecieModelo {
+  final List<EspecieModelo> listaEspecie;
+  ListaEspecieModelo({
+    @required this.listaEspecie,
   });
+  factory ListaEspecieModelo.fromJson(List<dynamic> parsedJson) {
+    List<EspecieModelo> _listaEspecie = List<EspecieModelo>();
+    _listaEspecie = parsedJson.map((i) => EspecieModelo.fromJson(i)).toList();
+    return ListaEspecieModelo(listaEspecie: _listaEspecie);
+  }
 }
 
 class EstadoGeneralModelo extends EstadoGeneralEntity {
@@ -211,5 +322,19 @@ class AccionObsModelo extends AccionObsEntity {
     @required int accionObsId,
     @required String accionObsDesc,
     @required int accionObsOrden,
+  });
+}
+
+class UsuarioModelo extends AccionObsEntity {
+  UsuarioModelo({
+    @required int usuarioId,
+    @required String usuarioGUI,
+    @required String usuarioCliente,
+    @required String usuarioRol,
+    @required String usarioNombre,
+    @required String usuarioApellido,
+    @required String usuarioEmail,
+    @required DateTime usuarioCreacion,
+    @required String usuarioActividad,
   });
 }

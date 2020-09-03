@@ -3,7 +3,9 @@ import 'package:flutterapparbol/features/arbol/domain/entities/form_entity.dart'
 
 FormEntity formTest = FormEntity(
   clienteArbol: [ClienteEntity(clienteId: 1, clienteNombre: 'Vitacura')],
-  zonaArbol: [ZonaEntity(zonaId: 1, zonaNombre: 'Unidad Vecinal 1')],
+  zonaArbol: [
+    ZonaEntity(zonaId: 1, zonaNombre: 'Unidad Vecinal 1', clienteId: 1)
+  ],
   calleArbol: [
     CalleEntity(calleId: 1, calleZonaId: 1, calleNombre: 'Nueva Costanera')
   ],
@@ -16,14 +18,14 @@ FormEntity formTest = FormEntity(
   ],
   especieArbol: [
     EspecieEntity(
-      especieId: 1,
+      especieIdOrigen: 1,
       especieNombreCientifico: 'Pinus Radiata',
       especieNombreComun: 'Pino',
-      orden: 3,
-      icono: 'assets/icon/....',
-      hojaGenerica: 'assets/hojas/..',
-      fotoGenerica: 'assets/fotos/...',
-      descripcion: 'omnis facus rebes dios cauh d dewdfef',
+      especieOrden: 3,
+      especieIcono: 'assets/icon/....',
+      especieHojaGenerica: 'assets/hojas/..',
+      especieFotoGenerica: 'assets/fotos/...',
+      especieDescripcion: 'omnis facus rebes dios cauh d dewdfef',
     )
   ],
   estadoGeneralArbol: [
@@ -49,7 +51,9 @@ FormEntity formTest = FormEntity(
 
 FormEntity formTestModelo = FormEntityModelo(
   clienteArbol: [ClienteEntity(clienteId: 1, clienteNombre: 'Vitacura')],
-  zonaArbol: [ZonaEntity(zonaId: 1, zonaNombre: 'Unidad Vecinal 1')],
+  zonaArbol: [
+    ZonaEntity(zonaId: 1, zonaNombre: 'Unidad Vecinal 1', clienteId: 1)
+  ],
   calleArbol: [
     CalleEntity(calleId: 1, calleZonaId: 1, calleNombre: 'Nueva Costanera')
   ],
@@ -62,14 +66,14 @@ FormEntity formTestModelo = FormEntityModelo(
   ],
   especieArbol: [
     EspecieEntity(
-      especieId: 1,
+      especieIdOrigen: 1,
       especieNombreCientifico: 'Pinus Radiata',
       especieNombreComun: 'Pino',
-      orden: 3,
-      icono: 'assets/icon/....',
-      hojaGenerica: 'assets/hojas/..',
-      fotoGenerica: 'assets/fotos/...',
-      descripcion: 'omnis facus rebes dios cauh d dewdfef',
+      especieOrden: 3,
+      especieIcono: 'assets/icon/....',
+      especieHojaGenerica: 'assets/hojas/..',
+      especieFotoGenerica: 'assets/fotos/...',
+      especieDescripcion: 'omnis facus rebes dios cauh d dewdfef',
     )
   ],
   estadoGeneralArbol: [
@@ -102,7 +106,7 @@ List<Map> tClientesListados = [
   {'clienteId': 2, 'clienteNombre': 'Las Condes'},
 ];
 
-ClienteModelo tClienteUnoModeloExp = ClienteModelo('Vitacura');
+ClienteModelo tClienteUnoModeloExp = ClienteModelo(clienteNombre: 'Vitacura');
 ZonaModelo tZonaModeloExp = ZonaModelo(
   clienteId: 1,
   zonaNombre: 'Unidad Vecinal 4',

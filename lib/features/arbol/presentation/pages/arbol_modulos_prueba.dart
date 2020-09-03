@@ -55,6 +55,7 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
   FormLocalSourceSqlImpl databaseHelper = FormLocalSourceSqlImpl();
   List<ClienteModelo> clienteList;
   int count = 0;
+  final EsquemaDataDeSQL referencia = EsquemaDataDeSQL();
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +76,7 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
               FlatButton(
                 onPressed: () async {
                   print('Creando la BD....');
-                  await databaseHelper.initializeDatabase();
+                  await databaseHelper.inicializarDatabase();
                   print('BD creada');
                 },
                 color: Colors.yellow,
@@ -85,14 +86,16 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
               FlatButton(
                 onPressed: () async {
                   print('Checkeando la BD....');
-                  List result = await databaseHelper.getTablesMapList(
-                      nombreTabla: TABLAS_BD['TABLA_CLIENTE']['NOMBRE_TABLA'],
-                      campoOrdenador: TABLAS_BD['TABLA_CLIENTE']
-                          ['CLIENTE_NOMBRE']);
-                  List resultZonas = await databaseHelper.getTablesMapList(
-                      nombreTabla: TABLAS_BD['TABLA_ZONA']['NOMBRE_TABLA'],
-                      campoOrdenador: TABLAS_BD['TABLA_ZONA']['CLIENTE_ONA']);
-                  print(result.toString() + " " + resultZonas.toString());
+                  List result = await databaseHelper.getFilasMapList(
+                    nombreTabla: referencia.cliente.nombreTabla,
+                    campoOrdenador: referencia.cliente.clienteNombre,
+                  );
+                  List resultZonas = await databaseHelper.getFilasMapList(
+                    nombreTabla: referencia.zona.nombreTabla,
+                    campoOrdenador: referencia.zona.zonaNombre,
+                  );
+                  print(result.toString());
+                  print(resultZonas.toString());
                 },
                 color: Colors.green,
                 child: Text('Que hay en la DB'),
@@ -100,13 +103,13 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
               SizedBox(height: 10.0),
               FlatButton(
                 onPressed: () async {
-                  await databaseHelper.insertCliente(
-                    objetoTabla: tClienteUnoModeloExp,
-                    nombreTabla: TABLAS_BD['TABLA_CLIENTE']['NOMBRE_TABLA'],
+                  await databaseHelper.insertFila(
+                    objetoFila: tClienteUnoModeloExp,
+                    nombreTabla: referencia.cliente.nombreTabla,
                   );
-                  await databaseHelper.insertCliente(
-                    objetoTabla: tZonaModeloExp,
-                    nombreTabla: TABLAS_BD['TABLA_ZONA']['NOMBRE_TABLA'],
+                  await databaseHelper.insertFila(
+                    objetoFila: tZonaModeloExp,
+                    nombreTabla: referencia.zona.nombreTabla,
                   );
                   print('grabado');
                 },
@@ -116,7 +119,9 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
               SizedBox(height: 10.0),
               FlatButton(
                 onPressed: () async {
-                  int nClientes = await databaseHelper.contarClientes();
+                  int nClientes = await databaseHelper.contarFilasTabla(
+                    nombreTabla: referencia.cliente.nombreTabla,
+                  );
                   await databaseHelper.deleteCliente(nClientes);
                   print('Borrando');
                 },
@@ -126,7 +131,6 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
               SizedBox(height: 10.0),
               FlatButton(
                 onPressed: () async {
-                  int nClientes = await databaseHelper.contarClientes();
                   await databaseHelper.cerrarBasedatos();
                   print('Cerrando');
                 },

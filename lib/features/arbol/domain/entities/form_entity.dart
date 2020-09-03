@@ -52,9 +52,11 @@ class ClienteEntity {
 class ZonaEntity {
   final int zonaId;
   final String zonaNombre;
+  final int clienteId;
   ZonaEntity({
     @required this.zonaId,
     @required this.zonaNombre,
+    @required this.clienteId,
   });
 }
 
@@ -81,24 +83,24 @@ class CalleEsquinaEntity {
 }
 
 class EspecieEntity {
-  final int especieId;
+  final int especieIdOrigen;
   final String especieNombreComun;
   final String especieNombreCientifico;
-  final int orden;
-  final String icono;
-  final String hojaGenerica;
-  final String fotoGenerica;
-  final String descripcion;
+  final int especieOrden;
+  final String especieIcono;
+  final String especieHojaGenerica;
+  final String especieFotoGenerica;
+  final String especieDescripcion;
 
   EspecieEntity({
-    @required this.especieId,
+    @required this.especieIdOrigen,
     @required this.especieNombreComun,
     @required this.especieNombreCientifico,
-    @required this.orden,
-    @required this.icono,
-    @required this.hojaGenerica,
-    @required this.fotoGenerica,
-    @required this.descripcion,
+    @required this.especieOrden,
+    @required this.especieIcono,
+    @required this.especieHojaGenerica,
+    @required this.especieFotoGenerica,
+    @required this.especieDescripcion,
   });
 }
 
@@ -143,5 +145,29 @@ class AccionObsEntity {
     @required this.accionObsId,
     @required this.accionObsDesc,
     @required this.accionObsOrden,
+  });
+}
+
+class UsuarioEntity {
+  final int usuarioId;
+  final String usuarioGUI;
+  final String usuarioCliente;
+  final String usuarioRol;
+  final String usarioNombre;
+  final String usuarioApellido;
+  final String usuarioEmail;
+  final DateTime usuarioCreacion;
+  final String usuarioActividad;
+
+  UsuarioEntity({
+    @required this.usuarioId,
+    @required this.usuarioGUI,
+    @required this.usuarioCliente,
+    @required this.usuarioRol,
+    @required this.usarioNombre,
+    @required this.usuarioApellido,
+    @required this.usuarioEmail,
+    @required this.usuarioCreacion,
+    @required this.usuarioActividad,
   });
 }
