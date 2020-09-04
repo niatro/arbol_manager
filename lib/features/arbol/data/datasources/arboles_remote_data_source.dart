@@ -116,30 +116,33 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
 
   @override
   Future<ObjetoFila> llenarTablaFormulario({String tabla}) async {
-    final _response = await client.post(
+    final _response = await http.post(
       _url + "/bd/getTablas.php",
       body: {
         "tabla": tabla,
       },
     );
-//    switch(tabla){
-//      case 'tablaCliente' : {
-//       ClienteModelo objetoFila = ClienteModelo.fromMapToObject(map);
-//       Map<String, dynamic> result =objetoFila.fromMapToObject(_response);
-//      }
-//      break;
-//
-//    }
-//
-//    if (_response.statusCode == 200) {
-//      final respuestaDecodificada = json.decode(_response.body);
-//      result =  objetoFila.
-//      return  tablaLlenada;
-//    }
-//
-//    } else {
-//    throw ServerException();
-//    }
+
+    if (_response.statusCode == 200) {
+      final respuestaDecodificada = json.decode(_response.body);
+      return funcionSwitch(respuestaDecodificada, tabla);
+    } else {
+      throw ServerException();
+    }
+  }
+
+//TODO: completar todos los casos
+  ListaEspecieModelo funcionSwitch(response, tabla) {
+    switch (tabla) {
+      case 'tablaEspecie':
+        ListaEspecieModelo objetoTabla = ListaEspecieModelo.fromJson(response);
+        return objetoTabla;
+        break;
+      case 'tablaCliente':
+        return null;
+      default:
+        return null;
+    }
   }
 
 //class ServParaBaseDatosMySql {

@@ -265,10 +265,10 @@ class EspecieModelo extends EspecieEntity implements ObjetoFila {
 
   factory EspecieModelo.fromJson(Map<String, dynamic> json) {
     return EspecieModelo(
-      especieOrigenId: json['id_especie'],
+      especieOrigenId: int.parse(json['id_especie']),
       especieNombreComun: json['detalle_especie'],
       especieNombreCientifico: json['detalle_cientifico_especie'],
-      especieOrden: json['orden_especie'],
+      especieOrden: int.parse(json['orden_especie']),
       especieIcono: json['especie_icono'],
       especieHojaGenerica: json['especie_hoja'] ?? 'Falta link a la imagen',
       especieFotoGenerica: json['especie_foto'] ?? 'Falta link a la imagen',
@@ -277,7 +277,7 @@ class EspecieModelo extends EspecieEntity implements ObjetoFila {
   }
 }
 
-class ListaEspecieModelo {
+class ListaEspecieModelo implements ObjetoFila {
   final List<EspecieModelo> listaEspecie;
   ListaEspecieModelo({
     @required this.listaEspecie,
@@ -286,6 +286,15 @@ class ListaEspecieModelo {
     List<EspecieModelo> _listaEspecie = List<EspecieModelo>();
     _listaEspecie = parsedJson.map((i) => EspecieModelo.fromJson(i)).toList();
     return ListaEspecieModelo(listaEspecie: _listaEspecie);
+  }
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    // TODO: implement toMap
+    throw UnimplementedError();
   }
 }
 

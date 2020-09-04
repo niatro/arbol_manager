@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutterapparbol/core/constants/form_entity_test.dart';
+import 'package:flutterapparbol/features/arbol/data/datasources/arboles_remote_data_source.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/form_local_source_sql.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/local_data_estructuras.dart';
 import 'package:flutterapparbol/features/arbol/data/models/form_entity_modelo.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 
 class ArbolModulosNfcPrueba extends StatefulWidget {
   @override
@@ -52,13 +54,22 @@ class ArbolModuloSQLDosPrueba extends StatefulWidget {
 }
 
 class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
+  http.Client client;
   FormLocalSourceSqlImpl databaseHelper = FormLocalSourceSqlImpl();
   List<ClienteModelo> clienteList;
+  ArbolesRemoteDataSourceImpl remoteDataSource;
   int count = 0;
   final EsquemaDataDeSQL referencia = EsquemaDataDeSQL();
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    http.Client client = http.Client();
+    ArbolesRemoteDataSourceImpl remoteDataSource =
+        ArbolesRemoteDataSourceImpl(client: client);
     if (clienteList == null) {
       clienteList = List<ClienteModelo>();
     }
@@ -136,6 +147,19 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
                 },
                 color: Colors.orange,
                 child: Text('Cerrar BD'),
+              ),
+              SizedBox(height: 10.0),
+              FlatButton(
+                onPressed: () async {
+                  ListaEspecieModelo especies =
+                      await remoteDataSource.llenarTablaFormulario(
+                          tabla: referencia.especie.nombreTabla);
+                  especies.listaEspecie.forEach((modelo) {
+                    print(modelo.especieNombreCientifico);
+                  });
+                },
+                color: Colors.brown,
+                child: Text('Acceder Arboles'),
               ),
             ],
           ),
