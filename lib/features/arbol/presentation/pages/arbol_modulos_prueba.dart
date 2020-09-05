@@ -142,11 +142,11 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
               SizedBox(height: 10.0),
               FlatButton(
                 onPressed: () async {
-                  await databaseHelper.cerrarBasedatos();
+                  await databaseHelper.borrarBasedatos();
                   print('Cerrando');
                 },
                 color: Colors.orange,
-                child: Text('Cerrar BD'),
+                child: Text('Borrar BD'),
               ),
               SizedBox(height: 10.0),
               FlatButton(
@@ -154,9 +154,22 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
                   ListaEspecieModelo especies =
                       await remoteDataSource.llenarTablaFormulario(
                           tabla: referencia.especie.nombreTabla);
-                  especies.listaEspecie.forEach((modelo) {
-                    print(modelo.especieNombreCientifico);
+
+                  especies.listaEspecie.forEach((element) {
+                    print(element.toMap());
                   });
+                  especies.listaEspecie.forEach((element) async {
+                    await databaseHelper.insertFila(
+                      objetoFila: element,
+                      nombreTabla: referencia.especie.nombreTabla,
+                    );
+                    print('grabado en BD');
+                  });
+                  List especiesenBD = await databaseHelper.getFilasMapList(
+                    nombreTabla: referencia.especie.nombreTabla,
+                    campoOrdenador: referencia.especie.especieOrden,
+                  );
+                  print(especiesenBD.toString());
                 },
                 color: Colors.brown,
                 child: Text('Acceder Arboles'),

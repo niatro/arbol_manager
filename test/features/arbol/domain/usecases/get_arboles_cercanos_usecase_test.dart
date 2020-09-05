@@ -23,18 +23,18 @@ void main() {
     usecase = GetArbolesCercanosUseCase(mockListaArbolRepositorio);
   });
   final coordenadasTest = LatLng(-33.40022111646666, -70.59898554630922);
-  final ArbolesEntity listaDeArbolesEntity = arbolesEntityTest;
+  final ArbolesEntity tListaDeArbolesEntity = arbolesEntityTest;
 
   test(
     'debería traer un listado de arboles basado en una reference geográfica del repositario',
     () async {
       // arrange
       when(mockListaArbolRepositorio.getArbolesCercanos(any))
-          .thenAnswer((_) async => Right(listaDeArbolesEntity));
+          .thenAnswer((_) async => Right(tListaDeArbolesEntity));
       // act
       final result = await usecase.call(Params(coordenada: coordenadasTest));
       // assert
-      expect(result, Right(listaDeArbolesEntity));
+      expect(result, Right(tListaDeArbolesEntity));
       verify(mockListaArbolRepositorio.getArbolesCercanos(coordenadasTest));
       verifyNoMoreInteractions(mockListaArbolRepositorio);
     },

@@ -70,6 +70,7 @@ class EsquemaCalleEsquina {
 class EsquemaEspecie {
   String nombreTabla = 'tablaEspecie';
   String especieId = 'especieId';
+  String especieOrigenId = 'especieOrigenId';
   String especieNombreComun = 'especieNombreComun';
   String especieNombreCientifico = 'especieNombreCientifico';
   String especieOrden = 'especieOrden';

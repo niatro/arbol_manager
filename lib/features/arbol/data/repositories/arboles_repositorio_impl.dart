@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutterapparbol/core/success/success.dart';
+import 'package:flutterapparbol/core/usecases/usecase.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/form_local_source_sql.dart';
 import 'package:flutterapparbol/features/arbol/data/models/form_entity_modelo.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/form_entity.dart';
@@ -96,12 +97,6 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
   }
 
   @override
-  Future<Either<Failure, LatLng>> getCoordenadas(String idUsuario) {
-    // TODO: implement getCoordenadas
-    throw UnimplementedError();
-  }
-
-  @override
   Future<Either<Failure, ServerActualizarFormSuccess>> actualizarDatosForm(
       {String idUsuario}) async {
     if (await netWorkInfo.isConnected) {
@@ -149,5 +144,11 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
         // el método getArbolesCercanos
       }
     }
+  }
+
+  @override
+  Future<Either<Failure, LatLng>> getCoordenadas({NoParams params}) {
+    // TODO: implement getCoordenadas
+    throw UnimplementedError();
   }
 }

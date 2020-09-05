@@ -20,6 +20,7 @@ abstract class FormLocalSourceSql {
   Future<int> updateCliente(String nombreTabla, ClienteModelo cliente);
   Future<int> insertFila({ObjetoFila objetoFila, String nombreTabla});
   Future<void> cerrarBasedatos();
+  Future<void> borrarBasedatos();
 }
 
 //OJO: Implementacion version 3 abajo 👀
@@ -84,6 +85,7 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
     await db.execute('''
     CREATE TABLE ${referencia.especie.nombreTabla} (
     ${referencia.especie.especieId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    ${referencia.especie.especieOrigenId} INTEGER,
     ${referencia.especie.especieNombreComun} TEXT,
     ${referencia.especie.especieNombreCientifico} TEXT,
     ${referencia.especie.especieOrden} INTEGER,
@@ -194,5 +196,12 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
   Future<List<ObjetoFila>> getFormEntityDeTabla({String nombreTabla}) {
     // TODO: implement getFormEntityDeTabla
     throw UnimplementedError();
+  }
+
+  @override
+  Future<void> borrarBasedatos() async {
+    String directory = await getDatabasesPath();
+    String path = directory + 'form.db';
+    deleteDatabase(path);
   }
 }
