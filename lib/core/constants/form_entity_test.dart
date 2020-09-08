@@ -2,16 +2,22 @@ import 'package:flutterapparbol/features/arbol/data/models/form_entity_modelo.da
 import 'package:flutterapparbol/features/arbol/domain/entities/form_entity.dart';
 
 FormEntity formTest = FormEntity(
-  clienteArbol: [ClienteEntity(clienteId: 1, clienteNombre: 'Vitacura')],
+  clienteArbol: [ClienteEntity(clienteOrigenId: 1, clienteNombre: 'Vitacura')],
   zonaArbol: [
-    ZonaEntity(zonaId: 1, zonaNombre: 'Unidad Vecinal 1', clienteId: 1)
+    ZonaEntity(zonaOrigenId: 1, zonaNombre: 'Unidad Vecinal 1', clienteId: 1)
   ],
   calleArbol: [
-    CalleEntity(calleId: 1, calleZonaId: 1, calleNombre: 'Nueva Costanera')
+    CalleEntity(
+      calleTipo: 'avenida',
+      calleOrigenId: 1,
+      calleZonaId: 1,
+      calleNombre: 'Nueva Costanera',
+    )
   ],
   esquinaCalleArbol: [
     CalleEsquinaEntity(
-      calleEsquinaId: 1,
+      calleEsquinaTipo: 'vereda',
+      calleEsquinaOrigenId: 1,
       calleEsquinaZonaId: 1,
       calleEsquinaNombre: 'Vicente Rozales',
     )
@@ -29,37 +35,43 @@ FormEntity formTest = FormEntity(
     )
   ],
   estadoGeneralArbol: [
-    EstadoGeneralEntity(estadoGeneralId: 2, estadoGeneralIdDesc: 'Bueno')
+    EstadoGeneralEntity(estadoGeneralOrigenId: 2, estadoGeneralDesc: 'Bueno')
   ],
   estadoSanitarioArbol: [
     EstadoSanitarioEntity(
-        estadoSanitarioId: 1, estadoSanitarioDesc: 'Hongos en la punta')
+        estadoSanitarioOrigenId: 1, estadoSanitarioDesc: 'Hongos en la punta')
   ],
   inclinacionTroncoArbol: [
     InclinacionTroncoEntity(
-        inclinacionTroncoId: 1, inclinacionTroncoDesc: 'Muy inclinado')
+        inclinacionTroncoOrigenId: 1, inclinacionTroncoDesc: 'Muy inclinado')
   ],
   orientacionInclinacionArbol: [
     OrientacionInclinacionEntity(
-        orientacionInclinacionId: 1, orientacionInclinacionDesc: 'A la vereda')
+        orientacionInclinacionOrigenId: 1,
+        orientacionInclinacionDesc: 'A la vereda')
   ],
   accionObsArbol: [
     AccionObsEntity(
-        accionObsId: 1, accionObsDesc: 'podar ramas', accionObsOrden: 2)
+        accionObsOrigenId: 1, accionObsDesc: 'podar ramas', accionObsOrden: 2)
   ],
 );
 
 FormEntity formTestModelo = FormEntityModelo(
-  clienteArbol: [ClienteEntity(clienteId: 1, clienteNombre: 'Vitacura')],
+  clienteArbol: [ClienteEntity(clienteOrigenId: 1, clienteNombre: 'Vitacura')],
   zonaArbol: [
-    ZonaEntity(zonaId: 1, zonaNombre: 'Unidad Vecinal 1', clienteId: 1)
+    ZonaEntity(zonaOrigenId: 1, zonaNombre: 'Unidad Vecinal 1', clienteId: 1)
   ],
   calleArbol: [
-    CalleEntity(calleId: 1, calleZonaId: 1, calleNombre: 'Nueva Costanera')
+    CalleEntity(
+        calleTipo: 'avenida',
+        calleOrigenId: 1,
+        calleZonaId: 1,
+        calleNombre: 'Nueva Costanera')
   ],
   esquinaCalleArbol: [
     CalleEsquinaEntity(
-      calleEsquinaId: 1,
+      calleEsquinaTipo: 'vereda',
+      calleEsquinaOrigenId: 1,
       calleEsquinaZonaId: 1,
       calleEsquinaNombre: 'Vicente Rozales',
     )
@@ -77,36 +89,38 @@ FormEntity formTestModelo = FormEntityModelo(
     )
   ],
   estadoGeneralArbol: [
-    EstadoGeneralEntity(estadoGeneralId: 2, estadoGeneralIdDesc: 'Bueno')
+    EstadoGeneralEntity(estadoGeneralOrigenId: 2, estadoGeneralDesc: 'Bueno')
   ],
   estadoSanitarioArbol: [
     EstadoSanitarioEntity(
-        estadoSanitarioId: 1, estadoSanitarioDesc: 'Hongos en la punta')
+        estadoSanitarioOrigenId: 1, estadoSanitarioDesc: 'Hongos en la punta')
   ],
   inclinacionTroncoArbol: [
     InclinacionTroncoEntity(
-        inclinacionTroncoId: 1, inclinacionTroncoDesc: 'Muy inclinado')
+        inclinacionTroncoOrigenId: 1, inclinacionTroncoDesc: 'Muy inclinado')
   ],
   orientacionInclinacionArbol: [
     OrientacionInclinacionEntity(
-        orientacionInclinacionId: 1, orientacionInclinacionDesc: 'A la vereda')
+        orientacionInclinacionOrigenId: 1,
+        orientacionInclinacionDesc: 'A la vereda')
   ],
   accionObsArbol: [
     AccionObsEntity(
-        accionObsId: 1, accionObsDesc: 'podar ramas', accionObsOrden: 2)
+        accionObsOrigenId: 1, accionObsDesc: 'podar ramas', accionObsOrden: 2)
   ],
 );
 
 ClienteEntity tClienteUno =
-    ClienteEntity(clienteId: 1, clienteNombre: 'Vitacura');
+    ClienteEntity(clienteOrigenId: 1, clienteNombre: 'Vitacura');
 ClienteEntity tClienteDos =
-    ClienteEntity(clienteId: 2, clienteNombre: 'Las Condes');
+    ClienteEntity(clienteOrigenId: 2, clienteNombre: 'Las Condes');
 List<Map> tClientesListados = [
   {'clienteId': 1, 'clienteNombre': 'Vitacura'},
   {'clienteId': 2, 'clienteNombre': 'Las Condes'},
 ];
 
-ClienteModelo tClienteUnoModeloExp = ClienteModelo(clienteNombre: 'Vitacura');
+ClienteModelo tClienteUnoModeloExp =
+    ClienteModelo(clienteNombre: 'Vitacura', clienteOrigenId: 1);
 ZonaModelo tZonaModeloExp = ZonaModelo(
   clienteId: 1,
   zonaNombre: 'Unidad Vecinal 4',

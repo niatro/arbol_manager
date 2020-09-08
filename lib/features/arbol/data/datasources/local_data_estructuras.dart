@@ -34,19 +34,21 @@ class EsquemaDataDeSQL {
   final EsquemaAccionObs accionObs = EsquemaAccionObs();
   final EsquemaUsuario usuario = EsquemaUsuario();
   final EsquemaAgentesPatogenos agentesPatogenos = EsquemaAgentesPatogenos();
-  final EsquemaLugarPlaga esquemaLugarPlaga = EsquemaLugarPlaga();
-  final EsquemaPlagas esquemaPlagas = EsquemaPlagas();
+  final EsquemaLugarPlaga lugarPlaga = EsquemaLugarPlaga();
+  final EsquemaPlagas plagas = EsquemaPlagas();
 }
 
 class EsquemaCliente {
   String nombreTabla = 'tablaCliente';
   String clienteId = 'clienteId';
+  String clienteOrigenId = 'clienteOrigenId';
   String clienteNombre = 'clienteNombre';
 }
 
 class EsquemaZona {
   String nombreTabla = 'tablaZona';
   String zonaId = 'zonaId';
+  String zonaOrigenId = 'zonaOrigenId';
   String zonaNombre = 'zonaNombre';
   String foreignKey = 'clienteId';
 }
@@ -54,6 +56,7 @@ class EsquemaZona {
 class EsquemaCalle {
   String nombreTabla = 'tablaCalle';
   String calleId = 'calleId';
+  String calleOrigenId = 'calleOrigenId';
   String calleZonaId = 'calleZonaId';
   String calleNombre = 'calleNombre';
   String foreignKey = 'clienteId';
@@ -62,6 +65,7 @@ class EsquemaCalle {
 class EsquemaCalleEsquina {
   String nombreTabla = 'tablaCalleEsquina';
   String calleEsquinaId = 'calleEsquinaId';
+  String calleEsquinaOrigenId = 'calleEsquinaorigenId';
   String calleEsquinaZonaId = 'calleEsquinaZonaId';
   String calleEsquinaNombre = 'calleEsquinaNombre';
   String foreignKey = 'clienteId';
@@ -83,30 +87,35 @@ class EsquemaEspecie {
 class EsquemaEstadoGeneral {
   String nombreTabla = 'tablaEstadoGeneral';
   String estadoGeneralId = 'estadoGeneralId';
+  String estadoGeneralOrigenId = 'estadoGeneralOrigenId';
   String estadoGeneralIdDesc = 'estadoGeneralIdDesc';
 }
 
 class EsquemaEstadoSanitario {
   String nombreTabla = 'tablaEstadoSanitario';
   String estadoSanitarioId = 'estadoSanitarioId';
+  String estadoSanitarioOrigenId = 'estadoSanitarioOrigenId';
   String estadoSanitarioDesc = 'estadoSanitarioDesc';
 }
 
 class EsquemaInclinacionTronco {
   String nombreTabla = 'tablaInclinacionTronco';
   String inclinacionTroncoId = 'inclinacionTroncoId';
+  String inclinacionTroncoOrigenId = 'inclinacionTroncoOrigenId';
   String inclinacionDesc = 'inclinacionDesc';
 }
 
 class EsquemaOrientacionInclinacion {
   String nombreTabla = 'tablaOrientacionInclinacion';
   String orientacionInclinacionId = 'orientacionInclinacionId';
+  String orientacionInclinacionOrigenId = 'orientacionInclinacionOrigenId';
   String orientacionInclinacionDesc = 'orientacionInclinacionDesc';
 }
 
 class EsquemaAccionObs {
   String nombreTabla = 'tablaAccionObs';
   String accionObsId = 'accionObsId';
+  String accionObsOrigenId = 'accionObsOrigenId';
   String accionObsDesc = 'accionObsDesc';
   String accionObsOrden = 'accionObsOrden';
 }
@@ -114,7 +123,9 @@ class EsquemaAccionObs {
 class EsquemaUsuario {
   String nombreTabla = 'tablaUsuario';
   String usuarioId = 'usuarioId';
+  String usuarioOrigenId = 'usuarioOrigenId';
   String usuarioGUI = 'usuarioGUI';
+  String usuarioCliente = 'usuarioCliente';
   String usuarioRol = 'usuarioRol';
   String usuarioNombre = 'usarioNombre';
   String usuarioApellido = 'usuarioApellido';
@@ -127,17 +138,20 @@ class EsquemaUsuario {
 class EsquemaAgentesPatogenos {
   String nombreTabla = 'tablaAgentesPatogenos';
   String agentesPatogenosId = 'agentesPatogenosId';
+  String agentesPatogenosOrigenId = 'agentesPatogenosOrigenId';
   String agentesPatogenosDesc = 'agentesPatogenosDesc';
 }
 
 class EsquemaLugarPlaga {
   String nombreTabla = 'tablaLugarPlaga';
   String lugarPlagaId = 'lugarPlagaId';
+  String lugarPlagaOrigenId = 'lugarPlagaOrigenId';
   String lugarPlagaDesc = 'lugarPlagaDesc';
 }
 
 class EsquemaPlagas {
   String nombreTabla = 'tablaPlagas';
   String plagaId = 'plagaId';
+  String plagaOrigenId = 'plagaOrigenId';
   String plagaDesc = 'plagaDesc';
 }

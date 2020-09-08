@@ -123,4 +123,22 @@ void main() {
       expect(() => call(idNFC: idNFC), throwsA(TypeMatcher<ServerException>()));
     });
   });
+  group('getDatosForm', () {
+    test(
+        'DEBERIA hacer un request Post y devolver un FormEntity que incluye todas las tablas',
+        () async {
+      // arrange
+      setUpMockHttpSuccess200('formExample.json');
+      // act
+
+      // assert
+    });
+    test('Deberia', () async {
+      // arrange
+
+      // act
+
+      // assert
+    });
+  });
 }

@@ -561,6 +561,7 @@ void main() {
     //TODO: falta escribir los test offline del repositorio
     runTestsOffline(() {});
   });
+
   //OJO: Repositorio actualizar Datos Form si se esta online y el usuario lo solicita 🔃
 
   group('actualizarDatosForm', () {
@@ -616,6 +617,20 @@ void main() {
       });
     });
 
-    runTestsOffline(() {});
+    runTestsOffline(() {
+      test(
+          'DEBERIA entregar una falla de actualización CUANDO el dispositivo esta offline',
+          () async {
+        // arrange
+        when(mockRemoteDataSource.getDatosForm(
+                idUsuario: anyNamed('idUsuario')))
+            .thenThrow((_) async => Left(ConexionFailure()));
+        // act
+        final result = await repositorio.getDatosForm(idUsuario: idUsuario);
+
+        // assert
+        expect(result, Left(ConexionFailure()));
+      });
+    });
   });
 }

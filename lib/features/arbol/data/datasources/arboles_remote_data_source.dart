@@ -132,14 +132,34 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
   }
 
 //TODO: completar todos los casos
-  ListaEspecieModelo funcionSwitch(response, tabla) {
+  ObjetoFila funcionSwitch(response, tabla) {
     switch (tabla) {
       case 'tablaEspecie':
         ListaEspecieModelo objetoTabla = ListaEspecieModelo.fromJson(response);
         return objetoTabla;
         break;
+      case 'tablaZona':
+        ListaZonaModelo objetoTabla = ListaZonaModelo.fromJson(response);
+        return objetoTabla;
+        break;
+      case 'tablaCalle':
+        ListaCalleModelo objetoTabla = ListaCalleModelo.fromJson(response);
+        return objetoTabla;
+        break;
+      case 'tablaCalleEsquina':
+        ListaCalleEsquinaModelo objetoTabla =
+            ListaCalleEsquinaModelo.fromJson(response);
+        return objetoTabla;
+        break;
+      case 'tablaEspecie':
+        ListaEspecieModelo objetoTabla = ListaEspecieModelo.fromJson(response);
+        return objetoTabla;
+        break;
       case 'tablaCliente':
-        return null;
+        ListaClienteModelo objetoTabla = ListaClienteModelo.fromJson(response);
+        return objetoTabla;
+        break;
+
       default:
         return null;
     }

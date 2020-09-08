@@ -41,42 +41,46 @@ class FormEntity extends Equatable {
 }
 
 class ClienteEntity {
-  int clienteId;
+  int clienteOrigenId;
   String clienteNombre;
   ClienteEntity({
-    @required this.clienteId,
+    @required this.clienteOrigenId,
     @required this.clienteNombre,
   });
 }
 
 class ZonaEntity {
-  final int zonaId;
+  final int zonaOrigenId;
   final String zonaNombre;
   final int clienteId;
   ZonaEntity({
-    @required this.zonaId,
+    @required this.zonaOrigenId,
     @required this.zonaNombre,
     @required this.clienteId,
   });
 }
 
 class CalleEntity {
-  final int calleId;
+  final int calleOrigenId;
   final int calleZonaId;
   final String calleNombre;
+  final String calleTipo;
   CalleEntity({
-    @required this.calleId,
+    @required this.calleOrigenId,
     @required this.calleZonaId,
     @required this.calleNombre,
+    @required this.calleTipo,
   });
 }
 
 class CalleEsquinaEntity {
-  final int calleEsquinaId;
+  final int calleEsquinaOrigenId;
   final int calleEsquinaZonaId;
   final String calleEsquinaNombre;
+  final String calleEsquinaTipo;
   CalleEsquinaEntity({
-    @required this.calleEsquinaId,
+    @required this.calleEsquinaTipo,
+    @required this.calleEsquinaOrigenId,
     @required this.calleEsquinaZonaId,
     @required this.calleEsquinaNombre,
   });
@@ -105,54 +109,56 @@ class EspecieEntity {
 }
 
 class EstadoGeneralEntity {
-  final int estadoGeneralId;
-  final String estadoGeneralIdDesc;
-  EstadoGeneralEntity(
-      {@required this.estadoGeneralId, @required this.estadoGeneralIdDesc});
+  final int estadoGeneralOrigenId;
+  final String estadoGeneralDesc;
+  EstadoGeneralEntity({
+    @required this.estadoGeneralOrigenId,
+    @required this.estadoGeneralDesc,
+  });
 }
 
 class EstadoSanitarioEntity {
-  final int estadoSanitarioId;
+  final int estadoSanitarioOrigenId;
   final String estadoSanitarioDesc;
   EstadoSanitarioEntity({
-    @required this.estadoSanitarioId,
+    @required this.estadoSanitarioOrigenId,
     @required this.estadoSanitarioDesc,
   });
 }
 
 class InclinacionTroncoEntity {
-  final int inclinacionTroncoId;
+  final int inclinacionTroncoOrigenId;
   final String inclinacionTroncoDesc;
   InclinacionTroncoEntity(
-      {@required this.inclinacionTroncoId,
+      {@required this.inclinacionTroncoOrigenId,
       @required this.inclinacionTroncoDesc});
 }
 
 class OrientacionInclinacionEntity {
-  final int orientacionInclinacionId;
+  final int orientacionInclinacionOrigenId;
   final String orientacionInclinacionDesc;
   OrientacionInclinacionEntity(
-      {@required this.orientacionInclinacionId,
+      {@required this.orientacionInclinacionOrigenId,
       @required this.orientacionInclinacionDesc});
 }
 
 class AccionObsEntity {
-  final int accionObsId;
+  final int accionObsOrigenId;
   final String accionObsDesc;
   final int accionObsOrden;
 
   AccionObsEntity({
-    @required this.accionObsId,
+    @required this.accionObsOrigenId,
     @required this.accionObsDesc,
     @required this.accionObsOrden,
   });
 }
 
 class UsuarioEntity {
-  final int usuarioId;
+  final int usuarioOrigenId;
   final String usuarioGUI;
-  final String usuarioCliente;
-  final String usuarioRol;
+  final int usuarioCliente;
+  final int usuarioRol;
   final String usarioNombre;
   final String usuarioApellido;
   final String usuarioEmail;
@@ -160,7 +166,7 @@ class UsuarioEntity {
   final String usuarioActividad;
 
   UsuarioEntity({
-    @required this.usuarioId,
+    @required this.usuarioOrigenId,
     @required this.usuarioGUI,
     @required this.usuarioCliente,
     @required this.usuarioRol,
@@ -169,5 +175,37 @@ class UsuarioEntity {
     @required this.usuarioEmail,
     @required this.usuarioCreacion,
     @required this.usuarioActividad,
+  });
+}
+
+class AgentePatogenoEntity {
+  final int agentePatogenoOrigenId;
+  final String agentePatogenoDesc;
+
+  AgentePatogenoEntity({
+    @required this.agentePatogenoOrigenId,
+    @required this.agentePatogenoDesc,
+  });
+}
+
+class LugarPlagaEntity {
+  final int lugarPlagaOrigenId;
+  final String lugarPlagaDesc;
+
+  LugarPlagaEntity({
+    @required this.lugarPlagaOrigenId,
+    @required this.lugarPlagaDesc,
+  });
+}
+
+class PlagaEntity {
+  final int plagaOrigenId;
+  final String plagaDesc;
+  final int lugarPlagaId;
+
+  PlagaEntity({
+    @required this.plagaOrigenId,
+    @required this.plagaDesc,
+    @required this.lugarPlagaId,
   });
 }

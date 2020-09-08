@@ -83,48 +83,49 @@ abstract class ObjetoFila {
 //TODO: falta el modelo para lugar de plaga patogeno 😱
 //TODO: falta el modelo para  para  plaga 😱
 
-//OJO: Cliente
+//OJO: Cliente / revision v_1 ok
 class ClienteModelo extends ClienteEntity implements ObjetoFila {
-  int _clienteId;
+  int _clienteOrigenId;
   String _clienteNombre;
-  ClienteModelo({clienteNombre}) : this._clienteNombre = clienteNombre;
-  ClienteModelo.conId(this._clienteId, this._clienteNombre)
+  ClienteModelo({
+    @required clienteOrigenId,
+    @required clienteNombre,
+  })  : this._clienteOrigenId = clienteOrigenId,
+        this._clienteNombre = clienteNombre;
+/*  ClienteModelo.conId(this._clienteId, this._clienteNombre)
       : super(
           clienteId: _clienteId,
           clienteNombre: _clienteNombre,
-        );
-  int get clienteId => _clienteId;
+        );*/
+  int get clienteOrigenId => _clienteOrigenId;
   String get clienteNombre => _clienteNombre;
 
   @override
-  int get idFila => _clienteId;
-  @override
-  set idFila(int clienteId) {
-    this.idFila = clienteId;
-  }
+  int idFila;
 
   @override
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
-//    if (clienteId != null) {
-//      map['clienteId'] = _clienteId;
-//    }
+    map['clienteOrigenId'] = _clienteOrigenId;
     map['clienteNombre'] = _clienteNombre;
     return map;
   }
 
   @override
   ClienteModelo.fromMapToObject(Map<String, dynamic> map) {
-    this._clienteId = map['clienteId'];
+    this._clienteOrigenId = map['clienteOrigenId'];
     this._clienteNombre = map['clienteNombre'];
   }
 
   factory ClienteModelo.fromJson(Map<String, dynamic> json) {
-    return ClienteModelo(clienteNombre: json["detalle_entidad"]);
+    return ClienteModelo(
+      clienteOrigenId: int.parse(json['id_entidad']),
+      clienteNombre: json["detalle_entidad"],
+    );
   }
 }
 
-class ListaClienteModelo {
+class ListaClienteModelo implements ObjetoFila {
   final List<ClienteModelo> listaClientes;
   ListaClienteModelo({
     @required this.listaClientes,
@@ -134,67 +135,226 @@ class ListaClienteModelo {
     _listaClientes = parsedJson.map((i) => ClienteModelo.fromJson(i)).toList();
     return ListaClienteModelo(listaClientes: _listaClientes);
   }
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    // TODO: implement toMap
+    throw UnimplementedError();
+  }
 }
 
 //OJO: Zona
 class ZonaModelo extends ZonaEntity implements ObjetoFila {
+  int _zonaOrigenId;
   int _clienteId;
-  int _zonaId;
   String _zonaNombre;
-  ZonaModelo({clienteId, zonaNombre})
-      : this._clienteId = clienteId,
+  ZonaModelo({
+    zonaOrigenId,
+    clienteId,
+    zonaNombre,
+  })  : this._zonaOrigenId = zonaOrigenId,
+        this._clienteId = clienteId,
         this._zonaNombre = zonaNombre;
-  ZonaModelo.conId(this._zonaId, this._clienteId, this._zonaNombre)
-      : super(
-          zonaId: _zonaId,
-          zonaNombre: _zonaNombre,
-          clienteId: _clienteId,
-        );
-  @required
+  int get zonaOrigenId => _zonaOrigenId;
   int get clienteId => _clienteId;
-  @required
-  int get zonaId => _zonaId;
-  @required
   String get zonaNombre => _zonaNombre;
 
   @override
-  int get idFila => _zonaId;
-  @override
-  set idFila(int zonaId) {
-    this._zonaId = zonaId;
-  }
+  int idFila;
 
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
-    if (zonaId != null) {
-      map['zonaId'] = _zonaId;
-    }
-    map['zonaNombre'] = _zonaNombre;
+    map['zonaOrigenId'] = _zonaOrigenId;
     map['clienteId'] = _clienteId;
+    map['zonaNombre'] = _zonaNombre;
     return map;
   }
 
   ZonaModelo.fromMapToObject(Map<String, dynamic> map) {
+    this._zonaOrigenId = map['zonaOrigenId'];
     this._clienteId = map['clienteId'];
-    this._zonaId = map['zonaId'];
     this._zonaNombre = map['zonaNombre'];
+  }
+  factory ZonaModelo.fromJson(Map<String, dynamic> json) {
+    return ZonaModelo(
+      clienteId: int.parse(json['id_entidad_sector_entidad']),
+      zonaOrigenId: int.parse(json['id_sector_entidad']),
+      zonaNombre: json['detalle_sector_entidad'],
+    );
   }
 }
 
-class CalleModelo extends CalleEntity {
-  CalleModelo({
-    @required int calleId,
-    @required int calleZonaId,
-    @required String calleNombre,
+class ListaZonaModelo implements ObjetoFila {
+  final List<ZonaModelo> listaZona;
+
+  ListaZonaModelo({
+    @required this.listaZona,
   });
+
+  factory ListaZonaModelo.fromJson(List<dynamic> parsedJson) {
+    List<ZonaModelo> _listaZona = List<ZonaModelo>();
+    _listaZona = parsedJson.map((i) => ZonaModelo.fromJson(i)).toList();
+    return ListaZonaModelo(listaZona: _listaZona);
+  }
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    // TODO: implement toMap
+    throw UnimplementedError();
+  }
 }
 
-class CalleEsquinaModelo extends CalleEsquinaEntity {
+//OJO: Las calles implementadas a continuación
+class CalleModelo extends CalleEntity implements ObjetoFila {
+  int _calleOrigenId;
+  int _calleZonaId;
+  String _calleNombre;
+  String _calleTipo;
+  CalleModelo({
+    @required int calleOrigenId,
+    @required int calleZonaId,
+    @required String calleNombre,
+    @required String calleTipo,
+  })  : this._calleOrigenId = calleOrigenId,
+        this._calleZonaId = calleZonaId,
+        this._calleNombre = calleNombre,
+        this._calleTipo = calleTipo;
+  int get calleOrigenId => _calleOrigenId;
+  int get calleZonaId => _calleZonaId;
+  String get calleNombre => _calleNombre;
+  String get calleTipo => _calleTipo;
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    var map = Map<String, dynamic>();
+    map['calleOrigenId'] = _calleOrigenId;
+    map['calleZonaId'] = _calleZonaId;
+    map['calleNombre'] = _calleNombre;
+    map['calleTipo'] = _calleTipo;
+    return map;
+  }
+
+  @override
+  CalleModelo.fromMapToObject(Map<String, dynamic> map) {
+    this._calleOrigenId = map['calleOrigenId'];
+    this._calleZonaId = map['calleZonaId'];
+    this._calleNombre = map['calleNombre'];
+    this._calleTipo = map['calleTipo'];
+  }
+
+  factory CalleModelo.fromJson(Map<String, dynamic> json) {
+    return CalleModelo(
+      calleOrigenId: int.parse(json['id_calle']),
+      calleZonaId: int.parse(json['id_sector_entidad_calle']),
+      calleNombre: json['detalle_calle'],
+      calleTipo: json['tipo_calle'],
+    );
+  }
+}
+
+class ListaCalleModelo implements ObjetoFila {
+  final List<CalleModelo> listaCalle;
+  ListaCalleModelo({
+    @required this.listaCalle,
+  });
+  factory ListaCalleModelo.fromJson(List<dynamic> parsedJson) {
+    List<CalleModelo> _listaCalle = List<CalleModelo>();
+    _listaCalle = parsedJson.map((i) => CalleModelo.fromJson(i)).toList();
+    return ListaCalleModelo(listaCalle: _listaCalle);
+  }
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    // TODO: implement toMap
+    throw UnimplementedError();
+  }
+}
+
+//OJO: Calle esquina
+class CalleEsquinaModelo extends CalleEsquinaEntity implements ObjetoFila {
+  int _calleEsquinaOrigenId;
+  int _calleEsquinaZonaId;
+  String _calleEsquinaNombre;
+  String _calleEsquinaTipo;
   CalleEsquinaModelo({
-    @required int calleEsquinaId,
+    @required int calleEsquinaOrigenId,
+    @required String calleEsquinaTipo,
     @required int calleEsquinaZonaId,
     @required String calleEsquinaNombre,
+  })  : this._calleEsquinaOrigenId = calleEsquinaOrigenId,
+        this._calleEsquinaTipo = calleEsquinaTipo,
+        this._calleEsquinaZonaId = calleEsquinaZonaId,
+        this._calleEsquinaNombre = calleEsquinaNombre;
+
+  int get calleEsquinaOrigenId => _calleEsquinaOrigenId;
+  int get calleEsquinaZonaId => _calleEsquinaZonaId;
+  String get calleEsquinaTipo => _calleEsquinaTipo;
+  String get calleEsquinaNombre => _calleEsquinaNombre;
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    var map = Map<String, dynamic>();
+    map['calleEsquinaOrigenId'] = _calleEsquinaOrigenId;
+    map['calleEsquinaZonaId'] = _calleEsquinaZonaId;
+    map['calleEsquinaNombre'] = _calleEsquinaNombre;
+    map['calleEsquinaTipo'] = _calleEsquinaTipo;
+    return map;
+  }
+
+  @override
+  CalleEsquinaModelo.fromMapToObject(Map<String, dynamic> map) {
+    this._calleEsquinaZonaId = map['calleEsquinaZonaId'];
+    this._calleEsquinaTipo = map['calleEsquinaTipo'];
+    this._calleEsquinaOrigenId = map['calleEsquinaOrigenId'];
+    this._calleEsquinaNombre = map['calleEsquinaNombre'];
+  }
+
+  factory CalleEsquinaModelo.fromJson(Map<String, dynamic> json) {
+    return CalleEsquinaModelo(
+      calleEsquinaOrigenId: int.parse(json['id_calle']),
+      calleEsquinaZonaId: int.parse(json['id_sector_entidad_calle']),
+      calleEsquinaNombre: json['detalle_calle'],
+      calleEsquinaTipo: json['tipo_calle'],
+    );
+  }
+}
+
+class ListaCalleEsquinaModelo implements ObjetoFila {
+  final List<CalleEsquinaModelo> listaCalleEsquina;
+
+  ListaCalleEsquinaModelo({
+    @required this.listaCalleEsquina,
   });
+
+  factory ListaCalleEsquinaModelo.fromJson(List<dynamic> parsedJson) {
+    List<CalleEsquinaModelo> _listaCalleEsquina = List<CalleEsquinaModelo>();
+    _listaCalleEsquina =
+        parsedJson.map((i) => CalleEsquinaModelo.fromJson(i)).toList();
+    return ListaCalleEsquinaModelo(listaCalleEsquina: _listaCalleEsquina);
+  }
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    // TODO: implement toMap
+    throw UnimplementedError();
+  }
 }
 
 //OJO: Especie
@@ -297,53 +457,616 @@ class ListaEspecieModelo implements ObjetoFila {
     throw UnimplementedError();
   }
 }
+//OJO: Estado General
 
-class EstadoGeneralModelo extends EstadoGeneralEntity {
+class EstadoGeneralModelo extends EstadoGeneralEntity implements ObjetoFila {
+  int _estadoGeneralOrigenId;
+  String _estadoGeneralDesc;
   EstadoGeneralModelo({
-    @required int estadoGeneralId,
-    @required String estadoGeneralIdDesc,
-  });
+    @required int estadoGeneralOrigenId,
+    @required String estadoGeneralDesc,
+  })  : this._estadoGeneralOrigenId = estadoGeneralOrigenId,
+        this._estadoGeneralDesc = estadoGeneralDesc;
+  int get estadoGeneralOrigenId => _estadoGeneralOrigenId;
+  String get estadoGeneralDesc => _estadoGeneralDesc;
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    var map = Map<String, dynamic>();
+    map['_estadoGeneralOrigenId'] = _estadoGeneralOrigenId;
+    map['estadoGeneralDesc'] = _estadoGeneralDesc;
+    return map;
+  }
+
+  @override
+  EstadoGeneralModelo.fromMapToObject(Map<String, dynamic> map) {
+    this._estadoGeneralOrigenId = map['_estadoGeneralOrigenId'];
+    this._estadoGeneralDesc = map['estadoGeneralDesc'];
+  }
+  factory EstadoGeneralModelo.fromJson(Map<String, dynamic> json) {
+    return EstadoGeneralModelo(
+      estadoGeneralOrigenId: int.parse(json['id_estado_general']),
+      estadoGeneralDesc: json['detalle_estado_general'],
+    );
+  }
 }
 
-class EstadoSanitarioModelo extends EstadoSanitarioEntity {
+class ListaEstadoGeneralModelo implements ObjetoFila {
+  final List<EstadoGeneralModelo> listaEstadoGeneral;
+  ListaEstadoGeneralModelo({
+    @required this.listaEstadoGeneral,
+  });
+  factory ListaEstadoGeneralModelo.fromJson(List<dynamic> parsedJson) {
+    List<EstadoGeneralModelo> _listaEstadoGeneral = List<EstadoGeneralModelo>();
+    _listaEstadoGeneral =
+        parsedJson.map((i) => EstadoGeneralModelo.fromJson(i)).toList();
+    return ListaEstadoGeneralModelo(listaEstadoGeneral: _listaEstadoGeneral);
+  }
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    // TODO: implement toMap
+    throw UnimplementedError();
+  }
+}
+//OJO: Estado Sanitario
+
+class EstadoSanitarioModelo extends EstadoSanitarioEntity
+    implements ObjetoFila {
+  int _estadoSanitarioOrigenId;
+  String _estadoSanitarioDesc;
   EstadoSanitarioModelo({
-    @required int estadoSanitarioId,
+    @required int estadoSanitarioOrigenId,
     @required String estadoSanitarioDesc,
-  });
+  })  : this._estadoSanitarioOrigenId = estadoSanitarioOrigenId,
+        this._estadoSanitarioDesc = estadoSanitarioDesc;
+  int get estadoSanitarioOrigenId => _estadoSanitarioOrigenId;
+  String get estadoSanitarioDesc => _estadoSanitarioDesc;
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    var map = Map<String, dynamic>();
+    map['estadoSanitarioOrigenId'] = _estadoSanitarioOrigenId;
+    map['estadoSanitarioDesc'] = _estadoSanitarioDesc;
+    return map;
+  }
+
+  @override
+  EstadoSanitarioModelo.fromMapToObject(Map<String, dynamic> map) {
+    this._estadoSanitarioOrigenId = map['estadoSanitarioOrigenId'];
+    this._estadoSanitarioDesc = map['estadoSanitarioDesc'];
+  }
+
+  factory EstadoSanitarioModelo.fromJson(Map<String, dynamic> json) {
+    return EstadoSanitarioModelo(
+      estadoSanitarioOrigenId: int.parse(json['id_estado_Sanitario']),
+      estadoSanitarioDesc: json['detalle_estado_sanitario'],
+    );
+  }
 }
 
-class InclinacionTroncoModelo extends InclinacionTroncoEntity {
+class ListaEstadoSanitarioModelo implements ObjetoFila {
+  final List<EstadoSanitarioModelo> listaEstadoSanitario;
+
+  ListaEstadoSanitarioModelo({
+    @required this.listaEstadoSanitario,
+  });
+
+  factory ListaEstadoSanitarioModelo.fromJson(List<dynamic> parsedJson) {
+    List<EstadoSanitarioModelo> _listaEstadoSanitario =
+        List<EstadoSanitarioModelo>();
+    _listaEstadoSanitario =
+        parsedJson.map((i) => EstadoSanitarioModelo.fromJson(i)).toList();
+    return ListaEstadoSanitarioModelo(
+        listaEstadoSanitario: _listaEstadoSanitario);
+  }
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    // TODO: implement toMap
+    throw UnimplementedError();
+  }
+}
+
+// implements ObjetoFila
+//_propiedades
+// : this._ = propiedades
+// get
+//  @override
+//  int idFila;
+// toMap
+// fromMaP
+// factory from json
+// class list
+//OJO: Inclinacon tronco
+
+class InclinacionTroncoModelo extends InclinacionTroncoEntity
+    implements ObjetoFila {
+  int _inclinacionTroncoOrigenId;
+  String _inclinacionTroncoDesc;
   InclinacionTroncoModelo({
-    @required int inclinacionTroncoId,
+    @required int inclinacionTroncoOrigenId,
     @required String inclinacionTroncoDesc,
-  });
+  })  : this._inclinacionTroncoOrigenId = inclinacionTroncoOrigenId,
+        this._inclinacionTroncoDesc = inclinacionTroncoDesc;
+  int get inclinacionTroncoOrigenId => _inclinacionTroncoOrigenId;
+  String get inclinacionTroncoDesc => _inclinacionTroncoDesc;
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    var map = Map<String, dynamic>();
+    map['inclinacionTroncoOrigenId'] = _inclinacionTroncoOrigenId;
+    map['inclinacionTroncoDesc'] = _inclinacionTroncoDesc;
+    return map;
+  }
+
+  @override
+  InclinacionTroncoModelo.fromMapToObject(Map<String, dynamic> map) {
+    this._inclinacionTroncoOrigenId = map['inclinacionTroncoOrigenId'];
+    this._inclinacionTroncoDesc = map['inclinacionTroncoDesc'];
+  }
+
+  factory InclinacionTroncoModelo.fromJson(Map<String, dynamic> json) {
+    return InclinacionTroncoModelo(
+      inclinacionTroncoOrigenId: int.parse(json['id_inclinacion_tronco']),
+      inclinacionTroncoDesc: json['detalle_inclinacion_tronco'],
+    );
+  }
 }
 
-class OrientacionInclinacionModelo extends OrientacionInclinacionEntity {
+class ListaInclinacionTroncoModelo implements ObjetoFila {
+  final List<InclinacionTroncoModelo> listaInclinacionTronco;
+
+  ListaInclinacionTroncoModelo({
+    @required this.listaInclinacionTronco,
+  });
+
+  factory ListaInclinacionTroncoModelo.fromJson(List<dynamic> parsedJson) {
+    List<InclinacionTroncoModelo> _listaInclinacionTronco =
+        List<InclinacionTroncoModelo>();
+    _listaInclinacionTronco =
+        parsedJson.map((i) => InclinacionTroncoModelo.fromJson(i)).toList();
+    return ListaInclinacionTroncoModelo(
+        listaInclinacionTronco: _listaInclinacionTronco);
+  }
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    // TODO: implement toMap
+    throw UnimplementedError();
+  }
+}
+//OJO: Orientación inclinación
+
+class OrientacionInclinacionModelo extends OrientacionInclinacionEntity
+    implements ObjetoFila {
+  int _orientacionInclinacionOrigenId;
+  String _orientacionInclinacionDesc;
   OrientacionInclinacionModelo({
     @required int orientacionInclinacionId,
     @required String orientacionInclinacionDesc,
-  });
+  })  : this._orientacionInclinacionOrigenId = orientacionInclinacionId,
+        this._orientacionInclinacionDesc = orientacionInclinacionDesc;
+
+  int get orientacionInclinacionId => _orientacionInclinacionOrigenId;
+  String get orientacionInclinacionDesc => _orientacionInclinacionDesc;
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    var map = Map<String, dynamic>();
+    map['orientacionInclinacionId'] = _orientacionInclinacionOrigenId;
+    map['orientacionInclinacionDesc'] = _orientacionInclinacionDesc;
+    return map;
+  }
+
+  @override
+  OrientacionInclinacionModelo.fromMapToObject(Map<String, dynamic> map) {
+    this._orientacionInclinacionOrigenId = map['orientacionInclinacionId'];
+    this._orientacionInclinacionDesc = map['orientacionInclinacionDesc'];
+  }
+
+  factory OrientacionInclinacionModelo.fromJson(Map<String, dynamic> json) {
+    return OrientacionInclinacionModelo(
+      orientacionInclinacionId: int.parse(json['id_inclinacion_tronco']),
+      orientacionInclinacionDesc: json['detalle_inclinacion_tronco'],
+    );
+  }
 }
 
-class AccionObsModelo extends AccionObsEntity {
+class ListaOrientacionInclinacion implements ObjetoFila {
+  final List<OrientacionInclinacionModelo> listaOrientacionInclinacion;
+
+  ListaOrientacionInclinacion({
+    @required this.listaOrientacionInclinacion,
+  });
+
+  factory ListaOrientacionInclinacion.fromJson(List<dynamic> parsedJson) {
+    List<OrientacionInclinacionModelo> _listaOrientacionInclinacion =
+        List<OrientacionInclinacionModelo>();
+    _listaOrientacionInclinacion = parsedJson
+        .map((i) => OrientacionInclinacionModelo.fromJson(i))
+        .toList();
+    return ListaOrientacionInclinacion(
+        listaOrientacionInclinacion: _listaOrientacionInclinacion);
+  }
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    // TODO: implement toMap
+    throw UnimplementedError();
+  }
+}
+
+//OJO: OAccion Obs
+
+class AccionObsModelo extends AccionObsEntity implements ObjetoFila {
+  int _accionObsOrigenId;
+  String _accionObsDesc;
+  int _accionObsOrden;
+
   AccionObsModelo({
-    @required int accionObsId,
+    @required int accionObsOrigenId,
     @required String accionObsDesc,
     @required int accionObsOrden,
-  });
+  })  : this._accionObsOrigenId = accionObsOrigenId,
+        this._accionObsDesc = accionObsDesc,
+        this._accionObsOrden = accionObsOrden;
+
+  int get accionObsOrigenId => _accionObsOrigenId;
+  String get accionObsDesc => _accionObsDesc;
+  int get accionObsOrden => _accionObsOrden;
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    var map = Map<String, dynamic>();
+    map['accionObsOrigenId'] = _accionObsOrigenId;
+    map['accionObsDesc'] = _accionObsDesc;
+    map['accionObsOrden'] = _accionObsOrden;
+    return map;
+  }
+
+  @override
+  AccionObsModelo.fromMapToObject(Map<String, dynamic> map) {
+    this._accionObsOrigenId = map['accionObsOrigenId'];
+    this._accionObsDesc = map['accionObsDesc'];
+    this._accionObsOrden = map['accionObsOrden'];
+  }
+
+  factory AccionObsModelo.fromJson(Map<String, dynamic> json) {
+    return AccionObsModelo(
+      accionObsOrigenId: int.parse(json['id_accion_obs']),
+      accionObsDesc: json['detalle_accion_obs'],
+      accionObsOrden: int.parse(json['orden_accion_obs']),
+    );
+  }
 }
 
-class UsuarioModelo extends AccionObsEntity {
+class ListaAccionObsModelo implements ObjetoFila {
+  final List<AccionObsModelo> listaAccionObs;
+
+  ListaAccionObsModelo({
+    @required this.listaAccionObs,
+  });
+
+  factory ListaAccionObsModelo.fromJson(List<dynamic> parsedJson) {
+    List<AccionObsModelo> _listaAccionObs = List<AccionObsModelo>();
+    _listaAccionObs =
+        parsedJson.map((i) => AccionObsModelo.fromJson(i)).toList();
+    return ListaAccionObsModelo(listaAccionObs: _listaAccionObs);
+  }
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    // TODO: implement toMap
+    throw UnimplementedError();
+  }
+}
+
+//OJO: Usuario
+
+class UsuarioModelo extends UsuarioEntity implements ObjetoFila {
+  int _usuarioOrigenId;
+  String _usuarioGUI;
+  int _usuarioCliente;
+  int _usuarioRol;
+  String _usarioNombre;
+  String _usuarioApellido;
+  String _usuarioEmail;
+  DateTime _usuarioCreacion;
+  String _usuarioActividad;
   UsuarioModelo({
-    @required int usuarioId,
+    @required int usuarioOrigenId,
     @required String usuarioGUI,
-    @required String usuarioCliente,
-    @required String usuarioRol,
+    @required int usuarioCliente,
+    @required int usuarioRol,
     @required String usarioNombre,
     @required String usuarioApellido,
     @required String usuarioEmail,
     @required DateTime usuarioCreacion,
     @required String usuarioActividad,
+  })  : this._usuarioOrigenId = usuarioOrigenId,
+        this._usuarioGUI = usuarioGUI,
+        this._usuarioCliente = usuarioCliente,
+        this._usuarioRol = usuarioRol,
+        this._usarioNombre = usarioNombre,
+        this._usuarioApellido = usuarioApellido,
+        this._usuarioEmail = usuarioEmail,
+        this._usuarioCreacion = usuarioCreacion,
+        this._usuarioActividad = usuarioActividad;
+
+  int get usuarioOrigenId => _usuarioOrigenId;
+  String get usuarioGUI => _usuarioGUI;
+  int get usuarioCliente => _usuarioCliente;
+  int get usuarioRol => _usuarioRol;
+  String get usarioNombre => _usarioNombre;
+  String get usuarioApellido => _usuarioApellido;
+  String get usuarioEmail => _usuarioEmail;
+  DateTime get usuarioCreacion => _usuarioCreacion;
+  String get usuarioActividad => _usuarioActividad;
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    var map = Map<String, dynamic>();
+    map['usuarioOrigenId'] = _usuarioOrigenId;
+    map['usuarioGUI'] = _usuarioGUI;
+    map['usuarioCliente'] = _usuarioCliente;
+    map['usuarioRol'] = _usuarioRol;
+    map['usarioNombre'] = _usarioNombre;
+    map['usuarioApellido'] = _usuarioApellido;
+    map['usuarioEmail'] = _usuarioEmail;
+    map['usuarioCreacion'] = _usuarioCreacion;
+    map['_usuarioActividad'] = _usuarioActividad;
+    return map;
+  }
+
+  @override
+  UsuarioModelo.fromMapToObject(Map<String, dynamic> map) {
+    this._usuarioOrigenId = map['usuarioOrigenId'];
+    this._usuarioGUI = map['usuarioGUI'];
+    this._usuarioCliente = map['usuarioCliente'];
+    this._usuarioRol = map['usuarioRol'];
+    this._usarioNombre = map['usarioNombre'];
+    this._usuarioApellido = map['usuarioApellido'];
+    this._usuarioEmail = map['usuarioEmail'];
+    this._usuarioCreacion = map['usuarioCreacion'];
+    this._usuarioActividad = map['_usuarioActividad'];
+  }
+
+  factory UsuarioModelo.fromJson(Map<String, dynamic> json) {
+    return UsuarioModelo(
+      usuarioOrigenId: int.parse(json['id_usuario']),
+      usuarioGUI: json['id_gui'] ?? 'NO SETEADO',
+      usuarioCliente: int.parse(json['id_entidad_usuario']),
+      usuarioRol: int.parse(json['id_perfil_user_usuario']),
+      usarioNombre: json['nombre_usuario'],
+      usuarioApellido: json['apellido_usuario'],
+      usuarioEmail: json['email_usuario'] ?? 'generico@provisional.cl',
+      usuarioCreacion: json['id_creacion'] ?? 'No definido',
+      usuarioActividad: json['activo_usuario'],
+    );
+  }
+}
+
+class ListaUsuarioModelo implements ObjetoFila {
+  final List<UsuarioModelo> listaUsuario;
+  ListaUsuarioModelo({
+    @required this.listaUsuario,
   });
+  factory ListaUsuarioModelo.fromJson(List<dynamic> parsedJson) {
+    List<UsuarioModelo> _listaUsuario = List<UsuarioModelo>();
+    _listaUsuario = parsedJson.map((i) => UsuarioModelo.fromJson(i)).toList();
+    return ListaUsuarioModelo(listaUsuario: _listaUsuario);
+  }
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    // TODO: implement toMap
+    throw UnimplementedError();
+  }
+}
+
+class AgentePatogenoModelo extends AgentePatogenoEntity implements ObjetoFila {
+  int _agentePatogenoOrigenId;
+  String _agentePatogenoDesc;
+  AgentePatogenoModelo({
+    @required int agentePatogenoOrigenId,
+    @required String agentePatogenoDesc,
+  })  : this._agentePatogenoOrigenId = agentePatogenoOrigenId,
+        this._agentePatogenoDesc = agentePatogenoDesc;
+  int get agentePatogenoOrigenId => _agentePatogenoOrigenId;
+  String get agentePatogenoDesc => _agentePatogenoDesc;
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    var map = Map<String, dynamic>();
+    map['agentePatogenoOrigenId'] = _agentePatogenoOrigenId;
+    map['agentePatogenoDesc'] = _agentePatogenoDesc;
+    return map;
+  }
+
+  @override
+  AgentePatogenoModelo.fromMapToObject(Map<String, dynamic> map) {
+    this._agentePatogenoOrigenId = map['agentePatogenoOrigenId'];
+    this._agentePatogenoDesc = map['_agentePatogenoDesc'];
+  }
+
+  factory AgentePatogenoModelo.fromJson(Map<String, dynamic> json) {
+    return AgentePatogenoModelo(
+      agentePatogenoOrigenId: int.parse(json['id_agentes_patogenos']),
+      agentePatogenoDesc: json['detalle_agentes_patogenos'],
+    );
+  }
+}
+
+class ListaAgentePatogenoModelo implements ObjetoFila {
+  final List<AgentePatogenoModelo> listaAgentePatogeno;
+  ListaAgentePatogenoModelo({
+    @required this.listaAgentePatogeno,
+  });
+  factory ListaAgentePatogenoModelo.fromJson(List<dynamic> parsedJson) {
+    List<AgentePatogenoModelo> _listaAgentePatogeno =
+        List<AgentePatogenoModelo>();
+    _listaAgentePatogeno =
+        parsedJson.map((i) => AgentePatogenoModelo.fromJson(i)).toList();
+    return ListaAgentePatogenoModelo(listaAgentePatogeno: _listaAgentePatogeno);
+  }
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    // TODO: implement toMap
+    throw UnimplementedError();
+  }
+}
+
+class LugarPLagaModelo extends LugarPlagaEntity implements ObjetoFila {
+  int _lugarPlagaOrigenId;
+  String _lugarPlagaDesc;
+  LugarPLagaModelo({
+    @required int lugarPlagaOrigenId,
+    @required String lugarPlagaDesc,
+  })  : this._lugarPlagaOrigenId = lugarPlagaOrigenId,
+        this._lugarPlagaDesc = lugarPlagaDesc;
+  int get lugarPlagaOrigenId => _lugarPlagaOrigenId;
+  String get lugarPlagaDesc => _lugarPlagaDesc;
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    var map = Map<String, dynamic>();
+    map['lugarPlagaOrigenId'] = _lugarPlagaOrigenId;
+    map['lugarPlagaDesc'] = _lugarPlagaDesc;
+    return map;
+  }
+
+  factory LugarPLagaModelo.fromJson(Map<String, dynamic> json) {
+    return LugarPLagaModelo(
+      lugarPlagaOrigenId: int.parse(json['id_lugar_plaga']),
+      lugarPlagaDesc: json['detalle_lugar_plaga'],
+    );
+  }
+}
+
+class ListaLugarPlagaModelo implements ObjetoFila {
+  final List<LugarPLagaModelo> listaLugarPlaga;
+  ListaLugarPlagaModelo({
+    @required this.listaLugarPlaga,
+  });
+  factory ListaLugarPlagaModelo.fromJson(List<dynamic> parsedJson) {
+    List<LugarPLagaModelo> _listaLugarPlaga = List<LugarPLagaModelo>();
+    _listaLugarPlaga =
+        parsedJson.map((i) => LugarPLagaModelo.fromJson(i)).toList();
+    return ListaLugarPlagaModelo(listaLugarPlaga: _listaLugarPlaga);
+  }
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    // TODO: implement toMap
+    throw UnimplementedError();
+  }
+}
+
+class PLagaModelo extends PlagaEntity implements ObjetoFila {
+  int _plagaOrigenId;
+  String _plagaDesc;
+  PLagaModelo({
+    @required int plagaOrigenId,
+    @required String plagaDesc,
+  })  : this._plagaOrigenId = plagaOrigenId,
+        this._plagaDesc = plagaDesc;
+  int get plagaOrigenId => _plagaOrigenId;
+  String get plagaDesc => _plagaDesc;
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    var map = Map<String, dynamic>();
+    map['plagaOrigenId'] = _plagaOrigenId;
+    map['plagaDesc'] = _plagaDesc;
+    return map;
+  }
+
+  @override
+  PLagaModelo.fromMapToObject(Map<String, dynamic> map) {
+    this._plagaOrigenId = map['plagaOrigenId'];
+    this._plagaDesc = map['plagaDesc'];
+  }
+
+  factory PLagaModelo.fromJson(Map<String, dynamic> json) {
+    return PLagaModelo(
+      plagaOrigenId: int.parse(json['id_especie']),
+      plagaDesc: json['detalle_cientifico_especie'],
+    );
+  }
+}
+
+class ListaPlagaModelo implements ObjetoFila {
+  final List<PLagaModelo> listaPlaga;
+
+  ListaPlagaModelo({
+    @required this.listaPlaga,
+  });
+
+  factory ListaPlagaModelo.fromJson(List<dynamic> parsedJson) {
+    List<PLagaModelo> _listaPlaga = List<PLagaModelo>();
+    _listaPlaga = parsedJson.map((i) => PLagaModelo.fromJson(i)).toList();
+    return ListaPlagaModelo(listaPlaga: _listaPlaga);
+  }
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    // TODO: implement toMap
+    throw UnimplementedError();
+  }
 }

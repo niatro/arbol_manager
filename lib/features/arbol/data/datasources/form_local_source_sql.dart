@@ -54,34 +54,44 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
   }
 
   void _createDB(Database db, int newVersion) async {
+    //OJO: Cliente / revision v_1 ok
     await db.execute('''
     CREATE TABLE ${referencia.cliente.nombreTabla} (
     ${referencia.cliente.clienteId} INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT, 
+    ${referencia.cliente.clienteOrigenId} INTEGER,
     ${referencia.cliente.clienteNombre} TEXT
     )''');
+    //OJO: Zona
     await db.execute('''
     CREATE TABLE ${referencia.zona.nombreTabla} (
     ${referencia.zona.zonaId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    ${referencia.zona.zonaOrigenId} INTEGER,
     ${referencia.zona.zonaNombre} TEXT,
     ${referencia.zona.foreignKey} INTEGER,
     FOREIGN KEY (${referencia.zona.foreignKey}) REFERENCES ${referencia.cliente.nombreTabla}(${referencia.cliente.clienteId})
     )''');
+    //OJO: Calles
     await db.execute('''
     CREATE TABLE ${referencia.calle.nombreTabla} (
     ${referencia.calle.calleId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    ${referencia.calle.calleZonaId} TEXT,
+    ${referencia.calle.calleZonaId} INTEGER,
+    ${referencia.calle.calleOrigenId} INTEGER,
     ${referencia.calle.calleNombre} TEXT,
     ${referencia.calle.foreignKey} INTEGER,
     FOREIGN KEY (${referencia.calle.foreignKey}) REFERENCES ${referencia.cliente.nombreTabla}(${referencia.cliente.clienteId})
     )''');
+    //OJO: Calles Esquina
     await db.execute('''
     CREATE TABLE ${referencia.calleEsquina.nombreTabla} (
     ${referencia.calleEsquina.calleEsquinaId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    ${referencia.calleEsquina.calleEsquinaZonaId} TEXT,
+    ${referencia.calleEsquina.calleEsquinaZonaId} INTEGER,
+    ${referencia.calleEsquina.calleEsquinaOrigenId} INTEGER,
     ${referencia.calleEsquina.calleEsquinaNombre} TEXT,
     ${referencia.calleEsquina.foreignKey} INTEGER,
     FOREIGN KEY (${referencia.calleEsquina.foreignKey}) REFERENCES ${referencia.cliente.nombreTabla}(${referencia.cliente.clienteId})
     )''');
+    //OJO: Especie
+
     await db.execute('''
     CREATE TABLE ${referencia.especie.nombreTabla} (
     ${referencia.especie.especieId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -94,37 +104,56 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
     ${referencia.especie.especieFotoGenerica} TEXT,
     ${referencia.especie.especieDescripcion} TEXT
     )''');
+    //OJO: Estado General
     await db.execute('''
     CREATE TABLE ${referencia.estadoGeneral.nombreTabla} (
     ${referencia.estadoGeneral.estadoGeneralId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    ${referencia.estadoGeneral.estadoGeneralOrigenId} INTEGER,
     ${referencia.estadoGeneral.estadoGeneralIdDesc} TEXT
     )''');
+
+    //OJO: Estado Sanitario
     await db.execute('''
     CREATE TABLE ${referencia.estadoSanitario.nombreTabla} (
     ${referencia.estadoSanitario.estadoSanitarioId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    ${referencia.estadoSanitario.estadoSanitarioOrigenId} INTEGER,
     ${referencia.estadoSanitario.estadoSanitarioDesc} TEXT
     )''');
+
+    //OJO: Inclinación tronco
     await db.execute('''
     CREATE TABLE ${referencia.inclinacionTronco.nombreTabla} (
     ${referencia.inclinacionTronco.inclinacionTroncoId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    ${referencia.inclinacionTronco.inclinacionTroncoOrigenId} INTEGER,    
     ${referencia.inclinacionTronco.inclinacionDesc} TEXT
     )''');
+
+    //OJO: Orientación inclinación
     await db.execute('''
     CREATE TABLE ${referencia.orientacionInclinacion.nombreTabla} (
     ${referencia.orientacionInclinacion.orientacionInclinacionId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    ${referencia.orientacionInclinacion.orientacionInclinacionOrigenId} INTEGER,        
     ${referencia.orientacionInclinacion.orientacionInclinacionDesc} TEXT
     )''');
+
+    //OJO: Accion Obs
     await db.execute('''
     CREATE TABLE ${referencia.accionObs.nombreTabla} (
     ${referencia.accionObs.accionObsId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    ${referencia.accionObs.accionObsOrigenId} INTEGER,            
     ${referencia.accionObs.accionObsDesc} TEXT,
     ${referencia.accionObs.accionObsOrden} INTEGER
     )''');
+
+    //OJO: Usuario
+
     await db.execute('''
     CREATE TABLE ${referencia.usuario.nombreTabla} (
         ${referencia.usuario.usuarioId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        ${referencia.usuario.usuarioOrigenId} INTEGER,                  
         ${referencia.usuario.usuarioGUI} TEXT,
-        ${referencia.usuario.usuarioRol} TEXT,
+        ${referencia.usuario.usuarioCliente} INTEGER,                  
+        ${referencia.usuario.usuarioRol} INTEGER,
         ${referencia.usuario.usuarioNombre} TEXT,
         ${referencia.usuario.usuarioApellido} TEXT,
         ${referencia.usuario.usuarioEmail} TEXT,
@@ -134,8 +163,26 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
         FOREIGN KEY (${referencia.usuario.foreignKey}) REFERENCES ${referencia.cliente.nombreTabla}(${referencia.cliente.clienteId})
     )''');
     //TODO: falta tabla para agente patogeno 😱
+    await db.execute('''
+    CREATE TABLE ${referencia.agentesPatogenos.nombreTabla} (
+    ${referencia.agentesPatogenos.agentesPatogenosId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    ${referencia.agentesPatogenos.agentesPatogenosOrigenId} INTEGER,        
+    ${referencia.agentesPatogenos.agentesPatogenosDesc} TEXT
+    )''');
     //TODO: falta tabla  para lugar plaga 😱
+    await db.execute('''
+    CREATE TABLE ${referencia.lugarPlaga.nombreTabla} (
+    ${referencia.lugarPlaga.lugarPlagaId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    ${referencia.lugarPlaga.lugarPlagaOrigenId} INTEGER,        
+    ${referencia.lugarPlaga.lugarPlagaDesc} TEXT
+    )''');
     //TODO: falta tabla  para  plaga 😱
+    await db.execute('''
+    CREATE TABLE ${referencia.plagas.nombreTabla} (
+    ${referencia.plagas.plagaId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    ${referencia.plagas.plagaOrigenId} INTEGER,        
+    ${referencia.plagas.plagaDesc} TEXT
+    )''');
   }
 
   //Fetch Operation: Get all forms from database 👌

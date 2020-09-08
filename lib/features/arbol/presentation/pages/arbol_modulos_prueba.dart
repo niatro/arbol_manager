@@ -151,28 +151,27 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
               SizedBox(height: 10.0),
               FlatButton(
                 onPressed: () async {
-                  ListaEspecieModelo especies =
+                  ListaClienteModelo clientes =
                       await remoteDataSource.llenarTablaFormulario(
-                          tabla: referencia.especie.nombreTabla);
+                          tabla: referencia.cliente.nombreTabla);
 
-                  especies.listaEspecie.forEach((element) {
-                    print(element.toMap());
-                  });
-                  especies.listaEspecie.forEach((element) async {
+                  clientes.listaClientes.forEach((element) async {
                     await databaseHelper.insertFila(
                       objetoFila: element,
-                      nombreTabla: referencia.especie.nombreTabla,
+                      nombreTabla: referencia.cliente.nombreTabla,
                     );
-                    print('grabado en BD');
+                    print('grabado exitosamente en BD');
                   });
-                  List especiesenBD = await databaseHelper.getFilasMapList(
-                    nombreTabla: referencia.especie.nombreTabla,
-                    campoOrdenador: referencia.especie.especieOrden,
+                  List clienteEnBD = await databaseHelper.getFilasMapList(
+                    nombreTabla: referencia.cliente.nombreTabla,
+                    campoOrdenador: referencia.cliente.clienteNombre,
                   );
-                  print(especiesenBD.toString());
+                  print('Leido de BD');
+                  print(clienteEnBD.length.toString());
+                  print(clienteEnBD.toString());
                 },
                 color: Colors.brown,
-                child: Text('Acceder Arboles'),
+                child: Text('Acceder Clientes'),
               ),
             ],
           ),
