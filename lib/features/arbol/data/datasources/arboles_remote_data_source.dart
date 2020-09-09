@@ -23,7 +23,7 @@ abstract class ArbolesRemoteDataSource {
   Future<bool> verificarIdNFCRemoteData({String idNFC});
   Future<ArbolesEntityModelo> getArbolPorIdNFCRemoteData({String idNFC});
   Future<FormEntityModelo> getDatosForm({String idUsuario});
-  Future<ObjetoFila> llenarTablaFormulario({String tabla});
+  Future<ObjetoFila> llenarObjetoListaDesdeHttp({String tabla});
 }
 
 class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
@@ -115,14 +115,13 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
   }
 
   @override
-  Future<ObjetoFila> llenarTablaFormulario({String tabla}) async {
+  Future<ObjetoFila> llenarObjetoListaDesdeHttp({String tabla}) async {
     final _response = await http.post(
       _url + "/bd/getTablas.php",
       body: {
         "tabla": tabla,
       },
     );
-
     if (_response.statusCode == 200) {
       final respuestaDecodificada = json.decode(_response.body);
       return funcionSwitch(respuestaDecodificada, tabla);
@@ -151,12 +150,51 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
             ListaCalleEsquinaModelo.fromJson(response);
         return objetoTabla;
         break;
-      case 'tablaEspecie':
-        ListaEspecieModelo objetoTabla = ListaEspecieModelo.fromJson(response);
+      case 'tablaUsuario':
+        ListaUsuarioModelo objetoTabla = ListaUsuarioModelo.fromJson(response);
+        return objetoTabla;
+        break;
+      case 'tablaEstadoGeneral':
+        ListaEstadoGeneralModelo objetoTabla =
+            ListaEstadoGeneralModelo.fromJson(response);
+        return objetoTabla;
+        break;
+      case 'tablaEstadoSanitario':
+        ListaEstadoSanitarioModelo objetoTabla =
+            ListaEstadoSanitarioModelo.fromJson(response);
+        return objetoTabla;
+        break;
+      case 'tablaInclinacionTronco':
+        ListaInclinacionTroncoModelo objetoTabla =
+            ListaInclinacionTroncoModelo.fromJson(response);
+        return objetoTabla;
+        break;
+      case 'tablaOrientacionInclinacion':
+        ListaOrientacionInclinacionModelo objetoTabla =
+            ListaOrientacionInclinacionModelo.fromJson(response);
+        return objetoTabla;
+        break;
+      case 'tablaAccionObs':
+        ListaAccionObsModelo objetoTabla =
+            ListaAccionObsModelo.fromJson(response);
         return objetoTabla;
         break;
       case 'tablaCliente':
         ListaClienteModelo objetoTabla = ListaClienteModelo.fromJson(response);
+        return objetoTabla;
+        break;
+      case 'tablaAgentesPatogenos':
+        ListaAgentePatogenoModelo objetoTabla =
+            ListaAgentePatogenoModelo.fromJson(response);
+        return objetoTabla;
+        break;
+      case 'tablaLugarPlaga':
+        ListaLugarPlagaModelo objetoTabla =
+            ListaLugarPlagaModelo.fromJson(response);
+        return objetoTabla;
+        break;
+      case 'tablaPlagas':
+        ListaPlagaModelo objetoTabla = ListaPlagaModelo.fromJson(response);
         return objetoTabla;
         break;
 

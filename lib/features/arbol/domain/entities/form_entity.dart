@@ -162,7 +162,7 @@ class UsuarioEntity {
   final String usarioNombre;
   final String usuarioApellido;
   final String usuarioEmail;
-  final DateTime usuarioCreacion;
+  final String usuarioCreacion;
   final String usuarioActividad;
 
   UsuarioEntity({

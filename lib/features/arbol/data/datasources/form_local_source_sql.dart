@@ -76,7 +76,8 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
     ${referencia.calle.calleId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     ${referencia.calle.calleZonaId} INTEGER,
     ${referencia.calle.calleOrigenId} INTEGER,
-    ${referencia.calle.calleNombre} TEXT,
+    ${referencia.calle.calleNombre} TEXT,     
+    ${referencia.calle.calleTipo} TEXT,
     ${referencia.calle.foreignKey} INTEGER,
     FOREIGN KEY (${referencia.calle.foreignKey}) REFERENCES ${referencia.cliente.nombreTabla}(${referencia.cliente.clienteId})
     )''');
@@ -87,6 +88,7 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
     ${referencia.calleEsquina.calleEsquinaZonaId} INTEGER,
     ${referencia.calleEsquina.calleEsquinaOrigenId} INTEGER,
     ${referencia.calleEsquina.calleEsquinaNombre} TEXT,
+    ${referencia.calleEsquina.calleEsquinaTipo} TEXT,
     ${referencia.calleEsquina.foreignKey} INTEGER,
     FOREIGN KEY (${referencia.calleEsquina.foreignKey}) REFERENCES ${referencia.cliente.nombreTabla}(${referencia.cliente.clienteId})
     )''');
@@ -109,7 +111,7 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
     CREATE TABLE ${referencia.estadoGeneral.nombreTabla} (
     ${referencia.estadoGeneral.estadoGeneralId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     ${referencia.estadoGeneral.estadoGeneralOrigenId} INTEGER,
-    ${referencia.estadoGeneral.estadoGeneralIdDesc} TEXT
+    ${referencia.estadoGeneral.estadoGeneralDesc} TEXT
     )''');
 
     //OJO: Estado Sanitario
@@ -125,7 +127,7 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
     CREATE TABLE ${referencia.inclinacionTronco.nombreTabla} (
     ${referencia.inclinacionTronco.inclinacionTroncoId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     ${referencia.inclinacionTronco.inclinacionTroncoOrigenId} INTEGER,    
-    ${referencia.inclinacionTronco.inclinacionDesc} TEXT
+    ${referencia.inclinacionTronco.inclinacionTroncoDesc} TEXT
     )''');
 
     //OJO: Orientación inclinación
@@ -166,8 +168,8 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
     await db.execute('''
     CREATE TABLE ${referencia.agentesPatogenos.nombreTabla} (
     ${referencia.agentesPatogenos.agentesPatogenosId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    ${referencia.agentesPatogenos.agentesPatogenosOrigenId} INTEGER,        
-    ${referencia.agentesPatogenos.agentesPatogenosDesc} TEXT
+    ${referencia.agentesPatogenos.agentePatogenoOrigenId} INTEGER,        
+    ${referencia.agentesPatogenos.agentePatogenoDesc} TEXT
     )''');
     //TODO: falta tabla  para lugar plaga 😱
     await db.execute('''

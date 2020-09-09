@@ -146,7 +146,7 @@ class ListaClienteModelo implements ObjetoFila {
   }
 }
 
-//OJO: Zona
+//OJO: Zona / Rev 1
 class ZonaModelo extends ZonaEntity implements ObjetoFila {
   int _zonaOrigenId;
   int _clienteId;
@@ -209,7 +209,7 @@ class ListaZonaModelo implements ObjetoFila {
   }
 }
 
-//OJO: Las calles implementadas a continuación
+//OJO: Las calles implementadas a continuación  / Rev 1
 class CalleModelo extends CalleEntity implements ObjetoFila {
   int _calleOrigenId;
   int _calleZonaId;
@@ -281,7 +281,7 @@ class ListaCalleModelo implements ObjetoFila {
   }
 }
 
-//OJO: Calle esquina
+//OJO: Calle esquina / Rev 1
 class CalleEsquinaModelo extends CalleEsquinaEntity implements ObjetoFila {
   int _calleEsquinaOrigenId;
   int _calleEsquinaZonaId;
@@ -357,7 +357,7 @@ class ListaCalleEsquinaModelo implements ObjetoFila {
   }
 }
 
-//OJO: Especie
+//OJO: Especie / Rev 1
 class EspecieModelo extends EspecieEntity implements ObjetoFila {
   int _especieOrigenId;
   String _especieNombreComun;
@@ -457,7 +457,7 @@ class ListaEspecieModelo implements ObjetoFila {
     throw UnimplementedError();
   }
 }
-//OJO: Estado General
+//OJO: Estado General  / Rev 1
 
 class EstadoGeneralModelo extends EstadoGeneralEntity implements ObjetoFila {
   int _estadoGeneralOrigenId;
@@ -476,14 +476,14 @@ class EstadoGeneralModelo extends EstadoGeneralEntity implements ObjetoFila {
   @override
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
-    map['_estadoGeneralOrigenId'] = _estadoGeneralOrigenId;
+    map['estadoGeneralOrigenId'] = _estadoGeneralOrigenId;
     map['estadoGeneralDesc'] = _estadoGeneralDesc;
     return map;
   }
 
   @override
   EstadoGeneralModelo.fromMapToObject(Map<String, dynamic> map) {
-    this._estadoGeneralOrigenId = map['_estadoGeneralOrigenId'];
+    this._estadoGeneralOrigenId = map['estadoGeneralOrigenId'];
     this._estadoGeneralDesc = map['estadoGeneralDesc'];
   }
   factory EstadoGeneralModelo.fromJson(Map<String, dynamic> json) {
@@ -515,7 +515,7 @@ class ListaEstadoGeneralModelo implements ObjetoFila {
     throw UnimplementedError();
   }
 }
-//OJO: Estado Sanitario
+//OJO: Estado Sanitario   / Rev 1
 
 class EstadoSanitarioModelo extends EstadoSanitarioEntity
     implements ObjetoFila {
@@ -548,7 +548,7 @@ class EstadoSanitarioModelo extends EstadoSanitarioEntity
 
   factory EstadoSanitarioModelo.fromJson(Map<String, dynamic> json) {
     return EstadoSanitarioModelo(
-      estadoSanitarioOrigenId: int.parse(json['id_estado_Sanitario']),
+      estadoSanitarioOrigenId: int.parse(json['id_estado_sanitario']),
       estadoSanitarioDesc: json['detalle_estado_sanitario'],
     );
   }
@@ -590,7 +590,8 @@ class ListaEstadoSanitarioModelo implements ObjetoFila {
 // fromMaP
 // factory from json
 // class list
-//OJO: Inclinacon tronco
+
+//OJO: Inclinacon tronco   / Rev 1
 
 class InclinacionTroncoModelo extends InclinacionTroncoEntity
     implements ObjetoFila {
@@ -654,19 +655,19 @@ class ListaInclinacionTroncoModelo implements ObjetoFila {
     throw UnimplementedError();
   }
 }
-//OJO: Orientación inclinación
+//OJO: Orientación inclinación   / Rev 1
 
 class OrientacionInclinacionModelo extends OrientacionInclinacionEntity
     implements ObjetoFila {
   int _orientacionInclinacionOrigenId;
   String _orientacionInclinacionDesc;
   OrientacionInclinacionModelo({
-    @required int orientacionInclinacionId,
+    @required int orientacionInclinacionOrigenId,
     @required String orientacionInclinacionDesc,
-  })  : this._orientacionInclinacionOrigenId = orientacionInclinacionId,
+  })  : this._orientacionInclinacionOrigenId = orientacionInclinacionOrigenId,
         this._orientacionInclinacionDesc = orientacionInclinacionDesc;
 
-  int get orientacionInclinacionId => _orientacionInclinacionOrigenId;
+  int get orientacionInclinacionOrigenId => _orientacionInclinacionOrigenId;
   String get orientacionInclinacionDesc => _orientacionInclinacionDesc;
 
   @override
@@ -675,39 +676,41 @@ class OrientacionInclinacionModelo extends OrientacionInclinacionEntity
   @override
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
-    map['orientacionInclinacionId'] = _orientacionInclinacionOrigenId;
+    map['orientacionInclinacionOrigenId'] = _orientacionInclinacionOrigenId;
     map['orientacionInclinacionDesc'] = _orientacionInclinacionDesc;
     return map;
   }
 
   @override
   OrientacionInclinacionModelo.fromMapToObject(Map<String, dynamic> map) {
-    this._orientacionInclinacionOrigenId = map['orientacionInclinacionId'];
+    this._orientacionInclinacionOrigenId =
+        map['orientacionInclinacionOrigenId'];
     this._orientacionInclinacionDesc = map['orientacionInclinacionDesc'];
   }
 
   factory OrientacionInclinacionModelo.fromJson(Map<String, dynamic> json) {
     return OrientacionInclinacionModelo(
-      orientacionInclinacionId: int.parse(json['id_inclinacion_tronco']),
-      orientacionInclinacionDesc: json['detalle_inclinacion_tronco'],
+      orientacionInclinacionOrigenId:
+          int.parse(json['id_orientacion_inclinacion']),
+      orientacionInclinacionDesc: json['detalle_orientacion_inclinacion'],
     );
   }
 }
 
-class ListaOrientacionInclinacion implements ObjetoFila {
+class ListaOrientacionInclinacionModelo implements ObjetoFila {
   final List<OrientacionInclinacionModelo> listaOrientacionInclinacion;
 
-  ListaOrientacionInclinacion({
+  ListaOrientacionInclinacionModelo({
     @required this.listaOrientacionInclinacion,
   });
 
-  factory ListaOrientacionInclinacion.fromJson(List<dynamic> parsedJson) {
+  factory ListaOrientacionInclinacionModelo.fromJson(List<dynamic> parsedJson) {
     List<OrientacionInclinacionModelo> _listaOrientacionInclinacion =
         List<OrientacionInclinacionModelo>();
     _listaOrientacionInclinacion = parsedJson
         .map((i) => OrientacionInclinacionModelo.fromJson(i))
         .toList();
-    return ListaOrientacionInclinacion(
+    return ListaOrientacionInclinacionModelo(
         listaOrientacionInclinacion: _listaOrientacionInclinacion);
   }
 
@@ -721,7 +724,7 @@ class ListaOrientacionInclinacion implements ObjetoFila {
   }
 }
 
-//OJO: OAccion Obs
+//OJO: Oaccion Obs    / Rev 1
 
 class AccionObsModelo extends AccionObsEntity implements ObjetoFila {
   int _accionObsOrigenId;
@@ -763,7 +766,7 @@ class AccionObsModelo extends AccionObsEntity implements ObjetoFila {
     return AccionObsModelo(
       accionObsOrigenId: int.parse(json['id_accion_obs']),
       accionObsDesc: json['detalle_accion_obs'],
-      accionObsOrden: int.parse(json['orden_accion_obs']),
+      accionObsOrden: int.parse(json['orden_accion_obs'] ?? '0'),
     );
   }
 }
@@ -792,7 +795,7 @@ class ListaAccionObsModelo implements ObjetoFila {
   }
 }
 
-//OJO: Usuario
+//OJO: Usuario     / Rev 1
 
 class UsuarioModelo extends UsuarioEntity implements ObjetoFila {
   int _usuarioOrigenId;
@@ -802,7 +805,7 @@ class UsuarioModelo extends UsuarioEntity implements ObjetoFila {
   String _usarioNombre;
   String _usuarioApellido;
   String _usuarioEmail;
-  DateTime _usuarioCreacion;
+  String _usuarioCreacion;
   String _usuarioActividad;
   UsuarioModelo({
     @required int usuarioOrigenId,
@@ -812,7 +815,7 @@ class UsuarioModelo extends UsuarioEntity implements ObjetoFila {
     @required String usarioNombre,
     @required String usuarioApellido,
     @required String usuarioEmail,
-    @required DateTime usuarioCreacion,
+    @required String usuarioCreacion,
     @required String usuarioActividad,
   })  : this._usuarioOrigenId = usuarioOrigenId,
         this._usuarioGUI = usuarioGUI,
@@ -831,7 +834,7 @@ class UsuarioModelo extends UsuarioEntity implements ObjetoFila {
   String get usarioNombre => _usarioNombre;
   String get usuarioApellido => _usuarioApellido;
   String get usuarioEmail => _usuarioEmail;
-  DateTime get usuarioCreacion => _usuarioCreacion;
+  String get usuarioCreacion => _usuarioCreacion;
   String get usuarioActividad => _usuarioActividad;
 
   @override
@@ -848,7 +851,7 @@ class UsuarioModelo extends UsuarioEntity implements ObjetoFila {
     map['usuarioApellido'] = _usuarioApellido;
     map['usuarioEmail'] = _usuarioEmail;
     map['usuarioCreacion'] = _usuarioCreacion;
-    map['_usuarioActividad'] = _usuarioActividad;
+    map['usuarioActividad'] = _usuarioActividad;
     return map;
   }
 
@@ -862,19 +865,19 @@ class UsuarioModelo extends UsuarioEntity implements ObjetoFila {
     this._usuarioApellido = map['usuarioApellido'];
     this._usuarioEmail = map['usuarioEmail'];
     this._usuarioCreacion = map['usuarioCreacion'];
-    this._usuarioActividad = map['_usuarioActividad'];
+    this._usuarioActividad = map['usuarioActividad'];
   }
 
   factory UsuarioModelo.fromJson(Map<String, dynamic> json) {
     return UsuarioModelo(
       usuarioOrigenId: int.parse(json['id_usuario']),
-      usuarioGUI: json['id_gui'] ?? 'NO SETEADO',
+      usuarioGUI: 'NO SETEADO',
       usuarioCliente: int.parse(json['id_entidad_usuario']),
       usuarioRol: int.parse(json['id_perfil_user_usuario']),
       usarioNombre: json['nombre_usuario'],
       usuarioApellido: json['apellido_usuario'],
-      usuarioEmail: json['email_usuario'] ?? 'generico@provisional.cl',
-      usuarioCreacion: json['id_creacion'] ?? 'No definido',
+      usuarioEmail: 'generico@provisional.cl',
+      usuarioCreacion: 'No definido',
       usuarioActividad: json['activo_usuario'],
     );
   }
@@ -901,6 +904,8 @@ class ListaUsuarioModelo implements ObjetoFila {
   }
 }
 
+//OJO: Agente Patogeno     / Rev 1
+
 class AgentePatogenoModelo extends AgentePatogenoEntity implements ObjetoFila {
   int _agentePatogenoOrigenId;
   String _agentePatogenoDesc;
@@ -926,7 +931,7 @@ class AgentePatogenoModelo extends AgentePatogenoEntity implements ObjetoFila {
   @override
   AgentePatogenoModelo.fromMapToObject(Map<String, dynamic> map) {
     this._agentePatogenoOrigenId = map['agentePatogenoOrigenId'];
-    this._agentePatogenoDesc = map['_agentePatogenoDesc'];
+    this._agentePatogenoDesc = map['agentePatogenoDesc'];
   }
 
   factory AgentePatogenoModelo.fromJson(Map<String, dynamic> json) {
@@ -960,6 +965,8 @@ class ListaAgentePatogenoModelo implements ObjetoFila {
   }
 }
 
+//OJO: Lugar Plaga     / Rev 1
+
 class LugarPLagaModelo extends LugarPlagaEntity implements ObjetoFila {
   int _lugarPlagaOrigenId;
   String _lugarPlagaDesc;
@@ -982,6 +989,12 @@ class LugarPLagaModelo extends LugarPlagaEntity implements ObjetoFila {
     return map;
   }
 
+  @override
+  LugarPLagaModelo.fromMapToObject(Map<String, dynamic> map) {
+    this._lugarPlagaOrigenId = map['lugarPlagaOrigenId'];
+    this._lugarPlagaDesc = map['lugarPlagaDesc'];
+  }
+
   factory LugarPLagaModelo.fromJson(Map<String, dynamic> json) {
     return LugarPLagaModelo(
       lugarPlagaOrigenId: int.parse(json['id_lugar_plaga']),
@@ -989,6 +1002,7 @@ class LugarPLagaModelo extends LugarPlagaEntity implements ObjetoFila {
     );
   }
 }
+//OJO: Lugar Plaga     / Rev 1
 
 class ListaLugarPlagaModelo implements ObjetoFila {
   final List<LugarPLagaModelo> listaLugarPlaga;
@@ -1011,6 +1025,8 @@ class ListaLugarPlagaModelo implements ObjetoFila {
     throw UnimplementedError();
   }
 }
+
+//OJO: Plaga     / Rev 1
 
 class PLagaModelo extends PlagaEntity implements ObjetoFila {
   int _plagaOrigenId;
@@ -1042,8 +1058,8 @@ class PLagaModelo extends PlagaEntity implements ObjetoFila {
 
   factory PLagaModelo.fromJson(Map<String, dynamic> json) {
     return PLagaModelo(
-      plagaOrigenId: int.parse(json['id_especie']),
-      plagaDesc: json['detalle_cientifico_especie'],
+      plagaOrigenId: int.parse(json['id_plagas']),
+      plagaDesc: json['detalle_plagas'],
     );
   }
 }
