@@ -1,13 +1,17 @@
 import 'dart:convert';
 
+import 'package:dartz/dartz_unsafe.dart';
 import 'package:flutterapparbol/core/constants/server_prueba.dart';
 import 'package:flutterapparbol/core/error/exceptions.dart';
+import 'package:flutterapparbol/features/arbol/data/datasources/form_local_source_sql.dart';
 import 'package:flutterapparbol/features/arbol/data/models/arboles_entity_modelo.dart';
 import 'package:flutterapparbol/features/arbol/data/models/form_entity_modelo.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
+
+import 'local_data_estructuras.dart';
 
 abstract class ArbolesRemoteDataSource {
   /// Va al sector de pruebas y ejecuta un archivo mediante un método post
@@ -23,18 +27,102 @@ abstract class ArbolesRemoteDataSource {
   Future<bool> verificarIdNFCRemoteData({String idNFC});
   Future<ArbolesEntityModelo> getArbolPorIdNFCRemoteData({String idNFC});
   Future<FormEntityModelo> getDatosForm({String idUsuario});
-  Future<ObjetoFila> llenarObjetoListaDesdeHttp({String tabla});
+  Future<ObjetoLista> llenarObjetoListaDesdeHttp({String tabla});
+  Future<bool> actualizarBaseDatosFormularios();
 }
 
 class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
   final http.Client client;
   ArbolesRemoteDataSourceImpl({@required this.client});
   final String _url = urlPruebas;
+  FormLocalSourceSqlImpl _databaseHelper = FormLocalSourceSqlImpl();
 
   @override
   Future<FormEntityModelo> getDatosForm({String idUsuario}) async {
-    // TODO: implement getDatosForm
-    throw UnimplementedError();
+    try {
+      List<Map<String, List<ObjetoFila>>> lista = [];
+      await llenarListaDesdeSql(lista);
+      Future.delayed(Duration(seconds: 1), () {
+        List<ClienteModelo> listaCliente = [];
+        lista[0]['tablaCliente'].forEach((object) {
+          listaCliente.add(object);
+        });
+        List<ZonaModelo> listaZona = [];
+        lista[1]['tablaZona'].forEach((object) {
+          listaZona.add(object);
+        });
+        List<CalleModelo> listaCalle = [];
+        lista[2]['tablaCalle'].forEach((object) {
+          listaCalle.add(object);
+        });
+        List<CalleEsquinaModelo> listaEsquinaCalle = [];
+        lista[3]['tablaCalleEsquina'].forEach((object) {
+          listaEsquinaCalle.add(object);
+        });
+
+        List<EstadoGeneralModelo> listaEstadoGeneral = [];
+        lista[4]['tablaEstadoGeneral'].forEach((object) {
+          listaEstadoGeneral.add(object);
+        });
+        List<EstadoSanitarioModelo> listaEstadoSanitario = [];
+        lista[5]['tablaEstadoSanitario'].forEach((object) {
+          listaEstadoSanitario.add(object);
+        });
+        List<InclinacionTroncoModelo> listaInclinacion = [];
+        lista[6]['tablaInclinacionTronco'].forEach((object) {
+          listaInclinacion.add(object);
+        });
+        List<OrientacionInclinacionModelo> listaOrientacionInclinacion = [];
+        lista[7]['tablaOrientacionInclinacion'].forEach((object) {
+          listaOrientacionInclinacion.add(object);
+        });
+        List<AccionObsModelo> listaAccionObs = [];
+        lista[8]['tablaAccionObs'].forEach((object) {
+          listaAccionObs.add(object);
+        });
+        List<UsuarioModelo> listaUsuario = [];
+        lista[9]['tablaUsuario'].forEach((object) {
+          listaUsuario.add(object);
+        });
+        List<AgentePatogenoModelo> listaAgentePatogeno = [];
+        lista[10]['tablaAgentesPatogenos'].forEach((object) {
+          listaAgentePatogeno.add(object);
+        });
+        List<LugarPlagaModelo> listaLugarPlaga = [];
+        lista[11]['tablaLugarPlaga'].forEach((object) {
+          listaLugarPlaga.add(object);
+        });
+        List<PlagaModelo> listaPlaga = [];
+        lista[12]['tablaPlagas'].forEach((object) {
+          listaPlaga.add(object);
+        });
+        List<EspecieModelo> listaEspecie = [];
+        lista[13]['tablaEspecie'].forEach((object) {
+          listaEspecie.add(object);
+        });
+        FormEntityModelo formEntityModelo = FormEntityModelo(
+          cliente: listaCliente,
+          zona: listaZona,
+          calle: listaCalle,
+          esquinaCalle: listaEsquinaCalle,
+          estadoGeneral: listaEstadoGeneral,
+          estadoSanitario: listaEstadoSanitario,
+          inclinacionTronco: listaInclinacion,
+          orientacionInclinacion: listaOrientacionInclinacion,
+          accionObs: listaAccionObs,
+          usuario: listaUsuario,
+          agentePatogeno: listaAgentePatogeno,
+          lugarPlaga: listaLugarPlaga,
+          plaga: listaPlaga,
+          especie: listaEspecie,
+        );
+        return formEntityModelo;
+
+//        print(formEntityModelo.lugarPlaga[0].lugarPlagaDesc);
+      });
+    } catch (e, s) {
+      print(s);
+    }
   }
 
   @override
@@ -115,7 +203,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
   }
 
   @override
-  Future<ObjetoFila> llenarObjetoListaDesdeHttp({String tabla}) async {
+  Future<ObjetoLista> llenarObjetoListaDesdeHttp({String tabla}) async {
     final _response = await http.post(
       _url + "/bd/getTablas.php",
       body: {
@@ -130,8 +218,32 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
     }
   }
 
-//TODO: completar todos los casos
-  ObjetoFila funcionSwitch(response, tabla) {
+  //OJO: Metodo Listo falta TDD
+  @override
+  Future<bool> actualizarBaseDatosFormularios() async {
+    try {
+      await _databaseHelper.borrarBasedatos();
+      await _databaseHelper.inicializarDatabase();
+      nombreTablasFormBD.forEach((nombreTabla) async {
+        await this
+            .llenarObjetoListaDesdeHttp(tabla: nombreTabla['nombre'])
+            .then((_objetoLista) {
+          _objetoLista.elementos.forEach((fila) async {
+            await _databaseHelper.insertFila(
+              objetoFila: fila,
+              nombreTabla: nombreTabla['nombre'],
+            );
+          });
+        });
+      });
+    } catch (e, s) {
+      print(s);
+    }
+    print('Escrito a punto de return');
+    return true;
+  }
+
+  ObjetoLista funcionSwitch(response, tabla) {
     switch (tabla) {
       case 'tablaEspecie':
         ListaEspecieModelo objetoTabla = ListaEspecieModelo.fromJson(response);
@@ -201,5 +313,21 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
       default:
         return null;
     }
+  }
+
+  Future<void> llenarListaDesdeSql(
+      List<Map<String, List<ObjetoFila>>> listaMapConObjetos) async {
+    nombreTablasFormBD.forEach((nombreTabla) async {
+      List listaMapas = await _databaseHelper.getFilasMapList(
+        nombreTabla: nombreTabla['nombre'],
+        campoOrdenador: nombreTabla['orden'],
+      );
+      List<ObjetoFila> listaObjetos = [];
+      listaMapas.forEach((mapa) {
+        listaObjetos.add(nombreTabla['objeto'](mapa));
+      });
+      Map<String, List<ObjetoFila>> tmp = {nombreTabla['nombre']: listaObjetos};
+      listaMapConObjetos.add(tmp);
+    });
   }
 }

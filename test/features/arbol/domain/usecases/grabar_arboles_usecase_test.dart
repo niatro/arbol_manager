@@ -20,7 +20,6 @@ void main() {
   });
 
   final ArbolesEntity listaDeArbolesEntity = arbolesEntityTest;
-  final ArbolEntity arbolEntity = arbolUno;
   final ServerGrabarSuccess existe = ServerGrabarSuccess();
   test(
     'debería pasar un listado de arboles al repositorio para luego grabarlo en BD, una vez operación se ha realizado debería devolver un true',

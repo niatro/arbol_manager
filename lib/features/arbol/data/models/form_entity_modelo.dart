@@ -4,33 +4,41 @@ import 'package:flutterapparbol/features/arbol/domain/entities/form_entity.dart'
 import 'package:meta/meta.dart';
 
 class FormEntityModelo extends FormEntity {
-  final List<ClienteEntity> clienteArbol;
-  final List<ZonaEntity> zonaArbol;
-  final List<CalleEntity> calleArbol;
-  final List<CalleEsquinaEntity> esquinaCalleArbol;
-  final List<EspecieEntity> especieArbol;
-  final List<EstadoGeneralEntity> estadoGeneralArbol;
-  final List<EstadoSanitarioEntity> estadoSanitarioArbol;
-  final List<InclinacionTroncoEntity> inclinacionTroncoArbol;
-  final List<OrientacionInclinacionEntity> orientacionInclinacionArbol;
-  final List<AccionObsEntity> accionObsArbol;
+  final List<ClienteModelo> cliente;
+  final List<ZonaModelo> zona;
+  final List<CalleModelo> calle;
+  final List<CalleEsquinaModelo> esquinaCalle;
+  final List<EspecieModelo> especie;
+  final List<EstadoGeneralModelo> estadoGeneral;
+  final List<EstadoSanitarioModelo> estadoSanitario;
+  final List<InclinacionTroncoModelo> inclinacionTronco;
+  final List<OrientacionInclinacionModelo> orientacionInclinacion;
+  final List<AccionObsModelo> accionObs;
+  final List<UsuarioModelo> usuario;
+  final List<AgentePatogenoModelo> agentePatogeno;
+  final List<LugarPlagaModelo> lugarPlaga;
+  final List<PlagaModelo> plaga;
 
   FormEntityModelo({
-    @required this.clienteArbol,
-    @required this.zonaArbol,
-    @required this.calleArbol,
-    @required this.esquinaCalleArbol,
-    @required this.especieArbol,
-    @required this.estadoGeneralArbol,
-    @required this.estadoSanitarioArbol,
-    @required this.inclinacionTroncoArbol,
-    @required this.orientacionInclinacionArbol,
-    @required this.accionObsArbol,
+    @required this.cliente,
+    @required this.zona,
+    @required this.calle,
+    @required this.esquinaCalle,
+    @required this.especie,
+    @required this.estadoGeneral,
+    @required this.estadoSanitario,
+    @required this.inclinacionTronco,
+    @required this.orientacionInclinacion,
+    @required this.accionObs,
+    @required this.usuario,
+    @required this.agentePatogeno,
+    @required this.lugarPlaga,
+    @required this.plaga,
   });
 
-  factory FormEntityModelo.fromJson(Map<String, dynamic> json) {
+/*  factory FormEntityModelo.fromJson(ObjetoLista json) {
     return FormEntityModelo(
-      clienteArbol: json["clienteArbol"],
+      cliente: json["clienteArbol"],
       zonaArbol: json["zonaArbol"],
       calleArbol: json["calleArbol"],
       esquinaCalleArbol: json["esquinaCalleArbol"],
@@ -41,7 +49,7 @@ class FormEntityModelo extends FormEntity {
       orientacionInclinacionArbol: json["orientacionInclinacionArbol"],
       accionObsArbol: json["accionObsArbol"],
     );
-  }
+  }*/
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['clienteArbol'] = this.clienteArbol;
@@ -73,15 +81,16 @@ class FormEntityModelo extends FormEntity {
   }
 }
 
+class ObjetoLista {
+  List<ObjetoFila> elementos;
+  ObjetoLista({@required this.elementos});
+}
+
 abstract class ObjetoFila {
   int idFila;
   Map<String, dynamic> toMap();
   ObjetoFila.fromMapToObject(Map<String, dynamic> map);
 }
-
-//TODO: falta el modelo para agente patogeno 😱
-//TODO: falta el modelo para lugar de plaga patogeno 😱
-//TODO: falta el modelo para  para  plaga 😱
 
 //OJO: Cliente / revision v_1 ok
 class ClienteModelo extends ClienteEntity implements ObjetoFila {
@@ -92,11 +101,6 @@ class ClienteModelo extends ClienteEntity implements ObjetoFila {
     @required clienteNombre,
   })  : this._clienteOrigenId = clienteOrigenId,
         this._clienteNombre = clienteNombre;
-/*  ClienteModelo.conId(this._clienteId, this._clienteNombre)
-      : super(
-          clienteId: _clienteId,
-          clienteNombre: _clienteNombre,
-        );*/
   int get clienteOrigenId => _clienteOrigenId;
   String get clienteNombre => _clienteNombre;
 
@@ -125,11 +129,11 @@ class ClienteModelo extends ClienteEntity implements ObjetoFila {
   }
 }
 
-class ListaClienteModelo implements ObjetoFila {
+class ListaClienteModelo extends ObjetoLista implements ObjetoFila {
   final List<ClienteModelo> listaClientes;
   ListaClienteModelo({
     @required this.listaClientes,
-  });
+  }) : super(elementos: listaClientes);
   factory ListaClienteModelo.fromJson(List<dynamic> parsedJson) {
     List<ClienteModelo> _listaClientes = List<ClienteModelo>();
     _listaClientes = parsedJson.map((i) => ClienteModelo.fromJson(i)).toList();
@@ -187,12 +191,12 @@ class ZonaModelo extends ZonaEntity implements ObjetoFila {
   }
 }
 
-class ListaZonaModelo implements ObjetoFila {
+class ListaZonaModelo extends ObjetoLista implements ObjetoFila {
   final List<ZonaModelo> listaZona;
 
   ListaZonaModelo({
     @required this.listaZona,
-  });
+  }) : super(elementos: listaZona);
 
   factory ListaZonaModelo.fromJson(List<dynamic> parsedJson) {
     List<ZonaModelo> _listaZona = List<ZonaModelo>();
@@ -209,7 +213,7 @@ class ListaZonaModelo implements ObjetoFila {
   }
 }
 
-//OJO: Las calles implementadas a continuación  / Rev 1
+//OJO: Las calles   / Rev 1
 class CalleModelo extends CalleEntity implements ObjetoFila {
   int _calleOrigenId;
   int _calleZonaId;
@@ -260,11 +264,11 @@ class CalleModelo extends CalleEntity implements ObjetoFila {
   }
 }
 
-class ListaCalleModelo implements ObjetoFila {
+class ListaCalleModelo extends ObjetoLista implements ObjetoFila {
   final List<CalleModelo> listaCalle;
   ListaCalleModelo({
     @required this.listaCalle,
-  });
+  }) : super(elementos: listaCalle);
   factory ListaCalleModelo.fromJson(List<dynamic> parsedJson) {
     List<CalleModelo> _listaCalle = List<CalleModelo>();
     _listaCalle = parsedJson.map((i) => CalleModelo.fromJson(i)).toList();
@@ -333,12 +337,12 @@ class CalleEsquinaModelo extends CalleEsquinaEntity implements ObjetoFila {
   }
 }
 
-class ListaCalleEsquinaModelo implements ObjetoFila {
+class ListaCalleEsquinaModelo extends ObjetoLista implements ObjetoFila {
   final List<CalleEsquinaModelo> listaCalleEsquina;
 
   ListaCalleEsquinaModelo({
     @required this.listaCalleEsquina,
-  });
+  }) : super(elementos: listaCalleEsquina);
 
   factory ListaCalleEsquinaModelo.fromJson(List<dynamic> parsedJson) {
     List<CalleEsquinaModelo> _listaCalleEsquina = List<CalleEsquinaModelo>();
@@ -437,11 +441,11 @@ class EspecieModelo extends EspecieEntity implements ObjetoFila {
   }
 }
 
-class ListaEspecieModelo implements ObjetoFila {
+class ListaEspecieModelo extends ObjetoLista implements ObjetoFila {
   final List<EspecieModelo> listaEspecie;
   ListaEspecieModelo({
     @required this.listaEspecie,
-  });
+  }) : super(elementos: listaEspecie);
   factory ListaEspecieModelo.fromJson(List<dynamic> parsedJson) {
     List<EspecieModelo> _listaEspecie = List<EspecieModelo>();
     _listaEspecie = parsedJson.map((i) => EspecieModelo.fromJson(i)).toList();
@@ -494,11 +498,11 @@ class EstadoGeneralModelo extends EstadoGeneralEntity implements ObjetoFila {
   }
 }
 
-class ListaEstadoGeneralModelo implements ObjetoFila {
+class ListaEstadoGeneralModelo extends ObjetoLista implements ObjetoFila {
   final List<EstadoGeneralModelo> listaEstadoGeneral;
   ListaEstadoGeneralModelo({
     @required this.listaEstadoGeneral,
-  });
+  }) : super(elementos: listaEstadoGeneral);
   factory ListaEstadoGeneralModelo.fromJson(List<dynamic> parsedJson) {
     List<EstadoGeneralModelo> _listaEstadoGeneral = List<EstadoGeneralModelo>();
     _listaEstadoGeneral =
@@ -554,12 +558,12 @@ class EstadoSanitarioModelo extends EstadoSanitarioEntity
   }
 }
 
-class ListaEstadoSanitarioModelo implements ObjetoFila {
+class ListaEstadoSanitarioModelo extends ObjetoLista implements ObjetoFila {
   final List<EstadoSanitarioModelo> listaEstadoSanitario;
 
   ListaEstadoSanitarioModelo({
     @required this.listaEstadoSanitario,
-  });
+  }) : super(elementos: listaEstadoSanitario);
 
   factory ListaEstadoSanitarioModelo.fromJson(List<dynamic> parsedJson) {
     List<EstadoSanitarioModelo> _listaEstadoSanitario =
@@ -630,12 +634,12 @@ class InclinacionTroncoModelo extends InclinacionTroncoEntity
   }
 }
 
-class ListaInclinacionTroncoModelo implements ObjetoFila {
+class ListaInclinacionTroncoModelo extends ObjetoLista implements ObjetoFila {
   final List<InclinacionTroncoModelo> listaInclinacionTronco;
 
   ListaInclinacionTroncoModelo({
     @required this.listaInclinacionTronco,
-  });
+  }) : super(elementos: listaInclinacionTronco);
 
   factory ListaInclinacionTroncoModelo.fromJson(List<dynamic> parsedJson) {
     List<InclinacionTroncoModelo> _listaInclinacionTronco =
@@ -697,12 +701,13 @@ class OrientacionInclinacionModelo extends OrientacionInclinacionEntity
   }
 }
 
-class ListaOrientacionInclinacionModelo implements ObjetoFila {
+class ListaOrientacionInclinacionModelo extends ObjetoLista
+    implements ObjetoFila {
   final List<OrientacionInclinacionModelo> listaOrientacionInclinacion;
 
   ListaOrientacionInclinacionModelo({
     @required this.listaOrientacionInclinacion,
-  });
+  }) : super(elementos: listaOrientacionInclinacion);
 
   factory ListaOrientacionInclinacionModelo.fromJson(List<dynamic> parsedJson) {
     List<OrientacionInclinacionModelo> _listaOrientacionInclinacion =
@@ -771,12 +776,12 @@ class AccionObsModelo extends AccionObsEntity implements ObjetoFila {
   }
 }
 
-class ListaAccionObsModelo implements ObjetoFila {
+class ListaAccionObsModelo extends ObjetoLista implements ObjetoFila {
   final List<AccionObsModelo> listaAccionObs;
 
   ListaAccionObsModelo({
     @required this.listaAccionObs,
-  });
+  }) : super(elementos: listaAccionObs);
 
   factory ListaAccionObsModelo.fromJson(List<dynamic> parsedJson) {
     List<AccionObsModelo> _listaAccionObs = List<AccionObsModelo>();
@@ -883,11 +888,11 @@ class UsuarioModelo extends UsuarioEntity implements ObjetoFila {
   }
 }
 
-class ListaUsuarioModelo implements ObjetoFila {
+class ListaUsuarioModelo extends ObjetoLista implements ObjetoFila {
   final List<UsuarioModelo> listaUsuario;
   ListaUsuarioModelo({
     @required this.listaUsuario,
-  });
+  }) : super(elementos: listaUsuario);
   factory ListaUsuarioModelo.fromJson(List<dynamic> parsedJson) {
     List<UsuarioModelo> _listaUsuario = List<UsuarioModelo>();
     _listaUsuario = parsedJson.map((i) => UsuarioModelo.fromJson(i)).toList();
@@ -942,11 +947,11 @@ class AgentePatogenoModelo extends AgentePatogenoEntity implements ObjetoFila {
   }
 }
 
-class ListaAgentePatogenoModelo implements ObjetoFila {
+class ListaAgentePatogenoModelo extends ObjetoLista implements ObjetoFila {
   final List<AgentePatogenoModelo> listaAgentePatogeno;
   ListaAgentePatogenoModelo({
     @required this.listaAgentePatogeno,
-  });
+  }) : super(elementos: listaAgentePatogeno);
   factory ListaAgentePatogenoModelo.fromJson(List<dynamic> parsedJson) {
     List<AgentePatogenoModelo> _listaAgentePatogeno =
         List<AgentePatogenoModelo>();
@@ -967,10 +972,10 @@ class ListaAgentePatogenoModelo implements ObjetoFila {
 
 //OJO: Lugar Plaga     / Rev 1
 
-class LugarPLagaModelo extends LugarPlagaEntity implements ObjetoFila {
+class LugarPlagaModelo extends LugarPlagaEntity implements ObjetoFila {
   int _lugarPlagaOrigenId;
   String _lugarPlagaDesc;
-  LugarPLagaModelo({
+  LugarPlagaModelo({
     @required int lugarPlagaOrigenId,
     @required String lugarPlagaDesc,
   })  : this._lugarPlagaOrigenId = lugarPlagaOrigenId,
@@ -990,29 +995,28 @@ class LugarPLagaModelo extends LugarPlagaEntity implements ObjetoFila {
   }
 
   @override
-  LugarPLagaModelo.fromMapToObject(Map<String, dynamic> map) {
+  LugarPlagaModelo.fromMapToObject(Map<String, dynamic> map) {
     this._lugarPlagaOrigenId = map['lugarPlagaOrigenId'];
     this._lugarPlagaDesc = map['lugarPlagaDesc'];
   }
 
-  factory LugarPLagaModelo.fromJson(Map<String, dynamic> json) {
-    return LugarPLagaModelo(
+  factory LugarPlagaModelo.fromJson(Map<String, dynamic> json) {
+    return LugarPlagaModelo(
       lugarPlagaOrigenId: int.parse(json['id_lugar_plaga']),
       lugarPlagaDesc: json['detalle_lugar_plaga'],
     );
   }
 }
-//OJO: Lugar Plaga     / Rev 1
 
-class ListaLugarPlagaModelo implements ObjetoFila {
-  final List<LugarPLagaModelo> listaLugarPlaga;
+class ListaLugarPlagaModelo extends ObjetoLista implements ObjetoFila {
+  final List<LugarPlagaModelo> listaLugarPlaga;
   ListaLugarPlagaModelo({
     @required this.listaLugarPlaga,
-  });
+  }) : super(elementos: listaLugarPlaga);
   factory ListaLugarPlagaModelo.fromJson(List<dynamic> parsedJson) {
-    List<LugarPLagaModelo> _listaLugarPlaga = List<LugarPLagaModelo>();
+    List<LugarPlagaModelo> _listaLugarPlaga = List<LugarPlagaModelo>();
     _listaLugarPlaga =
-        parsedJson.map((i) => LugarPLagaModelo.fromJson(i)).toList();
+        parsedJson.map((i) => LugarPlagaModelo.fromJson(i)).toList();
     return ListaLugarPlagaModelo(listaLugarPlaga: _listaLugarPlaga);
   }
 
@@ -1028,10 +1032,10 @@ class ListaLugarPlagaModelo implements ObjetoFila {
 
 //OJO: Plaga     / Rev 1
 
-class PLagaModelo extends PlagaEntity implements ObjetoFila {
+class PlagaModelo extends PlagaEntity implements ObjetoFila {
   int _plagaOrigenId;
   String _plagaDesc;
-  PLagaModelo({
+  PlagaModelo({
     @required int plagaOrigenId,
     @required String plagaDesc,
   })  : this._plagaOrigenId = plagaOrigenId,
@@ -1051,29 +1055,29 @@ class PLagaModelo extends PlagaEntity implements ObjetoFila {
   }
 
   @override
-  PLagaModelo.fromMapToObject(Map<String, dynamic> map) {
+  PlagaModelo.fromMapToObject(Map<String, dynamic> map) {
     this._plagaOrigenId = map['plagaOrigenId'];
     this._plagaDesc = map['plagaDesc'];
   }
 
-  factory PLagaModelo.fromJson(Map<String, dynamic> json) {
-    return PLagaModelo(
+  factory PlagaModelo.fromJson(Map<String, dynamic> json) {
+    return PlagaModelo(
       plagaOrigenId: int.parse(json['id_plagas']),
       plagaDesc: json['detalle_plagas'],
     );
   }
 }
 
-class ListaPlagaModelo implements ObjetoFila {
-  final List<PLagaModelo> listaPlaga;
+class ListaPlagaModelo extends ObjetoLista implements ObjetoFila {
+  final List<PlagaModelo> listaPlaga;
 
   ListaPlagaModelo({
     @required this.listaPlaga,
-  });
+  }) : super(elementos: listaPlaga);
 
   factory ListaPlagaModelo.fromJson(List<dynamic> parsedJson) {
-    List<PLagaModelo> _listaPlaga = List<PLagaModelo>();
-    _listaPlaga = parsedJson.map((i) => PLagaModelo.fromJson(i)).toList();
+    List<PlagaModelo> _listaPlaga = List<PlagaModelo>();
+    _listaPlaga = parsedJson.map((i) => PlagaModelo.fromJson(i)).toList();
     return ListaPlagaModelo(listaPlaga: _listaPlaga);
   }
 

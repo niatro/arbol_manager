@@ -55,9 +55,10 @@ FormEntity formTest = FormEntity(
         accionObsOrigenId: 1, accionObsDesc: 'podar ramas', accionObsOrden: 2)
   ],
 );
+/*
 
 FormEntity formTestModelo = FormEntityModelo(
-  clienteArbol: [ClienteEntity(clienteOrigenId: 1, clienteNombre: 'Vitacura')],
+  cliente: [ClienteEntity(clienteOrigenId: 1, clienteNombre: 'Vitacura')],
   zonaArbol: [
     ZonaEntity(zonaOrigenId: 1, zonaNombre: 'Unidad Vecinal 1', clienteId: 1)
   ],
@@ -109,6 +110,7 @@ FormEntity formTestModelo = FormEntityModelo(
         accionObsOrigenId: 1, accionObsDesc: 'podar ramas', accionObsOrden: 2)
   ],
 );
+*/
 
 ClienteEntity tClienteUno =
     ClienteEntity(clienteOrigenId: 1, clienteNombre: 'Vitacura');

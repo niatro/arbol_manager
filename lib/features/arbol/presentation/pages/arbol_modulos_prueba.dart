@@ -174,275 +174,6 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
                 SizedBox(height: 10.0),
                 FlatButton(
                   onPressed: () async {
-                    ListaZonaModelo zonas =
-                        await remoteDataSource.llenarObjetoListaDesdeHttp(
-                            tabla: referencia.zona.nombreTabla);
-
-                    zonas.listaZona.forEach((element) async {
-                      await databaseHelper.insertFila(
-                        objetoFila: element,
-                        nombreTabla: referencia.zona.nombreTabla,
-                      );
-                    });
-                    List clienteEnBD = await databaseHelper.getFilasMapList(
-                      nombreTabla: referencia.zona.nombreTabla,
-                      campoOrdenador: referencia.zona.zonaOrigenId,
-                    );
-                    print('Se leyo BD tabla zonas');
-                    print(
-                        'total de registros ${clienteEnBD.length.toString()}');
-                    print(clienteEnBD.toString());
-                  },
-                  color: Colors.brown,
-                  child: Text('Zonas'),
-                ),
-                SizedBox(height: 10.0),
-                FlatButton(
-                  onPressed: () async {
-                    ListaCalleModelo calles =
-                        await remoteDataSource.llenarObjetoListaDesdeHttp(
-                            tabla: referencia.calle.nombreTabla);
-
-                    calles.listaCalle.forEach((element) async {
-                      await databaseHelper.insertFila(
-                        objetoFila: element,
-                        nombreTabla: referencia.calle.nombreTabla,
-                      );
-                    });
-                    List tablaEnBD = await databaseHelper.getFilasMapList(
-                      nombreTabla: referencia.calle.nombreTabla,
-                      campoOrdenador: referencia.calle.calleZonaId,
-                    );
-                    print('Se leyo BD tabla calle');
-                    print('total de registros ${tablaEnBD.length.toString()}');
-                    print(tablaEnBD.toString());
-                  },
-                  color: Colors.brown,
-                  child: Text('Calles'),
-                ),
-                SizedBox(height: 10.0),
-                FlatButton(
-                  onPressed: () async {
-                    ListaCalleEsquinaModelo callesEsquina =
-                        await remoteDataSource.llenarObjetoListaDesdeHttp(
-                            tabla: referencia.calleEsquina.nombreTabla);
-
-                    callesEsquina.listaCalleEsquina.forEach((element) async {
-                      await databaseHelper.insertFila(
-                        objetoFila: element,
-                        nombreTabla: referencia.calleEsquina.nombreTabla,
-                      );
-                    });
-                    List tablaEnBD = await databaseHelper.getFilasMapList(
-                      nombreTabla: referencia.calleEsquina.nombreTabla,
-                      campoOrdenador:
-                          referencia.calleEsquina.calleEsquinaZonaId,
-                    );
-                    print('Se leyo BD tabla calle');
-                    print('total de registros ${tablaEnBD.length.toString()}');
-                    print(tablaEnBD.toString());
-                  },
-                  color: Colors.brown,
-                  child: Text('Esquina'),
-                ),
-                SizedBox(height: 10.0),
-                FlatButton(
-                  onPressed: () async {
-                    ListaEstadoGeneralModelo estadoGeneral =
-                        await remoteDataSource.llenarObjetoListaDesdeHttp(
-                            tabla: referencia.estadoGeneral.nombreTabla);
-
-                    estadoGeneral.listaEstadoGeneral.forEach((element) async {
-                      await databaseHelper.insertFila(
-                        objetoFila: element,
-                        nombreTabla: referencia.estadoGeneral.nombreTabla,
-                      );
-                    });
-                    List tablaEnBD = await databaseHelper.getFilasMapList(
-                      nombreTabla: referencia.estadoGeneral.nombreTabla,
-                      campoOrdenador:
-                          referencia.estadoGeneral.estadoGeneralOrigenId,
-                    );
-                    print('total de registros ${tablaEnBD.length.toString()}');
-                    print(tablaEnBD.toString());
-                  },
-                  color: Colors.brown,
-                  child: Text('Estado General'),
-                ),
-                SizedBox(height: 10.0),
-                FlatButton(
-                  onPressed: () async {
-                    ListaEstadoSanitarioModelo estadoSanitario =
-                        await remoteDataSource.llenarObjetoListaDesdeHttp(
-                            tabla: referencia.estadoSanitario.nombreTabla);
-
-                    estadoSanitario.listaEstadoSanitario
-                        .forEach((element) async {
-                      await databaseHelper.insertFila(
-                        objetoFila: element,
-                        nombreTabla: referencia.estadoSanitario.nombreTabla,
-                      );
-                    });
-                    List tablaEnBD = await databaseHelper.getFilasMapList(
-                      nombreTabla: referencia.estadoSanitario.nombreTabla,
-                      campoOrdenador:
-                          referencia.estadoSanitario.estadoSanitarioOrigenId,
-                    );
-                    print('total de registros ${tablaEnBD.length.toString()}');
-                    print(tablaEnBD.toString());
-                  },
-                  color: Colors.brown,
-                  child: Text('Sanitario'),
-                ),
-                SizedBox(height: 10.0),
-                FlatButton(
-                  onPressed: () async {
-                    ListaInclinacionTroncoModelo inclinacionTronco =
-                        await remoteDataSource.llenarObjetoListaDesdeHttp(
-                            tabla: referencia.inclinacionTronco.nombreTabla);
-
-                    inclinacionTronco.listaInclinacionTronco
-                        .forEach((element) async {
-                      await databaseHelper.insertFila(
-                        objetoFila: element,
-                        nombreTabla: referencia.inclinacionTronco.nombreTabla,
-                      );
-                    });
-                    List tablaEnBD = await databaseHelper.getFilasMapList(
-                      nombreTabla: referencia.inclinacionTronco.nombreTabla,
-                      campoOrdenador:
-                          referencia.inclinacionTronco.inclinacionTroncoId,
-                    );
-                    print('total de registros ${tablaEnBD.length.toString()}');
-                    print(tablaEnBD.toString());
-                  },
-                  color: Colors.brown,
-                  child: Text('Inclinacion'),
-                ),
-                SizedBox(height: 10.0),
-                FlatButton(
-                  onPressed: () async {
-                    ListaOrientacionInclinacionModelo orientacionInclinacion =
-                        await remoteDataSource.llenarObjetoListaDesdeHttp(
-                            tabla:
-                                referencia.orientacionInclinacion.nombreTabla);
-
-                    orientacionInclinacion.listaOrientacionInclinacion
-                        .forEach((element) async {
-                      await databaseHelper.insertFila(
-                        objetoFila: element,
-                        nombreTabla:
-                            referencia.orientacionInclinacion.nombreTabla,
-                      );
-                    });
-                    List tablaEnBD = await databaseHelper.getFilasMapList(
-                      nombreTabla:
-                          referencia.orientacionInclinacion.nombreTabla,
-                      campoOrdenador: referencia.orientacionInclinacion
-                          .orientacionInclinacionOrigenId,
-                    );
-                    print('total de registros ${tablaEnBD.length.toString()}');
-                    print(tablaEnBD.toString());
-                  },
-                  color: Colors.brown,
-                  child: Text('Orientacion'),
-                ),
-                SizedBox(height: 10.0),
-                FlatButton(
-                  onPressed: () async {
-                    ListaAccionObsModelo accionObs =
-                        await remoteDataSource.llenarObjetoListaDesdeHttp(
-                            tabla: referencia.accionObs.nombreTabla);
-
-                    accionObs.listaAccionObs.forEach((element) async {
-                      await databaseHelper.insertFila(
-                        objetoFila: element,
-                        nombreTabla: referencia.accionObs.nombreTabla,
-                      );
-                    });
-                    List tablaEnBD = await databaseHelper.getFilasMapList(
-                      nombreTabla: referencia.accionObs.nombreTabla,
-                      campoOrdenador: referencia.accionObs.accionObsOrden,
-                    );
-                    print('total de registros ${tablaEnBD.length.toString()}');
-                    print(tablaEnBD.toString());
-                  },
-                  color: Colors.brown,
-                  child: Text('Accion'),
-                ),
-                SizedBox(height: 10.0),
-                FlatButton(
-                  onPressed: () async {
-                    ListaUsuarioModelo usuario =
-                        await remoteDataSource.llenarObjetoListaDesdeHttp(
-                            tabla: referencia.usuario.nombreTabla);
-
-                    usuario.listaUsuario.forEach((element) async {
-                      await databaseHelper.insertFila(
-                        objetoFila: element,
-                        nombreTabla: referencia.usuario.nombreTabla,
-                      );
-                    });
-                    List tablaEnBD = await databaseHelper.getFilasMapList(
-                      nombreTabla: referencia.usuario.nombreTabla,
-                      campoOrdenador: referencia.usuario.usuarioOrigenId,
-                    );
-                    print('total de registros ${tablaEnBD.length.toString()}');
-                    print(tablaEnBD.toString());
-                  },
-                  color: Colors.brown,
-                  child: Text('Usuario'),
-                ),
-                SizedBox(height: 10.0),
-                FlatButton(
-                  onPressed: () async {
-                    ListaAgentePatogenoModelo agentePatogeno =
-                        await remoteDataSource.llenarObjetoListaDesdeHttp(
-                            tabla: referencia.agentesPatogenos.nombreTabla);
-
-                    agentePatogeno.listaAgentePatogeno.forEach((element) async {
-                      await databaseHelper.insertFila(
-                        objetoFila: element,
-                        nombreTabla: referencia.agentesPatogenos.nombreTabla,
-                      );
-                    });
-                    List tablaEnBD = await databaseHelper.getFilasMapList(
-                      nombreTabla: referencia.agentesPatogenos.nombreTabla,
-                      campoOrdenador:
-                          referencia.agentesPatogenos.agentePatogenoOrigenId,
-                    );
-                    print('total de registros ${tablaEnBD.length.toString()}');
-                    print(tablaEnBD.toString());
-                  },
-                  color: Colors.brown,
-                  child: Text('Patogeno'),
-                ),
-                SizedBox(height: 10.0),
-                FlatButton(
-                  onPressed: () async {
-                    ListaLugarPlagaModelo lugarPlaga =
-                        await remoteDataSource.llenarObjetoListaDesdeHttp(
-                            tabla: referencia.lugarPlaga.nombreTabla);
-
-                    lugarPlaga.listaLugarPlaga.forEach((element) async {
-                      await databaseHelper.insertFila(
-                        objetoFila: element,
-                        nombreTabla: referencia.lugarPlaga.nombreTabla,
-                      );
-                    });
-                    List tablaEnBD = await databaseHelper.getFilasMapList(
-                      nombreTabla: referencia.lugarPlaga.nombreTabla,
-                      campoOrdenador: referencia.lugarPlaga.lugarPlagaOrigenId,
-                    );
-                    print('total de registros ${tablaEnBD.length.toString()}');
-                    print(tablaEnBD.toString());
-                  },
-                  color: Colors.brown,
-                  child: Text('Lugar'),
-                ),
-                SizedBox(height: 10.0),
-                FlatButton(
-                  onPressed: () async {
                     ListaPlagaModelo plaga =
                         await remoteDataSource.llenarObjetoListaDesdeHttp(
                             tabla: referencia.plagas.nombreTabla);
@@ -462,6 +193,22 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
                   },
                   color: Colors.brown,
                   child: Text('Plagas'),
+                ),
+                SizedBox(height: 10.0),
+                FlatButton(
+                  onPressed: () async {
+                    await remoteDataSource.getDatosForm(idUsuario: 'dbaiiqqe3');
+                  },
+                  color: Colors.purple,
+                  child: Text('Leer BD como Objeto'),
+                ),
+                SizedBox(height: 10.0),
+                FlatButton(
+                  onPressed: () async {
+                    await remoteDataSource.actualizarBaseDatosFormularios();
+                  },
+                  color: Colors.purple,
+                  child: Text('Crear toda BD'),
                 ),
               ],
             ),

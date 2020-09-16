@@ -1,24 +1,134 @@
-const Map<String, Map> TABLAS_BD = {
-  'TABLA_CLIENTE': {
-    'NOMBRE_TABLA': 'tablaCliente',
-    'CLIENTE_ID': 'clienteId',
-    'CLIENTE_NOMBRE': 'clienteNombre',
-  },
-  'TABLA_ZONA': {
-    'NOMBRE_TABLA': 'tablaZona',
-    'ZONA_ID': 'zonaId',
-    'ZONA_NOMBRE': 'zonaNombre',
-  }
-};
+import 'package:flutterapparbol/features/arbol/data/models/form_entity_modelo.dart';
 
-//Constantes en tabla cliente 🙋
-const String TABLA_CLIENTE = 'tablaCliente';
-const String CLIENTE_ID = 'clienteId';
-const String CLIENTE_NOMBRE = 'clienteNombre';
-//Constantes en tabla zona 🙋
-const String TABLA_ZONA = 'tablaZona';
-const String ZONA_ID = 'zonaId';
-const String ZONA_NOMBRE = 'zonaNombre';
+final EsquemaDataDeSQL esquema = EsquemaDataDeSQL();
+ClienteModelo cliente(Map<String, dynamic> ob) {
+  return ClienteModelo.fromMapToObject(ob);
+}
+
+ZonaModelo zona(Map<String, dynamic> ob) {
+  return ZonaModelo.fromMapToObject(ob);
+}
+
+CalleModelo calle(Map<String, dynamic> ob) {
+  return CalleModelo.fromMapToObject(ob);
+}
+
+CalleEsquinaModelo calleEsquina(Map<String, dynamic> ob) {
+  return CalleEsquinaModelo.fromMapToObject(ob);
+}
+
+EstadoGeneralModelo estadoGeneral(Map<String, dynamic> ob) {
+  return EstadoGeneralModelo.fromMapToObject(ob);
+}
+
+EstadoSanitarioModelo estadoSanitario(Map<String, dynamic> ob) {
+  return EstadoSanitarioModelo.fromMapToObject(ob);
+}
+
+InclinacionTroncoModelo inclinacionTronco(Map<String, dynamic> ob) {
+  return InclinacionTroncoModelo.fromMapToObject(ob);
+}
+
+OrientacionInclinacionModelo orientacionInclinacion(Map<String, dynamic> ob) {
+  return OrientacionInclinacionModelo.fromMapToObject(ob);
+}
+
+AccionObsModelo accionObs(Map<String, dynamic> ob) {
+  return AccionObsModelo.fromMapToObject(ob);
+}
+
+UsuarioModelo usuario(Map<String, dynamic> ob) {
+  return UsuarioModelo.fromMapToObject(ob);
+}
+
+AgentePatogenoModelo agentePatogeno(Map<String, dynamic> ob) {
+  return AgentePatogenoModelo.fromMapToObject(ob);
+}
+
+LugarPlagaModelo lugarPlaga(Map<String, dynamic> ob) {
+  return LugarPlagaModelo.fromMapToObject(ob);
+}
+
+PlagaModelo plaga(Map<String, dynamic> ob) {
+  return PlagaModelo.fromMapToObject(ob);
+}
+
+EspecieModelo especie(Map<String, dynamic> ob) {
+  return EspecieModelo.fromMapToObject(ob);
+}
+
+final List<Map> nombreTablasFormBD = [
+  {
+    'nombre': esquema.cliente.nombreTabla,
+    'orden': esquema.cliente.clienteOrigenId,
+    'objeto': cliente,
+  },
+  {
+    'nombre': esquema.zona.nombreTabla,
+    'orden': esquema.zona.zonaOrigenId,
+    'objeto': zona,
+  },
+  {
+    'nombre': esquema.calle.nombreTabla,
+    'orden': esquema.calle.calleNombre,
+    'objeto': calle,
+  },
+  {
+    'nombre': esquema.calleEsquina.nombreTabla,
+    'orden': esquema.calleEsquina.calleEsquinaOrigenId,
+    'objeto': calleEsquina,
+  },
+  {
+    'nombre': esquema.estadoGeneral.nombreTabla,
+    'orden': esquema.estadoGeneral.estadoGeneralOrigenId,
+    'objeto': estadoGeneral,
+  },
+  {
+    'nombre': esquema.estadoSanitario.nombreTabla,
+    'orden': esquema.estadoSanitario.estadoSanitarioOrigenId,
+    'objeto': estadoSanitario,
+  },
+  {
+    'nombre': esquema.inclinacionTronco.nombreTabla,
+    'orden': esquema.inclinacionTronco.inclinacionTroncoId,
+    'objeto': inclinacionTronco,
+  },
+  {
+    'nombre': esquema.orientacionInclinacion.nombreTabla,
+    'orden': esquema.orientacionInclinacion.orientacionInclinacionOrigenId,
+    'objeto': orientacionInclinacion,
+  },
+  {
+    'nombre': esquema.accionObs.nombreTabla,
+    'orden': esquema.accionObs.accionObsOrden,
+    'objeto': accionObs,
+  },
+  {
+    'nombre': esquema.usuario.nombreTabla,
+    'orden': esquema.usuario.usuarioOrigenId,
+    'objeto': usuario,
+  },
+  {
+    'nombre': esquema.agentesPatogenos.nombreTabla,
+    'orden': esquema.agentesPatogenos.agentePatogenoDesc,
+    'objeto': agentePatogeno,
+  },
+  {
+    'nombre': esquema.lugarPlaga.nombreTabla,
+    'orden': esquema.lugarPlaga.lugarPlagaId,
+    'objeto': lugarPlaga,
+  },
+  {
+    'nombre': esquema.plagas.nombreTabla,
+    'orden': esquema.plagas.plagaDesc,
+    'objeto': plaga,
+  },
+  {
+    'nombre': esquema.especie.nombreTabla,
+    'orden': esquema.especie.especieOrden,
+    'objeto': especie,
+  },
+];
 
 class EsquemaDataDeSQL {
   final EsquemaCliente cliente = EsquemaCliente();

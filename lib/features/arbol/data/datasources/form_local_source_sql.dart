@@ -212,7 +212,8 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
   Future<int> updateCliente(String nombreTabla, ObjetoFila objetoTabla) async {
     Database db = await this.database;
     var result = await db.update(nombreTabla, objetoTabla.toMap(),
-        where: '$CLIENTE_ID = ?', whereArgs: [objetoTabla.idFila]);
+        where: '${esquema.cliente.clienteId} = ?',
+        whereArgs: [objetoTabla.idFila]);
     return result;
   }
 
@@ -220,8 +221,8 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
   @override
   Future<int> deleteCliente(int clienteId) async {
     Database db = await this.database;
-    var result = await db
-        .rawDelete('DELETE FROM $TABLA_CLIENTE WHERE $CLIENTE_ID = $clienteId');
+    var result = await db.rawDelete(
+        'DELETE FROM ${esquema.cliente.nombreTabla} WHERE ${esquema.cliente.clienteId} = $clienteId');
     return result;
   }
 
