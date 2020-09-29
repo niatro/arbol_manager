@@ -11,15 +11,14 @@ import 'package:flutterapparbol/features/arbol/data/datasources/arboles_local_da
 import 'package:flutterapparbol/features/arbol/data/datasources/arboles_remote_data_source.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/form_local_source_sql.dart';
 import 'package:flutterapparbol/features/arbol/data/models/arboles_entity_modelo.dart';
-import 'package:flutterapparbol/features/arbol/data/models/form_entity_modelo.dart';
 import 'package:flutterapparbol/features/arbol/data/repositories/arboles_repositorio_impl.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
-import 'package:flutterapparbol/features/arbol/domain/entities/form_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/idnfc_entity.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nfc_in_flutter/nfc_in_flutter.dart';
+import 'package:sqflite/sqflite.dart';
 
 class MockArbolesEntityRemoteDataSource extends Mock
     implements ArbolesRemoteDataSource {}
@@ -27,21 +26,29 @@ class MockArbolesEntityRemoteDataSource extends Mock
 class MockArbolesEntityLocalDataSource extends Mock
     implements ArbolesLocalDataSource {}
 
+class MockFormEntitySqlDataSource extends Mock implements FormLocalSourceSql {}
+
 class MockNetworkInfo extends Mock implements NetworkInfo {}
+
+class MockDataBase extends Mock implements Database {}
 
 void main() {
   ArbolesRepositorioImpl repositorio;
   MockArbolesEntityRemoteDataSource mockRemoteDataSource;
   MockArbolesEntityLocalDataSource mockLocalDataSource;
+  MockFormEntitySqlDataSource mockSqlDataSource;
   MockNetworkInfo mockNetworkInfo;
+  MockDataBase mockDataBase;
 
   setUp(() {
     mockRemoteDataSource = MockArbolesEntityRemoteDataSource();
     mockLocalDataSource = MockArbolesEntityLocalDataSource();
     mockNetworkInfo = MockNetworkInfo();
+    mockSqlDataSource = MockFormEntitySqlDataSource();
     repositorio = ArbolesRepositorioImpl(
         remoteDataSource: mockRemoteDataSource,
         localDatasource: mockLocalDataSource,
+        sqlDataSource: mockSqlDataSource,
         netWorkInfo: mockNetworkInfo);
   });
   void runTestsOnline(Function body) {
@@ -454,7 +461,7 @@ void main() {
     });
   });
   //OJO: Repositorio grabar árboles una vez que están capturados,
-  // Si se esta online se graba en la nube, si se esta ofline debe arrojar un error
+  // Si se esta online se graba en la nube, si se esta offline debe arrojar un error
   // Se debe entrega el parámetro que dic que árbol se debe guardar de la lista
 
   group('grabarArboles', () {
@@ -474,7 +481,7 @@ void main() {
                 idNFC: anyNamed('idNFC')))
             .thenAnswer((_) async => false);
         // Cuando se graban exitosamente  los datos
-        when(mockRemoteDataSource.grabarArbolesRemoteData(
+        when(mockRemoteDataSource.grabarArboleRemoteData(
                 arbol: tArbolesEntityModel.listaArbolEntity[0]))
             .thenAnswer((_) async => true);
 
@@ -484,7 +491,7 @@ void main() {
         // assert
         verifyNever(mockRemoteDataSource.verificarIdNFCRemoteData(
             idNFC: tArbolesEntityModel.listaArbolEntity[0].guiArbol));
-        verifyNever(mockRemoteDataSource.grabarArbolesRemoteData(
+        verifyNever(mockRemoteDataSource.grabarArboleRemoteData(
             arbol: tArbolesEntityModel.listaArbolEntity[0]));
         verifyZeroInteractions(mockLocalDataSource);
         expect(result, equals(Right(ServerGrabarSuccess())));
@@ -519,7 +526,7 @@ void main() {
                 idNFC: anyNamed('idNFC')))
             .thenAnswer((_) async => false);
         // Cuando se graban exitosamente  los datos
-        when(mockRemoteDataSource.grabarArbolesRemoteData(
+        when(mockRemoteDataSource.grabarArboleRemoteData(
                 arbol: tArbolesEntityModel.listaArbolEntity[0]))
             .thenThrow(ServerException());
         // act
@@ -528,7 +535,7 @@ void main() {
         // assert
         verifyNever(mockRemoteDataSource.verificarIdNFCRemoteData(
             idNFC: arbolUno.guiArbol));
-        verify(mockRemoteDataSource.grabarArbolesRemoteData(
+        verify(mockRemoteDataSource.grabarArboleRemoteData(
             arbol: tArbolesEntityModel.listaArbolEntity[0]));
         verifyZeroInteractions(mockLocalDataSource);
         expect(result, equals(Left(ServerFailure())));
@@ -543,7 +550,7 @@ void main() {
                 idNFC: anyNamed('idNFC')))
             .thenThrow(ServerException());
         // Cuando se graban exitosamente  los datos
-        when(mockRemoteDataSource.grabarArbolesRemoteData(
+        when(mockRemoteDataSource.grabarArboleRemoteData(
                 arbol: tArbolesEntityModel.listaArbolEntity[0]))
             .thenThrow(ServerException());
         // act
@@ -552,7 +559,7 @@ void main() {
         // assert
         verify(mockRemoteDataSource.verificarIdNFCRemoteData(
             idNFC: tArbolesEntityModel.listaArbolEntity[0].guiArbol));
-        verifyNever(mockRemoteDataSource.grabarArbolesRemoteData(
+        verifyNever(mockRemoteDataSource.grabarArboleRemoteData(
             arbol: tArbolesEntityModel.listaArbolEntity[0]));
         verifyZeroInteractions(mockLocalDataSource);
         expect(result, equals(Left(ServerFailure())));
@@ -565,15 +572,13 @@ void main() {
   //OJO: Repositorio actualizar Datos Form si se esta online y el usuario lo solicita 🔃
 
   group('actualizarDatosForm', () {
-    final Params params = Params(nArbol: 0);
     final String idUsuario = "usuarioPrueba";
-//    final FormEntityModelo tFormEntityModelo = formTestModelo;
     final ArbolesEntityModelo tArbolesEntityModel =
         ArbolesEntityModelo(listaArbolesEntity: [arbolUno, arbolDos]);
     final int tNumeroArbolesInicial =
         tArbolesEntityModel.listaArbolEntity.length;
     test(
-        '''DEBERÍA revisar que el repositorio pueda obtener datos para  el form'''
+        '''DEBERÍA revisar que esta Online y asi obtener datos para el form'''
         '''CUANDO esta conectado a la red''', () async {
       // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
@@ -595,25 +600,31 @@ void main() {
       expect(result, isA<Future<Either>>());
     });
     runTestsOnline(() {
-      /* test(
-          'DEBERIA actualizar la Base Datos Interna CUANDO la llamada remota devuelve data ',
+      test(
+          'DEBERIA actualizar la Base Datos Interna y arrojar un success CUANDO la llamada remota devuelve data ',
           () async {
         // arrange
-        when(mockRemoteDataSource.getDatosForm(
-                idUsuario: anyNamed('idUsuario')))
-            .thenAnswer((_) async => tFormEntityModelo);
+        when(mockRemoteDataSource.actualizarBaseDatosFormularios())
+            .thenAnswer((_) async => true);
         // act
-        final result = await repositorio.getDatosForm(idUsuario: idUsuario);
-        verify(mockRemoteDataSource.getDatosForm(idUsuario: idUsuario));
+        final result =
+            await repositorio.actualizarDatosForm(idUsuario: idUsuario);
+        verify(mockRemoteDataSource.actualizarBaseDatosFormularios());
         // assert
-        expect(result, equals(Right(tFormEntityModelo)));
-      });*/
-      test('DEDERIA', () async {
+        expect(result, equals(Right(ServerActualizarFormSuccess())));
+      });
+      test(
+          'DEDERIA arrojar un failure CUANDO no es capaz de actualizar la Base de Datos',
+          () async {
         // arrange
-
+        when(mockRemoteDataSource.actualizarBaseDatosFormularios())
+            .thenAnswer((_) async => false);
         // act
-
+        final result =
+            await repositorio.actualizarDatosForm(idUsuario: idUsuario);
+        verify(mockRemoteDataSource.actualizarBaseDatosFormularios());
         // assert
+        expect(result, equals(Left(ServerFailure())));
       });
     });
 
@@ -622,15 +633,75 @@ void main() {
           'DEBERIA entregar una falla de actualización CUANDO el dispositivo esta offline',
           () async {
         // arrange
-        when(mockRemoteDataSource.getDatosForm(
-                idUsuario: anyNamed('idUsuario')))
-            .thenThrow((_) async => Left(ConexionFailure()));
+        when(mockRemoteDataSource.actualizarBaseDatosFormularios())
+            .thenThrow((_) async => false);
         // act
-        final result = await repositorio.getDatosForm(idUsuario: idUsuario);
+        final result =
+            await repositorio.actualizarDatosForm(idUsuario: idUsuario);
 
         // assert
         expect(result, Left(ConexionFailure()));
+        verifyNever(mockRemoteDataSource.actualizarBaseDatosFormularios());
       });
+    });
+  });
+
+  group('getDatosForm', () {
+    final String idUsuario = "usuarioPrueba";
+
+    test(
+        'DEBERIA arrojar un un FormEntity CUANDO no hay problemas con la BD interna',
+        () async {
+      // arrange
+      when(mockSqlDataSource.getDatosFormSql(idUsuario: anyNamed('idUsuario')))
+          .thenAnswer((_) async => tFormTestModelo);
+      // act
+      final result = await repositorio.getDatosForm(idUsuario: idUsuario);
+      verify(mockSqlDataSource.getDatosFormSql(idUsuario: idUsuario));
+      // assert
+      expect(result, Right(tFormTestModelo));
+    });
+
+    test(
+        'DEBERIA arrojar un un Failure CUANDO  hay problemas con la BD interna',
+        () async {
+      // arrange
+      when(mockSqlDataSource.getDatosFormSql(idUsuario: anyNamed('idUsuario')))
+          .thenThrow(DataBaseException());
+      // act
+      final result = await repositorio.getDatosForm(idUsuario: idUsuario);
+      verify(mockSqlDataSource.getDatosFormSql(idUsuario: idUsuario));
+      // assert
+      expect(result, Left(DataBaseFailure()));
+    });
+  });
+
+  group('getCoordenadas', () {
+    Position position = Position(latitude: -33.2, longitude: -45.3);
+    LatLng latLong = LatLng(-33.2, -45.3);
+    test(
+        'DEBERIA retornar una clase LatLng CUANDO el reposito arroja un Position',
+        () async {
+      // arrange
+      when(mockLocalDataSource.getCoordenadasLocalData())
+          .thenAnswer((_) async => position);
+      // act
+      final result = await repositorio.getCoordenadas(params: NoParams());
+
+      // assert
+      expect(result, Right(latLong));
+    });
+    test(
+        'DEBERIA retornar una clase Failure con coord CUANDO el reposito arrroja una excepcion',
+        () async {
+      // arrange
+      when(mockLocalDataSource.getCoordenadasLocalData())
+          .thenThrow(LocationException());
+      // act
+      final result = await repositorio.getCoordenadas(params: NoParams());
+
+      // assert
+      expect(result, Left(LocalGpsFailure()));
     });
   });
 }

@@ -6,6 +6,7 @@ import 'package:flutterapparbol/core/error/exceptions.dart';
 import '../models/arboles_entity_modelo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:meta/meta.dart';
+import 'package:geolocator/geolocator.dart';
 
 abstract class ArbolesLocalDataSource {
   /// Va al cache  del dispositivo para obtener [ArbolesEntityModelo] si no
@@ -15,6 +16,7 @@ abstract class ArbolesLocalDataSource {
   Future<void> cacheArbEntDeArbEntModLocalData(
       ArbolesEntityModelo arbolesToCache);
   Future<String> leerIdNFCLocalData({String idUsuario});
+  Future<Position> getCoordenadasLocalData();
 }
 
 const CACHED_ARBOLES_ENTITY_MODEL = 'CACHED_ARBOLES_ENTITY_MODEL';
@@ -57,9 +59,21 @@ class ArbolesLocalDataSourceImpl implements ArbolesLocalDataSource {
   @override
   Future<void> cacheArbEntDeArbEntModLocalData(
       ArbolesEntityModelo arbolesToCache) {
-    final stringArboles = arbolesToCache.toJsonFromArbolesEntityModelo();
+    final stringArboles = arbolesToCache.toMapFromArbolesEntityModelo();
 
     return sharedPreferences.setString(
         CACHED_ARBOLES_ENTITY_MODEL, json.encode(stringArboles));
+  }
+
+  @override
+  Future<Position> getCoordenadasLocalData() async {
+    bool locationEnable = await isLocationServiceEnabled();
+    if (locationEnable == true) {
+      Position position =
+          await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      return position;
+    } else {
+      throw LocationException();
+    }
   }
 }

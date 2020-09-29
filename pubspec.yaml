@@ -36,7 +36,7 @@ dependencies:
   # NFC funcionalidades otro paquete
   nfc_in_flutter: ^2.0.5
   # Geolocator funcionalidades
-  geolocator: ^4.0.0
+  geolocator: ^6.0.0+4
   # Base de datos dispositivo
   sqflite: ^1.3.1+1
   # Encuentra rutas donde se guarda
@@ -44,6 +44,8 @@ dependencies:
   # Dependencias curso https://www.youtube.com/watch?v=t39VV2XyqR0
   path_provider: ^1.6.14
   intl: ^0.16.1
+  # identificadores unicos
+  uuid: ^2.2.2
 
 dev_dependencies:
   flutter_test:

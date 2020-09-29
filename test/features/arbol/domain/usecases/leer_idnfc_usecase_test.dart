@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutterapparbol/core/error/failure.dart';
 import 'package:flutterapparbol/core/usecases/usecase.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/idnfc_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/repositories/arboles_repositorio.dart';
@@ -21,7 +22,7 @@ void main() {
   final String idUsuario = "usuarioPrueba";
 
   test(
-    'DEBERIA pasar un idUsuario y recibir un IdNFCEntity',
+    'DEBERIA  recibir un IdNFCEntity CUANDO se produce la lectura de los datos',
     () async {
       // arrange
       when(mockArbolesRepositorio.leerIdNFC(idUsuario: anyNamed("idUsuario")))
@@ -30,6 +31,21 @@ void main() {
       final result = await usecase.call(Params(idUsuario: idUsuario));
       // assert
       expect(result, Right(idNFCEntity));
+      verify(mockArbolesRepositorio.leerIdNFC(idUsuario: idUsuario));
+      verifyNoMoreInteractions(mockArbolesRepositorio);
+    },
+  );
+
+  test(
+    'DEBERIA  recibir un nfcFailure CUANDO no se pueden leer los datos',
+    () async {
+      // arrange
+      when(mockArbolesRepositorio.leerIdNFC(idUsuario: anyNamed("idUsuario")))
+          .thenAnswer((_) async => Left(NfcFailure()));
+      // act
+      final result = await usecase.call(Params(idUsuario: idUsuario));
+      // assert
+      expect(result, Left(NfcFailure()));
       verify(mockArbolesRepositorio.leerIdNFC(idUsuario: idUsuario));
       verifyNoMoreInteractions(mockArbolesRepositorio);
     },

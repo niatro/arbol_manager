@@ -14,6 +14,10 @@ class FormEntity extends Equatable {
   final List<InclinacionTroncoEntity> inclinacionTroncoArbol;
   final List<OrientacionInclinacionEntity> orientacionInclinacionArbol;
   final List<AccionObsEntity> accionObsArbol;
+  final List<UsuarioEntity> usuario;
+  final List<AgentePatogenoEntity> agentePatogeno;
+  final List<LugarPlagaEntity> lugarPlaga;
+  final List<PlagaEntity> plaga;
 
   FormEntity({
     @required this.clienteArbol,
@@ -26,6 +30,10 @@ class FormEntity extends Equatable {
     @required this.inclinacionTroncoArbol,
     @required this.orientacionInclinacionArbol,
     @required this.accionObsArbol,
+    @required this.usuario,
+    @required this.agentePatogeno,
+    @required this.lugarPlaga,
+    @required this.plaga,
   }) : super([
           clienteArbol,
           zonaArbol,
@@ -37,6 +45,10 @@ class FormEntity extends Equatable {
           inclinacionTroncoArbol,
           orientacionInclinacionArbol,
           accionObsArbol,
+          usuario,
+          agentePatogeno,
+          lugarPlaga,
+          plaga,
         ]);
 }
 

@@ -50,6 +50,7 @@ class FormEntityModelo extends FormEntity {
       accionObsArbol: json["accionObsArbol"],
     );
   }*/
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['clienteArbol'] = this.clienteArbol;
@@ -77,6 +78,10 @@ class FormEntityModelo extends FormEntity {
       inclinacionTroncoArbol: this.inclinacionTroncoArbol,
       orientacionInclinacionArbol: this.orientacionInclinacionArbol,
       accionObsArbol: this.accionObsArbol,
+      usuario: this.usuario,
+      agentePatogeno: this.agentePatogeno,
+      lugarPlaga: this.lugarPlaga,
+      plaga: this.plaga,
     );
   }
 }

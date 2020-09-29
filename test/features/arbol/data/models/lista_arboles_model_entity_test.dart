@@ -37,7 +37,7 @@ void main() {
       'DEBE retornar un List<Map<String, dynamic>> CUANDO ingresamos List<ArbolEntityModelo>',
       () async {
         //arrange
-        final result = tArbolesEntityModelo.toJsonFromArbolesEntityModelo();
+        final result = tArbolesEntityModelo.toMapFromArbolesEntityModelo();
         //act
         final expectedListMap = listaMapDeArbolesSerializadosTest;
 //

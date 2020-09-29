@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:uuid/uuid.dart';
 
 import 'package:dartz/dartz_unsafe.dart';
 import 'package:flutterapparbol/core/constants/server_prueba.dart';
@@ -18,15 +19,18 @@ abstract class ArbolesRemoteDataSource {
   ///   http://35.224.182.198 y si funciona obtiene [ArbolesEntityModelo] si no
   ///  Arroja una excepcion [ServiceException] para todos los errores
   ///  Finalmente en implementación debería ir a  http://35.225.91.186
+  //OJO: no implementado
   Future<ArbolesEntityModelo> getArbolesCercanosRemoteData(
       {LatLng coordenadas});
 
   // Esto esta mal porque no se necesita devolver una entidad de ListaDeArboles
   // Solo necesito que la operación se haya realizado correctamente
-  Future<bool> grabarArbolesRemoteData({ArbolEntity arbol});
+  //OJO: no implementado
+  Future<bool> grabarArboleRemoteData({ArbolEntity arbol});
+  //OJO: no implementado
   Future<bool> verificarIdNFCRemoteData({String idNFC});
+  //OJO: no implementado
   Future<ArbolesEntityModelo> getArbolPorIdNFCRemoteData({String idNFC});
-  Future<FormEntityModelo> getDatosForm({String idUsuario});
   Future<ObjetoLista> llenarObjetoListaDesdeHttp({String tabla});
   Future<bool> actualizarBaseDatosFormularios();
 }
@@ -34,96 +38,9 @@ abstract class ArbolesRemoteDataSource {
 class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
   final http.Client client;
   ArbolesRemoteDataSourceImpl({@required this.client});
+  final EsquemaDataDeSQL referencia = EsquemaDataDeSQL();
   final String _url = urlPruebas;
   FormLocalSourceSqlImpl _databaseHelper = FormLocalSourceSqlImpl();
-
-  @override
-  Future<FormEntityModelo> getDatosForm({String idUsuario}) async {
-    try {
-      List<Map<String, List<ObjetoFila>>> lista = [];
-      await llenarListaDesdeSql(lista);
-      Future.delayed(Duration(seconds: 1), () {
-        List<ClienteModelo> listaCliente = [];
-        lista[0]['tablaCliente'].forEach((object) {
-          listaCliente.add(object);
-        });
-        List<ZonaModelo> listaZona = [];
-        lista[1]['tablaZona'].forEach((object) {
-          listaZona.add(object);
-        });
-        List<CalleModelo> listaCalle = [];
-        lista[2]['tablaCalle'].forEach((object) {
-          listaCalle.add(object);
-        });
-        List<CalleEsquinaModelo> listaEsquinaCalle = [];
-        lista[3]['tablaCalleEsquina'].forEach((object) {
-          listaEsquinaCalle.add(object);
-        });
-
-        List<EstadoGeneralModelo> listaEstadoGeneral = [];
-        lista[4]['tablaEstadoGeneral'].forEach((object) {
-          listaEstadoGeneral.add(object);
-        });
-        List<EstadoSanitarioModelo> listaEstadoSanitario = [];
-        lista[5]['tablaEstadoSanitario'].forEach((object) {
-          listaEstadoSanitario.add(object);
-        });
-        List<InclinacionTroncoModelo> listaInclinacion = [];
-        lista[6]['tablaInclinacionTronco'].forEach((object) {
-          listaInclinacion.add(object);
-        });
-        List<OrientacionInclinacionModelo> listaOrientacionInclinacion = [];
-        lista[7]['tablaOrientacionInclinacion'].forEach((object) {
-          listaOrientacionInclinacion.add(object);
-        });
-        List<AccionObsModelo> listaAccionObs = [];
-        lista[8]['tablaAccionObs'].forEach((object) {
-          listaAccionObs.add(object);
-        });
-        List<UsuarioModelo> listaUsuario = [];
-        lista[9]['tablaUsuario'].forEach((object) {
-          listaUsuario.add(object);
-        });
-        List<AgentePatogenoModelo> listaAgentePatogeno = [];
-        lista[10]['tablaAgentesPatogenos'].forEach((object) {
-          listaAgentePatogeno.add(object);
-        });
-        List<LugarPlagaModelo> listaLugarPlaga = [];
-        lista[11]['tablaLugarPlaga'].forEach((object) {
-          listaLugarPlaga.add(object);
-        });
-        List<PlagaModelo> listaPlaga = [];
-        lista[12]['tablaPlagas'].forEach((object) {
-          listaPlaga.add(object);
-        });
-        List<EspecieModelo> listaEspecie = [];
-        lista[13]['tablaEspecie'].forEach((object) {
-          listaEspecie.add(object);
-        });
-        FormEntityModelo formEntityModelo = FormEntityModelo(
-          cliente: listaCliente,
-          zona: listaZona,
-          calle: listaCalle,
-          esquinaCalle: listaEsquinaCalle,
-          estadoGeneral: listaEstadoGeneral,
-          estadoSanitario: listaEstadoSanitario,
-          inclinacionTronco: listaInclinacion,
-          orientacionInclinacion: listaOrientacionInclinacion,
-          accionObs: listaAccionObs,
-          usuario: listaUsuario,
-          agentePatogeno: listaAgentePatogeno,
-          lugarPlaga: listaLugarPlaga,
-          plaga: listaPlaga,
-          especie: listaEspecie,
-        );
-        return formEntityModelo;
-
-//        print(formEntityModelo.lugarPlaga[0].lugarPlagaDesc);
-      });
-    } catch (e, s) {
-      print(s);
-    }
-  }
 
   @override
   Future<ArbolesEntityModelo> getArbolesCercanosRemoteData(
@@ -164,30 +81,147 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
 
   @override
   Future<bool> verificarIdNFCRemoteData({String idNFC}) async {
-    final _response = await client.post(
+    final response = await client.post(
       _url + "/bd/comprobarIdNFC.php",
       body: {
         "idNFC": idNFC,
       },
     );
-    return _respuestaIdNFC(_response);
+    return _respuestaIdNFC(response);
   }
 
   @override
-  Future<bool> grabarArbolesRemoteData({ArbolEntity arbol}) async {
+  Future<bool> grabarArboleRemoteData({ArbolEntity arbol}) async {
     //OJO: esto solo comprueba que este el id del arbol
-    final _response = await client.post(
+    // Campo clientes
+    List resultCliente = await _databaseHelper.getFilasMapList(
+      nombreTabla: referencia.cliente.nombreTabla,
+      campoOrdenador: referencia.cliente.clienteNombre,
+    );
+    String id_entidad_arbol;
+    resultCliente.forEach((cliente) {
+      if (cliente['clienteNombre'] == arbol.clienteArbol) {
+        id_entidad_arbol = cliente['clienteOrigenId'].toString();
+      }
+    });
+    print('El id_entidad_arbol que se envia es: $id_entidad_arbol');
+
+//     Campo zona
+    List resultZona = await _databaseHelper.getFilasMapList(
+      nombreTabla: referencia.zona.nombreTabla,
+      campoOrdenador: referencia.zona.zonaOrigenId,
+    );
+    String id_sector_entidad_arbol;
+    resultZona.forEach((zona) {
+      if (zona['zonaNombre'] == arbol.zonaArbol) {
+        id_sector_entidad_arbol = zona['zonaOrigenId'].toString();
+      }
+    });
+    print(
+        'El id_sector_entidad_arbol que se envia es: $id_sector_entidad_arbol');
+
+// Campo calle
+    List resultCalle = await _databaseHelper.getFilasMapList(
+      nombreTabla: referencia.calle.nombreTabla,
+      campoOrdenador: referencia.calle.calleOrigenId,
+    );
+
+    String id_calle_arbol;
+    resultCalle.forEach((calle) {
+      if (calle['calleNombre'] == arbol.calleArbol) {
+        id_calle_arbol = calle['calleOrigenId'].toString();
+      }
+    });
+    print('el id_calle_arbol que se envia: $id_calle_arbol');
+
+    // Campo n calle
+    String n_calle_arbol = arbol.nCalleArbol.toString();
+    print('el id_calle_arbol que se envia: $n_calle_arbol');
+    // Campo idnFC
+
+    String id_nfc_arbol = arbol.idNfcHistoria.last;
+    print('el id_nfc_arbol que se envia: $id_nfc_arbol');
+
+    // Campo GUI
+    Uuid gui = Uuid();
+    String gui_arbol;
+    if (arbol.guiArbol == null) {
+      gui_arbol = gui.v1();
+    } else {
+      gui_arbol = arbol.guiArbol.toString();
+    }
+    print('el gui_arbol que se envia: $gui_arbol');
+
+    // Campo especie
+    List resultEspecie = await _databaseHelper.getFilasMapList(
+      nombreTabla: referencia.especie.nombreTabla,
+      campoOrdenador: referencia.especie.especieOrden,
+    );
+    String id_especie_arbol;
+    resultEspecie.forEach((elemento) {
+      if (elemento['especieNombreCientifico'] == arbol.especieArbol) {
+        id_especie_arbol = elemento['especieId'].toString();
+      }
+    });
+    print('El id_especie_arbol que se envia es: $id_especie_arbol');
+
+// Campo diametro de tronco
+    String id_diametro_tronco = arbol.diametroTroncoArbolCm.toString();
+    print('el id_diametro_tronco que se envia: $id_diametro_tronco');
+
+    // Campo diametro de tcopa ns
+    String id_diametro_copa_ns_arbol = arbol.diametroCopaNsArbolMt.toString();
+    print(
+        'el id_diametro_copa_ns_arbol que se envia: $id_diametro_copa_ns_arbol');
+
+    // Campo diametro de tcopa eo
+    String id_diametro_copa_eo_arbol = arbol.diametroCopaEoArbolMt.toString();
+    print(
+        'el id_diametro_copa_eo_arbol que se envia: $id_diametro_copa_eo_arbol');
+
+    // Campo altura Arbol
+    String id_altura_arbol = arbol.alturaArbolArbolMt.toString();
+    print('el id_altura_arbol que se envia: $id_altura_arbol');
+
+    // Campo altura copa
+    String id_altura_copa = arbol.alturaCopaArbolMt.toString();
+    print('el id_altura_copa que se envia: $id_altura_copa');
+
+    // Estado general
+    List resultEstadoGeneral = await _databaseHelper.getFilasMapList(
+      nombreTabla: referencia.estadoGeneral.nombreTabla,
+      campoOrdenador: referencia.estadoGeneral.estadoGeneralId,
+    );
+    String id_estado_general;
+    resultEstadoGeneral.forEach((elemento) {
+      print(elemento);
+      if (elemento['estadoGeneralDesc'] == arbol.estadoGeneralArbol) {
+        id_estado_general = elemento['estadoGeneralId'].toString();
+      }
+    });
+    print('El id_estado_general que se envia es: $id_estado_general');
+
+    /*   final response = await client.post(
       _url + "/bd/comprobarIdNFC.php",
       body: {
-        "idNFC": arbol.guiArbol,
+        "id_nfc_arbol": arbol.idNfcHistoria.last,
+        "gui_arbol": gui_arbol,
+        "id_entidad_arbol": id_entidad_arbol,
+        "id_sector_entidad_arbol": id_sector_entidad_arbol,
+        "id_calle_arbol": id_calle_arbol,
+        "n_calle_arbol": arbol.nCalleArbol,
+
+//        "id_especie_arbol":
       },
     );
-    if (_response.statusCode == 200) {
+    if (response.statusCode == 200) {
       return true;
     } else {
       throw ServerException();
-    }
-    //TODO: escribir el procedimiento para grabar el árbol 😥
+    }*/
+    return true;
+
+    //TODO: escribir el procedimiento para grabar el árbol en PHP 😥
   }
 
   bool _respuestaIdNFC(http.Response response) {
@@ -239,7 +273,6 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
     } catch (e, s) {
       print(s);
     }
-    print('Escrito a punto de return');
     return true;
   }
 
@@ -313,21 +346,5 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
       default:
         return null;
     }
-  }
-
-  Future<void> llenarListaDesdeSql(
-      List<Map<String, List<ObjetoFila>>> listaMapConObjetos) async {
-    nombreTablasFormBD.forEach((nombreTabla) async {
-      List listaMapas = await _databaseHelper.getFilasMapList(
-        nombreTabla: nombreTabla['nombre'],
-        campoOrdenador: nombreTabla['orden'],
-      );
-      List<ObjetoFila> listaObjetos = [];
-      listaMapas.forEach((mapa) {
-        listaObjetos.add(nombreTabla['objeto'](mapa));
-      });
-      Map<String, List<ObjetoFila>> tmp = {nombreTabla['nombre']: listaObjetos};
-      listaMapConObjetos.add(tmp);
-    });
   }
 }

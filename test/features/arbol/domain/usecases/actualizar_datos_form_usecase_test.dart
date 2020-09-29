@@ -36,16 +36,16 @@ void main() {
     verifyNoMoreInteractions(mockArbolesRepositorio);
   });
   test(
-      'DEBERIA entregar un Failure CUANDO no se actualizan los datos llamados desde el UseCase',
+      'DEBERIA entregar un Failure de server CUANDO no se actualizan los datos ',
       () async {
     // arrange
     when(mockArbolesRepositorio.actualizarDatosForm(
             idUsuario: anyNamed('idUsuario')))
-        .thenAnswer((_) async => Left(LocalDataBaseFailure()));
+        .thenAnswer((_) async => Left(ServerFailure()));
     // act
     final result = await usecase.call(Params(idUsuario: idUsuario));
     // assert
-    expect(result, Left(LocalDataBaseFailure()));
+    expect(result, Left(ServerFailure()));
     verify(mockArbolesRepositorio.actualizarDatosForm(idUsuario: idUsuario));
     verifyNoMoreInteractions(mockArbolesRepositorio);
   });

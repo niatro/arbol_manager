@@ -10,17 +10,24 @@ import '../../../../core/error/failure.dart';
 import '../entities/arboles_entity.dart';
 
 abstract class ArbolesRepositorio {
+  //LISTO: implementado
   Future<Either<Failure, ArbolesEntity>> getArbolesCercanos(LatLng coordenadas);
+  //LISTO: implementado
   Future<Either<Failure, ArbolesEntity>> getArbolPorIdNFC(String idNFC);
+  //LISTO: implementado
   Future<Either<Failure, bool>> comprobarIdNFC({String idNFC});
-
-  //OJO: Falta implementar y testear las caracteristicas abajo
+  //LISTO: implementado
   Future<Either<Failure, IdNFCEntity>> leerIdNFC({String idUsuario});
+  //LISTO: implementado
   Future<Either<Failure, LatLng>> getCoordenadas({NoParams params});
+  //LISTO: implementado
   Future<Either<Failure, Success>> grabarArboles(
       {ArbolesEntity arboles, int nArbol});
+  //LISTO: implementado
   Future<Either<Failure, FormEntity>> getDatosForm({String idUsuario});
+  //LISTO: implementado
   Future<Either<Failure, Success>> actualizarDatosForm({String idUsuario});
+  //LISTO: implementado
   Future<Either<Failure, Success>> crearDatosForm();
 
 // Los métodos abajo deberían ir en el layer de presentación

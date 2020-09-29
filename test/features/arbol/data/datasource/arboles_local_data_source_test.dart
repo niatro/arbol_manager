@@ -66,7 +66,7 @@ void main() {
 
       // assert
       final expectedJsonString =
-          json.encode(tArbolesEntityModelo.toJsonFromArbolesEntityModelo());
+          json.encode(tArbolesEntityModelo.toMapFromArbolesEntityModelo());
       verify(
         mockSharedPreferences.setString(
             CACHED_ARBOLES_ENTITY_MODEL, expectedJsonString),

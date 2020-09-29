@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutterapparbol/core/constants/form_entity_test.dart';
+import 'package:flutterapparbol/core/error/exceptions.dart';
 import 'package:flutterapparbol/core/success/success.dart';
 import 'package:flutterapparbol/features/arbol/data/models/form_entity_modelo.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/form_entity.dart';
@@ -20,7 +21,7 @@ abstract class FormLocalSourceSql {
   Future<int> updateCliente(String nombreTabla, ClienteModelo cliente);
   Future<int> insertFila({ObjetoFila objetoFila, String nombreTabla});
   Future<void> cerrarBasedatos();
-  Future<void> borrarBasedatos();
+  Future<FormEntityModelo> getDatosFormSql({String idUsuario});
 }
 
 //OJO: Implementacion version 3 abajo 👀
@@ -253,5 +254,108 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
     String directory = await getDatabasesPath();
     String path = directory + 'form.db';
     deleteDatabase(path);
+  }
+
+  @override
+  Future<FormEntityModelo> getDatosFormSql({String idUsuario}) async {
+    List<Map<String, List<ObjetoFila>>> lista = [];
+    await llenarListaDesdeSql(lista);
+    Future.delayed(Duration(seconds: 1), () {
+      List<ClienteModelo> listaCliente = [];
+      lista[0]['tablaCliente'].forEach((object) {
+        listaCliente.add(object);
+      });
+      List<ZonaModelo> listaZona = [];
+      lista[1]['tablaZona'].forEach((object) {
+        listaZona.add(object);
+      });
+      List<CalleModelo> listaCalle = [];
+      lista[2]['tablaCalle'].forEach((object) {
+        listaCalle.add(object);
+      });
+      List<CalleEsquinaModelo> listaEsquinaCalle = [];
+      lista[3]['tablaCalleEsquina'].forEach((object) {
+        listaEsquinaCalle.add(object);
+      });
+
+      List<EstadoGeneralModelo> listaEstadoGeneral = [];
+      lista[4]['tablaEstadoGeneral'].forEach((object) {
+        listaEstadoGeneral.add(object);
+      });
+      List<EstadoSanitarioModelo> listaEstadoSanitario = [];
+      lista[5]['tablaEstadoSanitario'].forEach((object) {
+        listaEstadoSanitario.add(object);
+      });
+      List<InclinacionTroncoModelo> listaInclinacion = [];
+      lista[6]['tablaInclinacionTronco'].forEach((object) {
+        listaInclinacion.add(object);
+      });
+      List<OrientacionInclinacionModelo> listaOrientacionInclinacion = [];
+      lista[7]['tablaOrientacionInclinacion'].forEach((object) {
+        listaOrientacionInclinacion.add(object);
+      });
+      List<AccionObsModelo> listaAccionObs = [];
+      lista[8]['tablaAccionObs'].forEach((object) {
+        listaAccionObs.add(object);
+      });
+      List<UsuarioModelo> listaUsuario = [];
+      lista[9]['tablaUsuario'].forEach((object) {
+        listaUsuario.add(object);
+      });
+      List<AgentePatogenoModelo> listaAgentePatogeno = [];
+      lista[10]['tablaAgentesPatogenos'].forEach((object) {
+        listaAgentePatogeno.add(object);
+      });
+      List<LugarPlagaModelo> listaLugarPlaga = [];
+      lista[11]['tablaLugarPlaga'].forEach((object) {
+        listaLugarPlaga.add(object);
+      });
+      List<PlagaModelo> listaPlaga = [];
+      lista[12]['tablaPlagas'].forEach((object) {
+        listaPlaga.add(object);
+      });
+      List<EspecieModelo> listaEspecie = [];
+      lista[13]['tablaEspecie'].forEach((object) {
+        listaEspecie.add(object);
+      });
+      FormEntityModelo formEntityModelo = FormEntityModelo(
+        cliente: listaCliente,
+        zona: listaZona,
+        calle: listaCalle,
+        esquinaCalle: listaEsquinaCalle,
+        estadoGeneral: listaEstadoGeneral,
+        estadoSanitario: listaEstadoSanitario,
+        inclinacionTronco: listaInclinacion,
+        orientacionInclinacion: listaOrientacionInclinacion,
+        accionObs: listaAccionObs,
+        usuario: listaUsuario,
+        agentePatogeno: listaAgentePatogeno,
+        lugarPlaga: listaLugarPlaga,
+        plaga: listaPlaga,
+        especie: listaEspecie,
+      );
+      if (formEntityModelo != null) {
+        print(formEntityModelo.agentePatogeno[0].agentePatogenoDesc);
+        return formEntityModelo;
+      } else {
+        throw DataBaseException();
+      }
+    });
+  }
+
+  Future<void> llenarListaDesdeSql(
+      List<Map<String, List<ObjetoFila>>> listaMapConObjetos) async {
+    nombreTablasFormBD.forEach((nombreTabla) async {
+      List listaMapas = await _databaseHelper.getFilasMapList(
+        nombreTabla: nombreTabla['nombre'],
+        campoOrdenador: nombreTabla['orden'],
+      );
+      List<ObjetoFila> listaObjetos = [];
+      listaMapas.forEach((mapa) {
+        listaObjetos.add(nombreTabla['objeto'](mapa));
+      });
+      Map<String, List<ObjetoFila>> tmp = {nombreTabla['nombre']: listaObjetos};
+      listaMapConObjetos.add(tmp);
+    });
   }
 }

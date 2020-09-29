@@ -21,3 +21,5 @@ class IdNfcNoGrabaYaExisteFailure extends Failure {}
 class LocalDataBaseFailure extends Failure {}
 
 class ConexionFailure extends Failure {}
+
+class LocalGpsFailure extends Failure {}

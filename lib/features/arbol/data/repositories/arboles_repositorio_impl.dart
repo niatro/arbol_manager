@@ -5,6 +5,7 @@ import 'package:flutterapparbol/features/arbol/data/datasources/form_local_sourc
 import 'package:flutterapparbol/features/arbol/data/models/form_entity_modelo.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/form_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/idnfc_entity.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:meta/meta.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
 
@@ -23,12 +24,14 @@ typedef Future<FormEntity> _FormEntityPorActualizacion();
 class ArbolesRepositorioImpl implements ArbolesRepositorio {
   final ArbolesRemoteDataSource remoteDataSource;
   final ArbolesLocalDataSource localDatasource;
+  final FormLocalSourceSql sqlDataSource;
   final NetworkInfo netWorkInfo;
 
   ArbolesRepositorioImpl({
     @required this.remoteDataSource,
     @required this.localDatasource,
     @required this.netWorkInfo,
+    @required this.sqlDataSource,
   });
   @override
   Future<Either<Failure, ArbolesEntity>> getArbolPorIdNFC(String idNFC) async {
@@ -79,7 +82,7 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
         bool verificado = await remoteDataSource.verificarIdNFCRemoteData(
             idNFC: arboles.listaArbolEntity[nArbol].guiArbol);
         if (verificado == false) {
-          bool grabadoSioNo = await remoteDataSource.grabarArbolesRemoteData(
+          bool grabadoSioNo = await remoteDataSource.grabarArboleRemoteData(
               arbol: arboles.listaArbolEntity[nArbol]);
           if (grabadoSioNo == true) {
             arboles.listaArbolEntity.removeAt(nArbol);
@@ -100,20 +103,25 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
   Future<Either<Failure, ServerActualizarFormSuccess>> actualizarDatosForm(
       {String idUsuario}) async {
     if (await netWorkInfo.isConnected) {
-      return Right(ServerActualizarFormSuccess());
+      bool result = await remoteDataSource.actualizarBaseDatosFormularios();
+      if (result == true) {
+        return Right(ServerActualizarFormSuccess());
+      } else {
+        return Left(ServerFailure());
+      }
     } else {
       return Left(ConexionFailure());
     }
-    // TODO: implement actualizarDatosFormulario
   }
 
+//OJO: TDD Realizado
   @override
   Future<Either<Failure, FormEntity>> getDatosForm({String idUsuario}) async {
-    if (await netWorkInfo.isConnected) {
-      final result = await remoteDataSource.getDatosForm(idUsuario: idUsuario);
+    try {
+      final result = await sqlDataSource.getDatosFormSql(idUsuario: idUsuario);
       return Right(result);
-    } else {
-      return Left(ConexionFailure());
+    } on DataBaseException {
+      return Left(DataBaseFailure());
     }
   }
 
@@ -147,8 +155,14 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
   }
 
   @override
-  Future<Either<Failure, LatLng>> getCoordenadas({NoParams params}) {
+  Future<Either<Failure, LatLng>> getCoordenadas({NoParams params}) async {
     // TODO: implement getCoordenadas
-    throw UnimplementedError();
+    try {
+      Position posicion = await localDatasource.getCoordenadasLocalData();
+      LatLng latlong = LatLng(posicion.latitude, posicion.longitude);
+      return Right(latlong);
+    } on LocationException {
+      return (Left(LocalGpsFailure()));
+    }
   }
 }

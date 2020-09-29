@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutterapparbol/core/error/failure.dart';
 import 'package:flutterapparbol/core/usecases/usecase.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/repositories/arboles_repositorio.dart';
@@ -24,6 +25,7 @@ void main() {
   });
   final coordenadasTest = LatLng(-33.40022111646666, -70.59898554630922);
   final ArbolesEntity tListaDeArbolesEntity = arbolesEntityTest;
+  ServerFailure falloServidor = ServerFailure();
 
   test(
     'debería traer un listado de arboles basado en una reference geográfica del repositario',
@@ -35,6 +37,20 @@ void main() {
       final result = await usecase.call(Params(coordenada: coordenadasTest));
       // assert
       expect(result, Right(tListaDeArbolesEntity));
+      verify(mockListaArbolRepositorio.getArbolesCercanos(coordenadasTest));
+      verifyNoMoreInteractions(mockListaArbolRepositorio);
+    },
+  );
+  test(
+    'debería traer un Failure cuando no pudo conseguir los arboles',
+    () async {
+      // arrange
+      when(mockListaArbolRepositorio.getArbolesCercanos(any))
+          .thenAnswer((_) async => Left(falloServidor));
+      // act
+      final result = await usecase.call(Params(coordenada: coordenadasTest));
+      // assert
+      expect(result, Left(falloServidor));
       verify(mockListaArbolRepositorio.getArbolesCercanos(coordenadasTest));
       verifyNoMoreInteractions(mockListaArbolRepositorio);
     },

@@ -18,10 +18,16 @@ void main() {
 
   setUp(() {});
 
-  group('Debe testear guardar data en la base de datos', () {
+  group('inicializarDatabase', () {
     final List<ClienteEntity> listaClientes = [tClienteUno, tClienteDos];
     List<Map> clientesObtenidos = tClientesListados;
   });
 
-  group('Debe testear LEER data DE la base de datos', () {});
+  group('contarFilasTabla', () {});
+  group('getFilasMapList', () {});
+  group('getFormEntityDeTabla', () {});
+  group('deleteCliente', () {});
+  group('insertFila', () {});
+  group('cerrarBasedatos', () {});
+  group('getDatosFormSql', () {});
 }

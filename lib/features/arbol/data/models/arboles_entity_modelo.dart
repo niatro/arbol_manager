@@ -16,7 +16,7 @@ class ArbolesEntityModelo extends ArbolesEntity {
     return ArbolesEntityModelo(listaArbolesEntity: _listaDeArbol);
   }
 
-  List<Map<String, dynamic>> toJsonFromArbolesEntityModelo() {
+  List<Map<String, dynamic>> toMapFromArbolesEntityModelo() {
     List<ArbolEntityModelo> data = List<ArbolEntityModelo>();
     data = [];
     final int nArbolesModelo = this.listaArbolEntity.length;

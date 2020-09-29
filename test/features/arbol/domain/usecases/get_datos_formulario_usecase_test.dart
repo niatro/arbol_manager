@@ -35,7 +35,7 @@ void main() {
     verifyNoMoreInteractions(mockArbolesRepositorio);
   });
   test(
-      'DEBERIA entregar un Failure CUANDO no se actualizan los datos llamados desde el UseCase',
+      'DEBERIA entregar un Failure en lectura de la BD CUANDO no se actualizan los datos llamados desde el UseCase',
       () async {
     // arrange
     when(mockArbolesRepositorio.getDatosForm(idUsuario: anyNamed('idUsuario')))

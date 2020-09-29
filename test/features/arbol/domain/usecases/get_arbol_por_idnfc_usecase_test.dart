@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutterapparbol/core/error/failure.dart';
 import 'package:flutterapparbol/core/usecases/usecase.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/repositories/arboles_repositorio.dart';
@@ -28,6 +29,7 @@ void main() {
   // implementa la clase abstracta del repositorio
 
   final ArbolesEntity arbolesEntity = arbolesEntityTest;
+  ServerFailure falloServidor = ServerFailure();
 
   test(
     'Trae un árbol (una lista con uno solo) basado en un IdNFC',
@@ -40,6 +42,22 @@ void main() {
       // assert Aquí comparamos que el output de nuestro UseCase correspondería
       // lo que se produce por la mímica de salida de nuestro repositorio
       expect(result, Right(arbolesEntity));
+      // se verifica que el método abajo citado ha sido llamado
+      verify(mockArbolesRepositorio.getArbolPorIdNFC(idNFC));
+      verifyNoMoreInteractions(mockArbolesRepositorio);
+    },
+  );
+  test(
+    'DEBERIA retornar un Failure CUANDO llama un arbol basado en IdNFC',
+    () async {
+      // arrange
+      when(mockArbolesRepositorio.getArbolPorIdNFC(any))
+          .thenAnswer((_) async => Left(falloServidor));
+      // act
+      final result = await usecase.call(Params(idNFC: idNFC));
+      // assert Aquí comparamos que el output de nuestro UseCase correspondería
+      // lo que se produce por la mímica de salida de nuestro repositorio
+      expect(result, Left(falloServidor));
       // se verifica que el método abajo citado ha sido llamado
       verify(mockArbolesRepositorio.getArbolPorIdNFC(idNFC));
       verifyNoMoreInteractions(mockArbolesRepositorio);
