@@ -19,6 +19,9 @@ class ArbolEntity extends Equatable {
   final double alturaCopaArbolMt;
   final String estadoGeneralArbol;
   final String estadoSanitarioArbol;
+  final String agentePatogeno;
+  final String sintoma;
+  final String lugarPlaga;
   final String inclinacionTroncoArbol;
   final String orientacionInclinacionArbol;
   final List<dynamic> obsArbolHistoria;
@@ -49,6 +52,9 @@ class ArbolEntity extends Equatable {
     @required this.alturaCopaArbolMt,
     @required this.estadoGeneralArbol,
     @required this.estadoSanitarioArbol,
+    @required this.agentePatogeno,
+    @required this.sintoma,
+    @required this.lugarPlaga,
     @required this.inclinacionTroncoArbol,
     @required this.orientacionInclinacionArbol,
     @required this.obsArbolHistoria,

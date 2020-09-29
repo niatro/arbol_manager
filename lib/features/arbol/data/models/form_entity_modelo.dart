@@ -4,37 +4,38 @@ import 'package:flutterapparbol/features/arbol/domain/entities/form_entity.dart'
 import 'package:meta/meta.dart';
 
 class FormEntityModelo extends FormEntity {
-  final List<ClienteModelo> cliente;
-  final List<ZonaModelo> zona;
-  final List<CalleModelo> calle;
-  final List<CalleEsquinaModelo> esquinaCalle;
-  final List<EspecieModelo> especie;
-  final List<EstadoGeneralModelo> estadoGeneral;
-  final List<EstadoSanitarioModelo> estadoSanitario;
-  final List<InclinacionTroncoModelo> inclinacionTronco;
-  final List<OrientacionInclinacionModelo> orientacionInclinacion;
-  final List<AccionObsModelo> accionObs;
-  final List<UsuarioModelo> usuario;
-  final List<AgentePatogenoModelo> agentePatogeno;
-  final List<LugarPlagaModelo> lugarPlaga;
-  final List<PlagaModelo> plaga;
+  final List<ClienteModelo> clientes;
+  final List<ZonaModelo> zonas;
+  final List<CalleModelo> calles;
+  final List<CalleEsquinaModelo> esquinaCalles;
+  final List<EspecieModelo> especies;
+  final List<EstadoGeneralModelo> estadosGenerales;
+  final List<EstadoSanitarioModelo> estadosSanitarios;
+  final List<InclinacionTroncoModelo> inclinacionesTronco;
+  final List<OrientacionInclinacionModelo> orientacionesInclinacion;
+  final List<AccionObsModelo> accionesObs;
+  final List<UsuarioModelo> usuarios;
+  final List<AgentePatogenoModelo> agentesPatogenos;
+  final List<LugarPlagaModelo> lugaresPlaga;
+  final List<PlagaModelo> plagas;
+  final List<SintomaModelo> sintomas;
 
-  FormEntityModelo({
-    @required this.cliente,
-    @required this.zona,
-    @required this.calle,
-    @required this.esquinaCalle,
-    @required this.especie,
-    @required this.estadoGeneral,
-    @required this.estadoSanitario,
-    @required this.inclinacionTronco,
-    @required this.orientacionInclinacion,
-    @required this.accionObs,
-    @required this.usuario,
-    @required this.agentePatogeno,
-    @required this.lugarPlaga,
-    @required this.plaga,
-  });
+  FormEntityModelo(
+      {@required this.clientes,
+      @required this.zonas,
+      @required this.calles,
+      @required this.esquinaCalles,
+      @required this.especies,
+      @required this.estadosGenerales,
+      @required this.estadosSanitarios,
+      @required this.inclinacionesTronco,
+      @required this.orientacionesInclinacion,
+      @required this.accionesObs,
+      @required this.usuarios,
+      @required this.agentesPatogenos,
+      @required this.lugaresPlaga,
+      @required this.plagas,
+      @required this.sintomas});
 
 /*  factory FormEntityModelo.fromJson(ObjetoLista json) {
     return FormEntityModelo(
@@ -60,6 +61,10 @@ class FormEntityModelo extends FormEntity {
     data['especieArbol'] = this.especieArbol;
     data['estadoGeneralArbol'] = this.estadoGeneralArbol;
     data['estadoSanitarioArbol'] = this.estadoSanitarioArbol;
+    data['agentesPatogenos'] = this.agentesPatogenos;
+    data['lugaresPlaga'] = this.lugaresPlaga;
+    data['plagas'] = this.plagas;
+    data['sintomas'] = this.sintomas;
     data['inclinacionTroncoArbol'] = this.inclinacionTroncoArbol;
     data['orientacionInclinacionArbol'] = this.orientacionInclinacionArbol;
     data['accionObsArbol'] = this.accionObsArbol;
@@ -78,10 +83,11 @@ class FormEntityModelo extends FormEntity {
       inclinacionTroncoArbol: this.inclinacionTroncoArbol,
       orientacionInclinacionArbol: this.orientacionInclinacionArbol,
       accionObsArbol: this.accionObsArbol,
-      usuario: this.usuario,
-      agentePatogeno: this.agentePatogeno,
-      lugarPlaga: this.lugarPlaga,
-      plaga: this.plaga,
+      usuarios: this.usuarios,
+      agentesPatogenos: this.agentesPatogenos,
+      lugaresPlaga: this.lugaresPlaga,
+      plagas: this.plagas,
+      sintomas: this.sintomas,
     );
   }
 }
@@ -1084,6 +1090,65 @@ class ListaPlagaModelo extends ObjetoLista implements ObjetoFila {
     List<PlagaModelo> _listaPlaga = List<PlagaModelo>();
     _listaPlaga = parsedJson.map((i) => PlagaModelo.fromJson(i)).toList();
     return ListaPlagaModelo(listaPlaga: _listaPlaga);
+  }
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    // TODO: implement toMap
+    throw UnimplementedError();
+  }
+}
+
+class SintomaModelo extends SintomaEntity implements ObjetoFila {
+  int _sintomaOrigenId;
+  String _sintomaDesc;
+  SintomaModelo({
+    @required int sintomaOrigenId,
+    @required String sintomaDesc,
+  })  : this._sintomaOrigenId = sintomaOrigenId,
+        this._sintomaDesc = sintomaDesc;
+  int get plagaOrigenId => _sintomaOrigenId;
+  String get plagaDesc => _sintomaDesc;
+
+  @override
+  int idFila;
+
+  @override
+  Map<String, dynamic> toMap() {
+    var map = Map<String, dynamic>();
+    map['sintomaOrigenId'] = _sintomaOrigenId;
+    map['sintomaDesc'] = _sintomaDesc;
+    return map;
+  }
+
+  @override
+  SintomaModelo.fromMapToObject(Map<String, dynamic> map) {
+    this._sintomaOrigenId = map['sintomaOrigenId'];
+    this._sintomaDesc = map['sintomaDesc'];
+  }
+
+  factory SintomaModelo.fromJson(Map<String, dynamic> json) {
+    return SintomaModelo(
+      sintomaOrigenId: int.parse(json['id_sintoma']),
+      sintomaDesc: json['detalle_sintoma'],
+    );
+  }
+}
+
+class ListaSintomaModelo extends ObjetoLista implements ObjetoFila {
+  final List<SintomaModelo> listaSintoma;
+
+  ListaSintomaModelo({
+    @required this.listaSintoma,
+  }) : super(elementos: listaSintoma);
+
+  factory ListaSintomaModelo.fromJson(List<dynamic> parsedJson) {
+    List<SintomaModelo> _listaSintoma = List<SintomaModelo>();
+    _listaSintoma = parsedJson.map((i) => SintomaModelo.fromJson(i)).toList();
+    return ListaSintomaModelo(listaSintoma: _listaSintoma);
   }
 
   @override

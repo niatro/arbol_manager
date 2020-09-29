@@ -53,6 +53,10 @@ PlagaModelo plaga(Map<String, dynamic> ob) {
   return PlagaModelo.fromMapToObject(ob);
 }
 
+SintomaModelo sintoma(Map<String, dynamic> ob) {
+  return SintomaModelo.fromMapToObject(ob);
+}
+
 EspecieModelo especie(Map<String, dynamic> ob) {
   return EspecieModelo.fromMapToObject(ob);
 }
@@ -124,6 +128,11 @@ final List<Map> nombreTablasFormBD = [
     'objeto': plaga,
   },
   {
+    'nombre': esquema.sintomas.nombreTabla,
+    'orden': esquema.sintomas.sintomaDesc,
+    'objeto': sintoma,
+  },
+  {
     'nombre': esquema.especie.nombreTabla,
     'orden': esquema.especie.especieOrden,
     'objeto': especie,
@@ -146,6 +155,7 @@ class EsquemaDataDeSQL {
   final EsquemaAgentesPatogenos agentesPatogenos = EsquemaAgentesPatogenos();
   final EsquemaLugarPlaga lugarPlaga = EsquemaLugarPlaga();
   final EsquemaPlagas plagas = EsquemaPlagas();
+  final EsquemaSintomas sintomas = EsquemaSintomas();
 }
 
 class EsquemaCliente {
@@ -266,4 +276,11 @@ class EsquemaPlagas {
   String plagaId = 'plagaId';
   String plagaOrigenId = 'plagaOrigenId';
   String plagaDesc = 'plagaDesc';
+}
+
+class EsquemaSintomas {
+  String nombreTabla = 'tablaSintoma';
+  String sintomaId = 'sintomaId';
+  String sintomaOrigenId = 'sintomaOrigenId';
+  String sintomaDesc = 'sintomaDesc';
 }

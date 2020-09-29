@@ -54,7 +54,7 @@ FormEntity formTest = FormEntity(
     AccionObsEntity(
         accionObsOrigenId: 1, accionObsDesc: 'podar ramas', accionObsOrden: 2)
   ],
-  usuario: [
+  usuarios: [
     UsuarioEntity(
         usuarioOrigenId: 1,
         usuarioGUI: 'sferwUg6k',
@@ -66,31 +66,30 @@ FormEntity formTest = FormEntity(
         usuarioCreacion: '2018-07-07',
         usuarioActividad: 'si')
   ],
-  agentePatogeno: [
+  agentesPatogenos: [
     AgentePatogenoEntity(
         agentePatogenoOrigenId: 1, agentePatogenoDesc: 'Plaga Mala')
   ],
-  lugarPlaga: [
+  lugaresPlaga: [
     LugarPlagaEntity(lugarPlagaOrigenId: 2, lugarPlagaDesc: 'ramillas')
   ],
-  plaga: [
-    PlagaEntity(plagaOrigenId: 3, plagaDesc: 'Pulgones', lugarPlagaId: 2)
-  ],
+  plagas: [PlagaEntity(plagaOrigenId: 3, plagaDesc: 'Pulgones', plagaId: 2)],
+  sintomas: [SintomaModelo(sintomaOrigenId: 1, sintomaDesc: 'Aserrin')],
 );
 
 FormEntityModelo tFormTestModelo = FormEntityModelo(
-  cliente: [ClienteModelo(clienteOrigenId: 1, clienteNombre: 'Vitacura')],
-  zona: [
+  clientes: [ClienteModelo(clienteOrigenId: 1, clienteNombre: 'Vitacura')],
+  zonas: [
     ZonaModelo(zonaOrigenId: 1, zonaNombre: 'Unidad Vecinal 1', clienteId: 1)
   ],
-  calle: [
+  calles: [
     CalleModelo(
         calleTipo: 'avenida',
         calleOrigenId: 1,
         calleZonaId: 1,
         calleNombre: 'Nueva Costanera')
   ],
-  esquinaCalle: [
+  esquinaCalles: [
     CalleEsquinaModelo(
       calleEsquinaTipo: 'vereda',
       calleEsquinaOrigenId: 1,
@@ -98,7 +97,7 @@ FormEntityModelo tFormTestModelo = FormEntityModelo(
       calleEsquinaNombre: 'Vicente Rozales',
     )
   ],
-  especie: [
+  especies: [
     EspecieModelo(
       especieOrigenId: 1,
       especieNombreCientifico: 'Pinus Radiata',
@@ -110,27 +109,27 @@ FormEntityModelo tFormTestModelo = FormEntityModelo(
       especieDescripcion: 'omnis facus rebes dios cauh d dewdfef',
     )
   ],
-  estadoGeneral: [
+  estadosGenerales: [
     EstadoGeneralModelo(estadoGeneralOrigenId: 2, estadoGeneralDesc: 'Bueno')
   ],
-  estadoSanitario: [
+  estadosSanitarios: [
     EstadoSanitarioModelo(
         estadoSanitarioOrigenId: 1, estadoSanitarioDesc: 'Hongos en la punta')
   ],
-  inclinacionTronco: [
+  inclinacionesTronco: [
     InclinacionTroncoModelo(
         inclinacionTroncoOrigenId: 1, inclinacionTroncoDesc: 'Muy inclinado')
   ],
-  orientacionInclinacion: [
+  orientacionesInclinacion: [
     OrientacionInclinacionModelo(
         orientacionInclinacionOrigenId: 1,
         orientacionInclinacionDesc: 'A la vereda')
   ],
-  accionObs: [
+  accionesObs: [
     AccionObsModelo(
         accionObsOrigenId: 1, accionObsDesc: 'podar ramas', accionObsOrden: 2)
   ],
-  usuario: [
+  usuarios: [
     UsuarioModelo(
         usuarioOrigenId: 1,
         usuarioGUI: 'sferwUg6k',
@@ -142,14 +141,15 @@ FormEntityModelo tFormTestModelo = FormEntityModelo(
         usuarioCreacion: '2018-07-07',
         usuarioActividad: 'si')
   ],
-  agentePatogeno: [
+  agentesPatogenos: [
     AgentePatogenoModelo(
         agentePatogenoOrigenId: 1, agentePatogenoDesc: 'Plaga Mala')
   ],
-  lugarPlaga: [
+  lugaresPlaga: [
     LugarPlagaModelo(lugarPlagaOrigenId: 2, lugarPlagaDesc: 'ramillas')
   ],
-  plaga: [PlagaModelo(plagaOrigenId: 3, plagaDesc: 'Pulgones')],
+  plagas: [PlagaModelo(plagaOrigenId: 3, plagaDesc: 'Pulgones')],
+  sintomas: [SintomaModelo(sintomaOrigenId: 1, sintomaDesc: 'Aserrin')],
 );
 
 ClienteEntity tClienteUno =

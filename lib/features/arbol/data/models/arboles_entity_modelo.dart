@@ -38,6 +38,9 @@ class ArbolesEntityModelo extends ArbolesEntity {
         alturaCopaArbolMt: this.listaArbolEntity[i].alturaCopaArbolMt,
         estadoGeneralArbol: this.listaArbolEntity[i].estadoGeneralArbol,
         estadoSanitarioArbol: this.listaArbolEntity[i].estadoSanitarioArbol,
+        agentePatogeno: this.listaArbolEntity[i].agentePatogeno,
+        sintoma: this.listaArbolEntity[i].sintoma,
+        lugarPlaga: this.listaArbolEntity[i].lugarPlaga,
         inclinacionTroncoArbol: this.listaArbolEntity[i].inclinacionTroncoArbol,
         orientacionInclinacionArbol:
             this.listaArbolEntity[i].orientacionInclinacionArbol,
@@ -82,6 +85,9 @@ class ArbolEntityModelo extends ArbolEntity {
     @required double alturaCopaArbolMt,
     @required String estadoGeneralArbol,
     @required String estadoSanitarioArbol,
+    @required String agentePatogeno,
+    @required String sintoma,
+    @required String lugarPlaga,
     @required String inclinacionTroncoArbol,
     @required String orientacionInclinacionArbol,
     @required List<dynamic> obsArbolHistoria,
@@ -111,6 +117,9 @@ class ArbolEntityModelo extends ArbolEntity {
           alturaCopaArbolMt: alturaCopaArbolMt,
           estadoGeneralArbol: estadoGeneralArbol,
           estadoSanitarioArbol: estadoSanitarioArbol,
+          agentePatogeno: agentePatogeno,
+          sintoma: sintoma,
+          lugarPlaga: lugarPlaga,
           inclinacionTroncoArbol: inclinacionTroncoArbol,
           orientacionInclinacionArbol: orientacionInclinacionArbol,
           obsArbolHistoria: obsArbolHistoria,
@@ -146,6 +155,9 @@ class ArbolEntityModelo extends ArbolEntity {
         alturaCopaArbolMt: double.parse(json["alturaCopaArbolMt"]),
         estadoGeneralArbol: json["estadoGeneralArbol"],
         estadoSanitarioArbol: json["estadoSanitarioArbol"],
+        agentePatogeno: json["agentePatogeno"],
+        sintoma: json["sintoma"],
+        lugarPlaga: json["lugarPlaga"],
         inclinacionTroncoArbol: json["inclinacionTroncoArbol"],
         orientacionInclinacionArbol: json["orientacionInclinacionArbol"],
         obsArbolHistoria:
@@ -187,6 +199,9 @@ class ArbolEntityModelo extends ArbolEntity {
     data['alturaCopaArbolMt'] = this.alturaCopaArbolMt.toString();
     data['estadoGeneralArbol'] = this.estadoGeneralArbol;
     data['estadoSanitarioArbol'] = this.estadoSanitarioArbol;
+    data['agentePatogeno'] = this.agentePatogeno;
+    data['sintoma'] = this.sintoma;
+    data['lugarPlaga'] = this.lugarPlaga;
     data['inclinacionTroncoArbol'] = this.inclinacionTroncoArbol;
     data['orientacionInclinacionArbol'] = this.orientacionInclinacionArbol;
     data['obsArbolHistoria'] = this.obsArbolHistoria;

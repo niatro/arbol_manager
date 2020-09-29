@@ -14,10 +14,11 @@ class FormEntity extends Equatable {
   final List<InclinacionTroncoEntity> inclinacionTroncoArbol;
   final List<OrientacionInclinacionEntity> orientacionInclinacionArbol;
   final List<AccionObsEntity> accionObsArbol;
-  final List<UsuarioEntity> usuario;
-  final List<AgentePatogenoEntity> agentePatogeno;
-  final List<LugarPlagaEntity> lugarPlaga;
-  final List<PlagaEntity> plaga;
+  final List<UsuarioEntity> usuarios;
+  final List<AgentePatogenoEntity> agentesPatogenos;
+  final List<LugarPlagaEntity> lugaresPlaga;
+  final List<PlagaEntity> plagas;
+  final List<SintomaEntity> sintomas;
 
   FormEntity({
     @required this.clienteArbol,
@@ -30,10 +31,11 @@ class FormEntity extends Equatable {
     @required this.inclinacionTroncoArbol,
     @required this.orientacionInclinacionArbol,
     @required this.accionObsArbol,
-    @required this.usuario,
-    @required this.agentePatogeno,
-    @required this.lugarPlaga,
-    @required this.plaga,
+    @required this.usuarios,
+    @required this.agentesPatogenos,
+    @required this.lugaresPlaga,
+    @required this.plagas,
+    @required this.sintomas,
   }) : super([
           clienteArbol,
           zonaArbol,
@@ -45,10 +47,11 @@ class FormEntity extends Equatable {
           inclinacionTroncoArbol,
           orientacionInclinacionArbol,
           accionObsArbol,
-          usuario,
-          agentePatogeno,
-          lugarPlaga,
-          plaga,
+          usuarios,
+          agentesPatogenos,
+          lugaresPlaga,
+          plagas,
+          sintomas,
         ]);
 }
 
@@ -213,11 +216,23 @@ class LugarPlagaEntity {
 class PlagaEntity {
   final int plagaOrigenId;
   final String plagaDesc;
-  final int lugarPlagaId;
+  final int plagaId;
 
   PlagaEntity({
     @required this.plagaOrigenId,
     @required this.plagaDesc,
-    @required this.lugarPlagaId,
+    @required this.plagaId,
+  });
+}
+
+class SintomaEntity {
+  final int sintomaOrigenId;
+  final String sintomaDesc;
+  final int sintomaId;
+
+  SintomaEntity({
+    @required this.sintomaOrigenId,
+    @required this.sintomaDesc,
+    @required this.sintomaId,
   });
 }

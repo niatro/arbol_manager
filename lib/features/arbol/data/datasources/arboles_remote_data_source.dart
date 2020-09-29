@@ -208,7 +208,6 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
     );
     String id_estado_sanitario;
     resultEstadoSanitario.forEach((elemento) {
-      print(elemento);
       if (elemento['estadoSanitarioDesc'] == arbol.estadoSanitarioArbol) {
         id_estado_sanitario = elemento['estadoSanitarioOrigenId'].toString();
       }
@@ -220,14 +219,28 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
       nombreTabla: referencia.agentesPatogenos.nombreTabla,
       campoOrdenador: referencia.agentesPatogenos.agentePatogenoDesc,
     );
-    /*   String id_agentes_patogenos;
+    String id_agentes_patogenos;
     resultAgentesPatogenos.forEach((elemento) {
-      print(elemento);
-      if (elemento['agentesPatogenosDesc'] == arbol.) {
-        id_agentes_patogenos = elemento['estadoSanitarioOrigenId'].toString();
+//      print(elemento);
+      if (elemento['agentePatogenoDesc'] == arbol.agentePatogeno) {
+        id_agentes_patogenos = elemento['agentePatogenoOrigenId'].toString();
       }
     });
-    print('El id_agentes_patogenos que se envia es: $id_agentes_patogenos');*/
+    print('El id_agentes_patogenos que se envia es: $id_agentes_patogenos');
+
+    // El sintoma
+    List resultSintomas = await _databaseHelper.getFilasMapList(
+      nombreTabla: referencia.sintomas.nombreTabla,
+      campoOrdenador: referencia.sintomas.sintomaDesc,
+    );
+    String id_sintoma;
+    resultSintomas.forEach((elemento) {
+//      print(elemento);
+      if (elemento['sintomaDesc'] == arbol.sintoma) {
+        id_sintoma = elemento['sintomaOrigenId'].toString();
+      }
+    });
+    print('El id_sintoma que se envia es: $id_sintoma');
 
     /*   final response = await client.post(
       _url + "/bd/comprobarIdNFC.php",
@@ -287,9 +300,11 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
       await _databaseHelper.borrarBasedatos();
       await _databaseHelper.inicializarDatabase();
       nombreTablasFormBD.forEach((nombreTabla) async {
+//        print(nombreTabla);
         await this
             .llenarObjetoListaDesdeHttp(tabla: nombreTabla['nombre'])
             .then((_objetoLista) {
+//          print(nombreTabla['nombre']);
           _objetoLista.elementos.forEach((fila) async {
             await _databaseHelper.insertFila(
               objetoFila: fila,
@@ -368,6 +383,10 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
         break;
       case 'tablaPlagas':
         ListaPlagaModelo objetoTabla = ListaPlagaModelo.fromJson(response);
+        return objetoTabla;
+        break;
+      case 'tablaSintoma':
+        ListaSintomaModelo objetoTabla = ListaSintomaModelo.fromJson(response);
         return objetoTabla;
         break;
 

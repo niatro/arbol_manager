@@ -183,6 +183,12 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
     ${referencia.plagas.plagaOrigenId} INTEGER,        
     ${referencia.plagas.plagaDesc} TEXT
     )''');
+    await db.execute('''
+    CREATE TABLE ${referencia.sintomas.nombreTabla} (
+    ${referencia.sintomas.sintomaId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    ${referencia.sintomas.sintomaOrigenId} INTEGER,        
+    ${referencia.sintomas.sintomaDesc} TEXT
+    )''');
   }
 
   //Fetch Operation: Get all forms from database 👌
@@ -311,28 +317,33 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
       lista[12]['tablaPlagas'].forEach((object) {
         listaPlaga.add(object);
       });
+      List<SintomaModelo> listaSintoma = [];
+      lista[13]['tablaSintomas'].forEach((object) {
+        listaSintoma.add(object);
+      });
       List<EspecieModelo> listaEspecie = [];
-      lista[13]['tablaEspecie'].forEach((object) {
+      lista[14]['tablaEspecie'].forEach((object) {
         listaEspecie.add(object);
       });
       FormEntityModelo formEntityModelo = FormEntityModelo(
-        cliente: listaCliente,
-        zona: listaZona,
-        calle: listaCalle,
-        esquinaCalle: listaEsquinaCalle,
-        estadoGeneral: listaEstadoGeneral,
-        estadoSanitario: listaEstadoSanitario,
-        inclinacionTronco: listaInclinacion,
-        orientacionInclinacion: listaOrientacionInclinacion,
-        accionObs: listaAccionObs,
-        usuario: listaUsuario,
-        agentePatogeno: listaAgentePatogeno,
-        lugarPlaga: listaLugarPlaga,
-        plaga: listaPlaga,
-        especie: listaEspecie,
+        clientes: listaCliente,
+        zonas: listaZona,
+        calles: listaCalle,
+        esquinaCalles: listaEsquinaCalle,
+        estadosGenerales: listaEstadoGeneral,
+        estadosSanitarios: listaEstadoSanitario,
+        inclinacionesTronco: listaInclinacion,
+        orientacionesInclinacion: listaOrientacionInclinacion,
+        accionesObs: listaAccionObs,
+        usuarios: listaUsuario,
+        agentesPatogenos: listaAgentePatogeno,
+        lugaresPlaga: listaLugarPlaga,
+        plagas: listaPlaga,
+        sintomas: listaSintoma,
+        especies: listaEspecie,
       );
       if (formEntityModelo != null) {
-        print(formEntityModelo.agentePatogeno[0].agentePatogenoDesc);
+        print(formEntityModelo.agentesPatogenos[0].agentePatogenoDesc);
         return formEntityModelo;
       } else {
         throw DataBaseException();
