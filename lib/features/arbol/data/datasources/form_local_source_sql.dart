@@ -165,21 +165,18 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
         ${referencia.usuario.foreignKey} INTEGER,
         FOREIGN KEY (${referencia.usuario.foreignKey}) REFERENCES ${referencia.cliente.nombreTabla}(${referencia.cliente.clienteId})
     )''');
-    //TODO: falta tabla para agente patogeno 😱
     await db.execute('''
     CREATE TABLE ${referencia.agentesPatogenos.nombreTabla} (
     ${referencia.agentesPatogenos.agentesPatogenosId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     ${referencia.agentesPatogenos.agentePatogenoOrigenId} INTEGER,        
     ${referencia.agentesPatogenos.agentePatogenoDesc} TEXT
     )''');
-    //TODO: falta tabla  para lugar plaga 😱
     await db.execute('''
     CREATE TABLE ${referencia.lugarPlaga.nombreTabla} (
     ${referencia.lugarPlaga.lugarPlagaId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     ${referencia.lugarPlaga.lugarPlagaOrigenId} INTEGER,        
     ${referencia.lugarPlaga.lugarPlagaDesc} TEXT
     )''');
-    //TODO: falta tabla  para  plaga 😱
     await db.execute('''
     CREATE TABLE ${referencia.plagas.nombreTabla} (
     ${referencia.plagas.plagaId} INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,

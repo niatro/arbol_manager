@@ -194,12 +194,40 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
     );
     String id_estado_general;
     resultEstadoGeneral.forEach((elemento) {
-      print(elemento);
+//      print(elemento);
       if (elemento['estadoGeneralDesc'] == arbol.estadoGeneralArbol) {
         id_estado_general = elemento['estadoGeneralId'].toString();
       }
     });
     print('El id_estado_general que se envia es: $id_estado_general');
+
+    // El estado Sanitario
+    List resultEstadoSanitario = await _databaseHelper.getFilasMapList(
+      nombreTabla: referencia.estadoSanitario.nombreTabla,
+      campoOrdenador: referencia.estadoSanitario.estadoSanitarioOrigenId,
+    );
+    String id_estado_sanitario;
+    resultEstadoSanitario.forEach((elemento) {
+      print(elemento);
+      if (elemento['estadoSanitarioDesc'] == arbol.estadoSanitarioArbol) {
+        id_estado_sanitario = elemento['estadoSanitarioOrigenId'].toString();
+      }
+    });
+    print('El id_estado_sanitario que se envia es: $id_estado_sanitario');
+
+    // Los agentes patogenos
+    List resultAgentesPatogenos = await _databaseHelper.getFilasMapList(
+      nombreTabla: referencia.agentesPatogenos.nombreTabla,
+      campoOrdenador: referencia.agentesPatogenos.agentePatogenoDesc,
+    );
+    /*   String id_agentes_patogenos;
+    resultAgentesPatogenos.forEach((elemento) {
+      print(elemento);
+      if (elemento['agentesPatogenosDesc'] == arbol.) {
+        id_agentes_patogenos = elemento['estadoSanitarioOrigenId'].toString();
+      }
+    });
+    print('El id_agentes_patogenos que se envia es: $id_agentes_patogenos');*/
 
     /*   final response = await client.post(
       _url + "/bd/comprobarIdNFC.php",
