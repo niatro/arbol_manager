@@ -140,7 +140,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
     // Campo idnFC
 
     String id_nfc_arbol = arbol.idNfcHistoria.last;
-    print('el id_nfc_arbol que se envia: $id_nfc_arbol');
+    print('el n_calle_arbol que se envia: $id_nfc_arbol');
 
     // Campo GUI
     Uuid gui = Uuid();
@@ -235,12 +235,73 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
     );
     String id_sintoma;
     resultSintomas.forEach((elemento) {
-//      print(elemento);
       if (elemento['sintomaDesc'] == arbol.sintoma) {
         id_sintoma = elemento['sintomaOrigenId'].toString();
       }
     });
     print('El id_sintoma que se envia es: $id_sintoma');
+
+    // El lugar de la plaga
+    List resultLugarPlaga = await _databaseHelper.getFilasMapList(
+      nombreTabla: referencia.lugarPlaga.nombreTabla,
+      campoOrdenador: referencia.lugarPlaga.lugarPlagaDesc,
+    );
+    String id_lugar_plaga;
+    resultLugarPlaga.forEach((elemento) {
+//      print(elemento);
+      if (elemento['lugarPlagaDesc'] == arbol.lugarPlaga) {
+        id_lugar_plaga = elemento['lugarPlagaOrigenId'].toString();
+      }
+    });
+    print('El id_lugar_plaga que se envia es: $id_lugar_plaga');
+
+    // La inclinacion del tronco
+
+    List resultInclinacionTronco = await _databaseHelper.getFilasMapList(
+      nombreTabla: referencia.inclinacionTronco.nombreTabla,
+      campoOrdenador: referencia.inclinacionTronco.inclinacionTroncoId,
+    );
+    String id_inclinacion_tronco;
+    resultInclinacionTronco.forEach((elemento) {
+      if (elemento['inclinacionTroncoDesc'] == arbol.inclinacionTroncoArbol) {
+        id_inclinacion_tronco =
+            elemento['inclinacionTroncoOrigenId'].toString();
+      }
+    });
+    print('El id_inclinacion_tronco que se envia es: $id_inclinacion_tronco');
+
+    // La orientacion inclinacion
+
+    List resultOrientacionInclinacion = await _databaseHelper.getFilasMapList(
+      nombreTabla: referencia.orientacionInclinacion.nombreTabla,
+      campoOrdenador:
+          referencia.orientacionInclinacion.orientacionInclinacionId,
+    );
+    String id_orientacion_inclinacion;
+    resultOrientacionInclinacion.forEach((elemento) {
+      print(elemento);
+      if (elemento['orientacionInclinacionDesc'] ==
+          arbol.orientacionInclinacionArbol) {
+        id_orientacion_inclinacion =
+            elemento['orientacionInclinacionOrigenId'].toString();
+      }
+    });
+    print(
+        'El id_orientacion_inclinacion que se envia es: $id_orientacion_inclinacion');
+
+    // La accion Observacion
+
+    List resultAccionObs = await _databaseHelper.getFilasMapList(
+      nombreTabla: referencia.accionObs.nombreTabla,
+      campoOrdenador: referencia.accionObs.accionObsDesc,
+    );
+    String id_accion_obs;
+    resultAccionObs.forEach((elemento) {
+      if (elemento['accionObsDesc'] == arbol.accionObsArbol) {
+        id_accion_obs = elemento['accionObsOrigenId'].toString();
+      }
+    });
+    print('El id_accion_obs que se envia es: $id_accion_obs');
 
     /*   final response = await client.post(
       _url + "/bd/comprobarIdNFC.php",
