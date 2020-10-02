@@ -46,6 +46,8 @@ class ArbolesEntityModelo extends ArbolesEntity {
             this.listaArbolEntity[i].orientacionInclinacionArbol,
         obsArbolHistoria: this.listaArbolEntity[i].obsArbolHistoria,
         accionObsArbol: this.listaArbolEntity[i].accionObsArbol,
+        segundaAccionObsArbol: this.listaArbolEntity[i].segundaAccionObsArbol,
+        terceraAccionObsArbol: this.listaArbolEntity[i].terceraAccionObsArbol,
         geoReferenciaCapturaArbol:
             this.listaArbolEntity[i].geoReferenciaCapturaArbol,
         nombreUsuarioCreacionArbol:
@@ -92,6 +94,8 @@ class ArbolEntityModelo extends ArbolEntity {
     @required String orientacionInclinacionArbol,
     @required List<dynamic> obsArbolHistoria,
     @required String accionObsArbol,
+    @required String segundaAccionObsArbol,
+    @required String terceraAccionObsArbol,
     @required LatLng geoReferenciaCapturaArbol,
     @required String nombreUsuarioCreacionArbol,
     @required String usuarioModificaArbol,
@@ -124,6 +128,8 @@ class ArbolEntityModelo extends ArbolEntity {
           orientacionInclinacionArbol: orientacionInclinacionArbol,
           obsArbolHistoria: obsArbolHistoria,
           accionObsArbol: accionObsArbol,
+          segundaAccionObsArbol: segundaAccionObsArbol,
+          terceraAccionObsArbol: terceraAccionObsArbol,
           geoReferenciaCapturaArbol: geoReferenciaCapturaArbol,
           nombreUsuarioCreacionArbol: nombreUsuarioCreacionArbol,
           usuarioModificaArbol: usuarioModificaArbol,

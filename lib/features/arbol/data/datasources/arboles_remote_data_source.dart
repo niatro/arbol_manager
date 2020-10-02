@@ -136,11 +136,12 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
 
     // Campo n calle
     String n_calle_arbol = arbol.nCalleArbol.toString();
-    print('el id_calle_arbol que se envia: $n_calle_arbol');
+    print('el n_calle_arbol que se envia: $n_calle_arbol');
+
     // Campo idnFC
 
     String id_nfc_arbol = arbol.idNfcHistoria.last;
-    print('el n_calle_arbol que se envia: $id_nfc_arbol');
+    print('el id_nfc_arbol que se envia: $id_nfc_arbol');
 
     // Campo GUI
     Uuid gui = Uuid();
@@ -184,35 +185,37 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
     print('el id_altura_arbol que se envia: $id_altura_arbol');
 
     // Campo altura copa
-    String id_altura_copa = arbol.alturaCopaArbolMt.toString();
-    print('el id_altura_copa que se envia: $id_altura_copa');
+    String id_altura_copa_arbol = arbol.alturaCopaArbolMt.toString();
+    print('el id_altura_copa_arbol que se envia: $id_altura_copa_arbol');
 
     // Estado general
     List resultEstadoGeneral = await _databaseHelper.getFilasMapList(
       nombreTabla: referencia.estadoGeneral.nombreTabla,
       campoOrdenador: referencia.estadoGeneral.estadoGeneralId,
     );
-    String id_estado_general;
+    String id_estado_general_arbol;
     resultEstadoGeneral.forEach((elemento) {
 //      print(elemento);
       if (elemento['estadoGeneralDesc'] == arbol.estadoGeneralArbol) {
-        id_estado_general = elemento['estadoGeneralId'].toString();
+        id_estado_general_arbol = elemento['estadoGeneralId'].toString();
       }
     });
-    print('El id_estado_general que se envia es: $id_estado_general');
+    print(
+        'El id_estado_general_arbol que se envia es: $id_estado_general_arbol');
 
     // El estado Sanitario
     List resultEstadoSanitario = await _databaseHelper.getFilasMapList(
       nombreTabla: referencia.estadoSanitario.nombreTabla,
       campoOrdenador: referencia.estadoSanitario.estadoSanitarioOrigenId,
     );
-    String id_estado_sanitario;
+    String id_estado_sanitario_arbol;
     resultEstadoSanitario.forEach((elemento) {
       if (elemento['estadoSanitarioDesc'] == arbol.estadoSanitarioArbol) {
-        id_estado_sanitario = elemento['estadoSanitarioOrigenId'].toString();
+        id_estado_sanitario_arbol =
+            elemento['estadoSanitarioOrigenId'].toString();
       }
     });
-    print('El id_estado_sanitario que se envia es: $id_estado_sanitario');
+    print('El id_estado_sanitario que se envia es: $id_estado_sanitario_arbol');
 
     // Los agentes patogenos
     List resultAgentesPatogenos = await _databaseHelper.getFilasMapList(
@@ -261,14 +264,15 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
       nombreTabla: referencia.inclinacionTronco.nombreTabla,
       campoOrdenador: referencia.inclinacionTronco.inclinacionTroncoId,
     );
-    String id_inclinacion_tronco;
+    String id_inclinacion_tronco_arbol;
     resultInclinacionTronco.forEach((elemento) {
       if (elemento['inclinacionTroncoDesc'] == arbol.inclinacionTroncoArbol) {
-        id_inclinacion_tronco =
+        id_inclinacion_tronco_arbol =
             elemento['inclinacionTroncoOrigenId'].toString();
       }
     });
-    print('El id_inclinacion_tronco que se envia es: $id_inclinacion_tronco');
+    print(
+        'El id_inclinacion_tronco_arbol que se envia es: $id_inclinacion_tronco_arbol');
 
     // La orientacion inclinacion
 
@@ -277,17 +281,16 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
       campoOrdenador:
           referencia.orientacionInclinacion.orientacionInclinacionId,
     );
-    String id_orientacion_inclinacion;
+    String id_orientacion_inclinacion_arbol;
     resultOrientacionInclinacion.forEach((elemento) {
-      print(elemento);
       if (elemento['orientacionInclinacionDesc'] ==
           arbol.orientacionInclinacionArbol) {
-        id_orientacion_inclinacion =
+        id_orientacion_inclinacion_arbol =
             elemento['orientacionInclinacionOrigenId'].toString();
       }
     });
     print(
-        'El id_orientacion_inclinacion que se envia es: $id_orientacion_inclinacion');
+        'El id_orientacion_inclinacion_arbol que se envia es: $id_orientacion_inclinacion_arbol');
 
     // La accion Observacion
 
@@ -295,13 +298,128 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
       nombreTabla: referencia.accionObs.nombreTabla,
       campoOrdenador: referencia.accionObs.accionObsDesc,
     );
-    String id_accion_obs;
+    String id_accion_obs_arbol;
     resultAccionObs.forEach((elemento) {
       if (elemento['accionObsDesc'] == arbol.accionObsArbol) {
-        id_accion_obs = elemento['accionObsOrigenId'].toString();
+        id_accion_obs_arbol = elemento['accionObsOrigenId'].toString();
       }
     });
-    print('El id_accion_obs que se envia es: $id_accion_obs');
+    print('El id_accion_obs_arbol que se envia es: $id_accion_obs_arbol');
+
+    // La  Segunda accion Observacion
+
+    List resultSegundaAccionObs = await _databaseHelper.getFilasMapList(
+      nombreTabla: referencia.accionObs.nombreTabla,
+      campoOrdenador: referencia.accionObs.accionObsDesc,
+    );
+    String id_accion_obs_arbol_2;
+    resultSegundaAccionObs.forEach((elemento) {
+      if (elemento['accionObsDesc'] == arbol.accionObsArbol) {
+        id_accion_obs_arbol_2 = elemento['accionObsOrigenId'].toString();
+      }
+    });
+    print('El id_accion_obs_arbol_2 que se envia es: $id_accion_obs_arbol_2');
+
+    // La tercera accion Observacion
+
+    List resultTerceraAccionObs = await _databaseHelper.getFilasMapList(
+      nombreTabla: referencia.accionObs.nombreTabla,
+      campoOrdenador: referencia.accionObs.accionObsDesc,
+    );
+    String id_accion_obs_arbol_3;
+    resultTerceraAccionObs.forEach((elemento) {
+      if (elemento['accionObsDesc'] == arbol.accionObsArbol) {
+        id_accion_obs_arbol_3 = elemento['accionObsOrigenId'].toString();
+      }
+    });
+    print('El id_accion_obs_arbol_3 que se envia es: $id_accion_obs_arbol_3');
+
+    //TODO: implementar en base de datos interna una tabla con todas las obs de los arboles
+    // Campo Observaciones Arbol
+    String observaciones_arbol = arbol.obsArbolHistoria.last.toString();
+    print('el observaciones_arbol que se envia: $observaciones_arbol');
+
+    // Campo Georeferencia por GPS
+    String geo_referencia_gps_arbol = null;
+    print(
+        'el geo_referencia_gps_arbol que se envia: $geo_referencia_gps_arbol');
+
+    // Campo Georeferencia por Captura
+    String geo_referencia_captura_arbol = null;
+    print(
+        'el geo_referencia_captura_arbol que se envia: $geo_referencia_captura_arbol');
+
+    // Campo Georeferencia por Google, unico valido
+    String geo_referencia_google_arbol =
+        "${arbol.geoReferenciaCapturaArbol.latitude.toString()},${arbol.geoReferenciaCapturaArbol.longitude.toString()}";
+    print(
+        'el geo_referencia_google_arbol que se envia: $geo_referencia_google_arbol');
+
+    // Alerta Arbol
+    String alerta_arbol = arbol.alertaArbol;
+    print('el alerta_arbol que se envia: $alerta_arbol');
+
+    // Revision Arbol
+    String revision_arbol = arbol.alertaArbol;
+    print('el revision_arbol que se envia: $revision_arbol');
+
+    // Campo calle Esquina
+    List resultEsquinaCalle = await _databaseHelper.getFilasMapListWhere(
+      nombreTabla: referencia.calleEsquina.nombreTabla,
+      campoOrdenador: referencia.calleEsquina.calleEsquinaOrigenId,
+      campoRestringido: referencia.calleEsquina.calleEsquinaZonaId,
+      valorRestrictor: id_sector_entidad_arbol,
+    );
+
+    String esquina_calle_arbol;
+    resultEsquinaCalle.forEach((esquinaCalle) {
+      if (esquinaCalle['calleEsquinaNombre'] == arbol.esquinaCalleArbol) {
+        esquina_calle_arbol = esquinaCalle['calleEsquinaNombre'].toString();
+      }
+    });
+    print('el esquina_calle_arbol que se envia: $esquina_calle_arbol');
+
+    //Usuario creacion de arbol
+
+    List resultUsuarioCreacion = await _databaseHelper.getFilasMapList(
+      nombreTabla: referencia.usuario.nombreTabla,
+      campoOrdenador: referencia.usuario.usuarioOrigenId,
+    );
+
+    String id_usuario_creacion_arbol;
+    resultUsuarioCreacion.forEach((usuario) {
+      if ('${usuario['usuarioNombre']} ${usuario['usuarioApellido']}' ==
+          arbol.nombreUsuarioCreacionArbol) {
+        id_usuario_creacion_arbol = usuario['usuarioRol'].toString();
+      }
+    });
+    print(
+        'el id_usuario_creacion_arbol que se envia: $id_usuario_creacion_arbol');
+
+    //Usuario modificacion arbol
+
+    List resultUsuarioModificacion = await _databaseHelper.getFilasMapList(
+      nombreTabla: referencia.usuario.nombreTabla,
+      campoOrdenador: referencia.usuario.usuarioOrigenId,
+    );
+
+    String id_usuario_modifica_arbol;
+    resultUsuarioModificacion.forEach((usuario) {
+      if ('${usuario['usuarioNombre']} ${usuario['usuarioApellido']}' ==
+          arbol.usuarioModificaArbol) {
+        id_usuario_modifica_arbol = usuario['usuarioRol'].toString();
+      }
+    });
+    print(
+        'el id_usuario_modifica_arbol que se envia: $id_usuario_modifica_arbol');
+
+// Fecha de creacion
+    String fecha_creacion_arbol = arbol.fechaCreacionArbol.toUtc().toString();
+    print('el fecha_creacion_arbol que se envia: $fecha_creacion_arbol');
+    // Fecha de modificacion
+    String fecha_ultima_mod_arbol =
+        arbol.fechaUltimaModArbol.toUtc().toString();
+    print('el fecha_creacion_arbol que se envia: $fecha_ultima_mod_arbol');
 
     /*   final response = await client.post(
       _url + "/bd/comprobarIdNFC.php",

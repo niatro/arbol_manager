@@ -818,7 +818,7 @@ class UsuarioModelo extends UsuarioEntity implements ObjetoFila {
   String _usuarioGUI;
   int _usuarioCliente;
   int _usuarioRol;
-  String _usarioNombre;
+  String _usuarioNombre;
   String _usuarioApellido;
   String _usuarioEmail;
   String _usuarioCreacion;
@@ -828,7 +828,7 @@ class UsuarioModelo extends UsuarioEntity implements ObjetoFila {
     @required String usuarioGUI,
     @required int usuarioCliente,
     @required int usuarioRol,
-    @required String usarioNombre,
+    @required String usuarioNombre,
     @required String usuarioApellido,
     @required String usuarioEmail,
     @required String usuarioCreacion,
@@ -837,7 +837,7 @@ class UsuarioModelo extends UsuarioEntity implements ObjetoFila {
         this._usuarioGUI = usuarioGUI,
         this._usuarioCliente = usuarioCliente,
         this._usuarioRol = usuarioRol,
-        this._usarioNombre = usarioNombre,
+        this._usuarioNombre = usuarioNombre,
         this._usuarioApellido = usuarioApellido,
         this._usuarioEmail = usuarioEmail,
         this._usuarioCreacion = usuarioCreacion,
@@ -847,7 +847,7 @@ class UsuarioModelo extends UsuarioEntity implements ObjetoFila {
   String get usuarioGUI => _usuarioGUI;
   int get usuarioCliente => _usuarioCliente;
   int get usuarioRol => _usuarioRol;
-  String get usarioNombre => _usarioNombre;
+  String get usarioNombre => _usuarioNombre;
   String get usuarioApellido => _usuarioApellido;
   String get usuarioEmail => _usuarioEmail;
   String get usuarioCreacion => _usuarioCreacion;
@@ -863,7 +863,7 @@ class UsuarioModelo extends UsuarioEntity implements ObjetoFila {
     map['usuarioGUI'] = _usuarioGUI;
     map['usuarioCliente'] = _usuarioCliente;
     map['usuarioRol'] = _usuarioRol;
-    map['usarioNombre'] = _usarioNombre;
+    map['usuarioNombre'] = _usuarioNombre;
     map['usuarioApellido'] = _usuarioApellido;
     map['usuarioEmail'] = _usuarioEmail;
     map['usuarioCreacion'] = _usuarioCreacion;
@@ -877,7 +877,7 @@ class UsuarioModelo extends UsuarioEntity implements ObjetoFila {
     this._usuarioGUI = map['usuarioGUI'];
     this._usuarioCliente = map['usuarioCliente'];
     this._usuarioRol = map['usuarioRol'];
-    this._usarioNombre = map['usarioNombre'];
+    this._usuarioNombre = map['usuarioNombre'];
     this._usuarioApellido = map['usuarioApellido'];
     this._usuarioEmail = map['usuarioEmail'];
     this._usuarioCreacion = map['usuarioCreacion'];
@@ -890,7 +890,7 @@ class UsuarioModelo extends UsuarioEntity implements ObjetoFila {
       usuarioGUI: 'NO SETEADO',
       usuarioCliente: int.parse(json['id_entidad_usuario']),
       usuarioRol: int.parse(json['id_perfil_user_usuario']),
-      usarioNombre: json['nombre_usuario'],
+      usuarioNombre: json['nombre_usuario'],
       usuarioApellido: json['apellido_usuario'],
       usuarioEmail: 'generico@provisional.cl',
       usuarioCreacion: 'No definido',

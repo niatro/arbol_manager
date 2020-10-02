@@ -46,6 +46,8 @@ dependencies:
   intl: ^0.16.1
   # identificadores unicos
   uuid: ^2.2.2
+  # para sacar fotos
+  image_picker: ^0.6.7+11
 
 dev_dependencies:
   flutter_test:

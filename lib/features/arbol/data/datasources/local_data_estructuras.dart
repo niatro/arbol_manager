@@ -249,7 +249,7 @@ class EsquemaUsuario {
   String usuarioGUI = 'usuarioGUI';
   String usuarioCliente = 'usuarioCliente';
   String usuarioRol = 'usuarioRol';
-  String usuarioNombre = 'usarioNombre';
+  String usuarioNombre = 'usuarioNombre';
   String usuarioApellido = 'usuarioApellido';
   String usuarioEmail = 'usuarioEmail';
   String usuarioCreacion = 'usuarioCreacion';

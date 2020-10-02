@@ -148,6 +148,7 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
     ${referencia.accionObs.accionObsOrden} INTEGER
     )''');
 
+    //TODO: el ForeignKey sale nulo, cuando deberia salir con el id de vitacura
     //OJO: Usuario
 
     await db.execute('''
@@ -199,6 +200,20 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
 //    var result = await db
 //        .rawQuery('SELECT * FROM $TABLA_CLIENTE order by $CLIENTE_NOMBRE ASC');
     var result = await db.query(nombreTabla, orderBy: '$campoOrdenador ');
+    return result;
+  }
+
+  Future<List<Map<String, dynamic>>> getFilasMapListWhere(
+      {@required String nombreTabla,
+      @required String campoOrdenador,
+      @required String campoRestringido,
+      @required String valorRestrictor}) async {
+    Database db = await this.database;
+//    var result = await db
+//        .rawQuery('SELECT * FROM $TABLA_CLIENTE order by $CLIENTE_NOMBRE ASC');
+    var result = await db.query(nombreTabla,
+        orderBy: '$campoOrdenador ',
+        where: '$campoRestringido = $valorRestrictor');
     return result;
   }
 

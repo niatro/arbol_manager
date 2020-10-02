@@ -26,6 +26,8 @@ class ArbolEntity extends Equatable {
   final String orientacionInclinacionArbol;
   final List<dynamic> obsArbolHistoria;
   final String accionObsArbol;
+  final String segundaAccionObsArbol;
+  final String terceraAccionObsArbol;
   final LatLng geoReferenciaCapturaArbol;
   final String nombreUsuarioCreacionArbol;
   final String usuarioModificaArbol;
@@ -59,6 +61,8 @@ class ArbolEntity extends Equatable {
     @required this.orientacionInclinacionArbol,
     @required this.obsArbolHistoria,
     @required this.accionObsArbol,
+    @required this.segundaAccionObsArbol,
+    @required this.terceraAccionObsArbol,
     @required this.geoReferenciaCapturaArbol,
     @required this.nombreUsuarioCreacionArbol,
     @required this.usuarioModificaArbol,
@@ -88,6 +92,8 @@ class ArbolEntity extends Equatable {
           orientacionInclinacionArbol,
           obsArbolHistoria,
           accionObsArbol,
+          segundaAccionObsArbol,
+          terceraAccionObsArbol,
           geoReferenciaCapturaArbol,
           nombreUsuarioCreacionArbol,
           usuarioModificaArbol,

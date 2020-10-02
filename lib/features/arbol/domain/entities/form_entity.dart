@@ -174,7 +174,7 @@ class UsuarioEntity {
   final String usuarioGUI;
   final int usuarioCliente;
   final int usuarioRol;
-  final String usarioNombre;
+  final String usuarioNombre;
   final String usuarioApellido;
   final String usuarioEmail;
   final String usuarioCreacion;
@@ -185,7 +185,7 @@ class UsuarioEntity {
     @required this.usuarioGUI,
     @required this.usuarioCliente,
     @required this.usuarioRol,
-    @required this.usarioNombre,
+    @required this.usuarioNombre,
     @required this.usuarioApellido,
     @required this.usuarioEmail,
     @required this.usuarioCreacion,
