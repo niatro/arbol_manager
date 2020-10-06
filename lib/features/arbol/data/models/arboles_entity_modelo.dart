@@ -1,4 +1,5 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:convert';
 
 import '../../domain/entities/arboles_entity.dart';
 import 'package:meta/meta.dart';
@@ -40,7 +41,9 @@ class ArbolesEntityModelo extends ArbolesEntity {
         estadoSanitarioArbol: this.listaArbolEntity[i].estadoSanitarioArbol,
         agentePatogeno: this.listaArbolEntity[i].agentePatogeno,
         sintoma: this.listaArbolEntity[i].sintoma,
+        plaga: this.listaArbolEntity[i].plaga,
         lugarPlaga: this.listaArbolEntity[i].lugarPlaga,
+        enfermedad: this.listaArbolEntity[i].enfermedad,
         inclinacionTroncoArbol: this.listaArbolEntity[i].inclinacionTroncoArbol,
         orientacionInclinacionArbol:
             this.listaArbolEntity[i].orientacionInclinacionArbol,
@@ -89,7 +92,9 @@ class ArbolEntityModelo extends ArbolEntity {
     @required String estadoSanitarioArbol,
     @required String agentePatogeno,
     @required String sintoma,
+    @required String plaga,
     @required String lugarPlaga,
+    @required Enfermedad enfermedad,
     @required String inclinacionTroncoArbol,
     @required String orientacionInclinacionArbol,
     @required List<dynamic> obsArbolHistoria,
@@ -123,7 +128,9 @@ class ArbolEntityModelo extends ArbolEntity {
           estadoSanitarioArbol: estadoSanitarioArbol,
           agentePatogeno: agentePatogeno,
           sintoma: sintoma,
+          plaga: plaga,
           lugarPlaga: lugarPlaga,
+          enfermedad: enfermedad,
           inclinacionTroncoArbol: inclinacionTroncoArbol,
           orientacionInclinacionArbol: orientacionInclinacionArbol,
           obsArbolHistoria: obsArbolHistoria,
@@ -163,7 +170,11 @@ class ArbolEntityModelo extends ArbolEntity {
         estadoSanitarioArbol: json["estadoSanitarioArbol"],
         agentePatogeno: json["agentePatogeno"],
         sintoma: json["sintoma"],
+        plaga: json["plaga"],
         lugarPlaga: json["lugarPlaga"],
+        enfermedad: json['enfermedad'] != null
+            ? Enfermedad.fromJson(json['enfermedad'])
+            : null,
         inclinacionTroncoArbol: json["inclinacionTroncoArbol"],
         orientacionInclinacionArbol: json["orientacionInclinacionArbol"],
         obsArbolHistoria:
@@ -207,8 +218,11 @@ class ArbolEntityModelo extends ArbolEntity {
     data['estadoSanitarioArbol'] = this.estadoSanitarioArbol;
     data['agentePatogeno'] = this.agentePatogeno;
     data['sintoma'] = this.sintoma;
+    data['plaga'] = this.plaga;
     data['lugarPlaga'] = this.lugarPlaga;
+    data['enfermedad'] = this.enfermedad.toJson();
     data['inclinacionTroncoArbol'] = this.inclinacionTroncoArbol;
+
     data['orientacionInclinacionArbol'] = this.orientacionInclinacionArbol;
     data['obsArbolHistoria'] = this.obsArbolHistoria;
     data['accionObsArbol'] = this.accionObsArbol;

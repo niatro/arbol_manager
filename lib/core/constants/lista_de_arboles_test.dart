@@ -21,7 +21,10 @@ ArbolEntity arbolUno = ArbolEntity(
   estadoSanitarioArbol: "Sano",
   agentePatogeno: "Pulgon",
   sintoma: "Aserrin",
+  plaga: "Escarabajo",
   lugarPlaga: "Follaje y Ramillas",
+  enfermedad: Enfermedad(
+      sintoma: "Fumagina", agentePatogeno: "Conchuelas", lugarPlaga: "Fuste"),
   inclinacionTroncoArbol: "Menor o igual a 30 grados",
   orientacionInclinacionArbol: "Calle",
   obsArbolHistoria: ["Chip roto", "revisar registro"],
@@ -57,7 +60,10 @@ ArbolEntity arbolDos = ArbolEntity(
   estadoSanitarioArbol: "Sano",
   agentePatogeno: "Pulgon",
   sintoma: "Aserrin",
+  plaga: "Escarabajo",
   lugarPlaga: "Follaje y Ramillas",
+  enfermedad: Enfermedad(
+      sintoma: "Fumagina", agentePatogeno: "Conchuelas", lugarPlaga: "Fuste"),
   inclinacionTroncoArbol: "Menor o igual a 30 grados",
   orientacionInclinacionArbol: "Calle",
   obsArbolHistoria: ["mala foto", "revisar registro"],
@@ -97,7 +103,10 @@ ArbolEntityModelo arbolUnoModel = ArbolEntityModelo(
   estadoSanitarioArbol: "Sano",
   agentePatogeno: "Pulgon",
   sintoma: "Aserrin",
+  plaga: "Escarabajo",
   lugarPlaga: "Follaje y Ramillas",
+  enfermedad: Enfermedad(
+      sintoma: "Fumagina", agentePatogeno: "Conchuelas", lugarPlaga: "Fuste"),
   inclinacionTroncoArbol: "Menor o igual a 30 grados",
   orientacionInclinacionArbol: "Calle",
   obsArbolHistoria: ["Chip roto", "revisar registro"],
@@ -133,7 +142,10 @@ ArbolEntityModelo arbolDosModel = ArbolEntityModelo(
   estadoSanitarioArbol: "Sano",
   agentePatogeno: "Pulgon",
   sintoma: "Aserrin",
+  plaga: "Escarabajo",
   lugarPlaga: "Follaje y Ramillas",
+  enfermedad: Enfermedad(
+      sintoma: "Fumagina", agentePatogeno: "Conchuelas", lugarPlaga: "Fuste"),
   inclinacionTroncoArbol: "Menor o igual a 30 grados",
   orientacionInclinacionArbol: "Calle",
   obsArbolHistoria: ["mala foto", "revisar registro"],

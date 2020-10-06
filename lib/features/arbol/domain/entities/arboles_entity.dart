@@ -21,7 +21,9 @@ class ArbolEntity extends Equatable {
   final String estadoSanitarioArbol;
   final String agentePatogeno;
   final String sintoma;
+  final String plaga;
   final String lugarPlaga;
+  final Enfermedad enfermedad;
   final String inclinacionTroncoArbol;
   final String orientacionInclinacionArbol;
   final List<dynamic> obsArbolHistoria;
@@ -56,7 +58,9 @@ class ArbolEntity extends Equatable {
     @required this.estadoSanitarioArbol,
     @required this.agentePatogeno,
     @required this.sintoma,
+    @required this.plaga,
     @required this.lugarPlaga,
+    @required this.enfermedad,
     @required this.inclinacionTroncoArbol,
     @required this.orientacionInclinacionArbol,
     @required this.obsArbolHistoria,
@@ -88,6 +92,11 @@ class ArbolEntity extends Equatable {
           alturaCopaArbolMt,
           estadoGeneralArbol,
           estadoSanitarioArbol,
+          agentePatogeno,
+          sintoma,
+          plaga,
+          lugarPlaga,
+          enfermedad,
           inclinacionTroncoArbol,
           orientacionInclinacionArbol,
           obsArbolHistoria,
@@ -110,4 +119,26 @@ class ArbolesEntity extends Equatable {
   ArbolesEntity({
     @required this.listaArbolEntity,
   }) : super([listaArbolEntity]);
+}
+
+class Enfermedad extends Equatable {
+  String sintoma;
+  String agentePatogeno;
+  String lugarPlaga;
+
+  Enfermedad({this.sintoma, this.agentePatogeno, this.lugarPlaga});
+
+  Enfermedad.fromJson(Map<String, dynamic> json) {
+    sintoma = json['sintoma'];
+    agentePatogeno = json['agentePatogeno'];
+    lugarPlaga = json['lugarPlaga'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['sintoma'] = this.sintoma;
+    data['agentePatogeno'] = this.agentePatogeno;
+    data['lugarPlaga'] = this.lugarPlaga;
+    return data;
+  }
 }

@@ -18,7 +18,13 @@ final List<Map> listaMapDeArbolesSerializadosTest = [
     "estadoSanitarioArbol": "Sano",
     "agentePatogeno": "Pulgon",
     "sintoma": "Aserrin",
+    "plaga": "Escarabajo",
     "lugarPlaga": "Follaje y Ramillas",
+    "enfermedad": {
+      "sintoma": "Fumagina",
+      "agentePatogeno": "Conchuelas",
+      "lugarPlaga": "Fuste"
+    },
     "inclinacionTroncoArbol": "Menor o igual a 30 grados",
     "orientacionInclinacionArbol": "Calle",
     "obsArbolHistoria": ["Chip roto", "revisar registro"],
@@ -51,7 +57,13 @@ final List<Map> listaMapDeArbolesSerializadosTest = [
     "estadoSanitarioArbol": "Sano",
     "agentePatogeno": "Pulgon",
     "sintoma": "Aserrin",
+    "plaga": "Escarabajo",
     "lugarPlaga": "Follaje y Ramillas",
+    "enfermedad": {
+      "sintoma": "Fumagina",
+      "agentePatogeno": "Conchuelas",
+      "lugarPlaga": "Fuste"
+    },
     "inclinacionTroncoArbol": "Menor o igual a 30 grados",
     "orientacionInclinacionArbol": "Calle",
     "obsArbolHistoria": ["mala foto", "revisar registro"],
