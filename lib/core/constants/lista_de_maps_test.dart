@@ -16,10 +16,6 @@ final List<Map> listaMapDeArbolesSerializadosTest = [
     "alturaCopaArbolMt": "7.0",
     "estadoGeneralArbol": "Bueno",
     "estadoSanitarioArbol": "Sano",
-    "agentePatogeno": "Pulgon",
-    "sintoma": "Aserrin",
-    "plaga": "Escarabajo",
-    "lugarPlaga": "Follaje y Ramillas",
     "enfermedad": {
       "sintoma": "Fumagina",
       "agentePatogeno": "Conchuelas",
@@ -55,10 +51,6 @@ final List<Map> listaMapDeArbolesSerializadosTest = [
     "alturaCopaArbolMt": "7.0",
     "estadoGeneralArbol": "bueno",
     "estadoSanitarioArbol": "Sano",
-    "agentePatogeno": "Pulgon",
-    "sintoma": "Aserrin",
-    "plaga": "Escarabajo",
-    "lugarPlaga": "Follaje y Ramillas",
     "enfermedad": {
       "sintoma": "Fumagina",
       "agentePatogeno": "Conchuelas",

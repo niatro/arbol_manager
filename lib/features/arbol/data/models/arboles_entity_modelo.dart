@@ -39,10 +39,6 @@ class ArbolesEntityModelo extends ArbolesEntity {
         alturaCopaArbolMt: this.listaArbolEntity[i].alturaCopaArbolMt,
         estadoGeneralArbol: this.listaArbolEntity[i].estadoGeneralArbol,
         estadoSanitarioArbol: this.listaArbolEntity[i].estadoSanitarioArbol,
-        agentePatogeno: this.listaArbolEntity[i].agentePatogeno,
-        sintoma: this.listaArbolEntity[i].sintoma,
-        plaga: this.listaArbolEntity[i].plaga,
-        lugarPlaga: this.listaArbolEntity[i].lugarPlaga,
         enfermedad: this.listaArbolEntity[i].enfermedad,
         inclinacionTroncoArbol: this.listaArbolEntity[i].inclinacionTroncoArbol,
         orientacionInclinacionArbol:
@@ -90,10 +86,6 @@ class ArbolEntityModelo extends ArbolEntity {
     @required double alturaCopaArbolMt,
     @required String estadoGeneralArbol,
     @required String estadoSanitarioArbol,
-    @required String agentePatogeno,
-    @required String sintoma,
-    @required String plaga,
-    @required String lugarPlaga,
     @required Enfermedad enfermedad,
     @required String inclinacionTroncoArbol,
     @required String orientacionInclinacionArbol,
@@ -126,10 +118,6 @@ class ArbolEntityModelo extends ArbolEntity {
           alturaCopaArbolMt: alturaCopaArbolMt,
           estadoGeneralArbol: estadoGeneralArbol,
           estadoSanitarioArbol: estadoSanitarioArbol,
-          agentePatogeno: agentePatogeno,
-          sintoma: sintoma,
-          plaga: plaga,
-          lugarPlaga: lugarPlaga,
           enfermedad: enfermedad,
           inclinacionTroncoArbol: inclinacionTroncoArbol,
           orientacionInclinacionArbol: orientacionInclinacionArbol,
@@ -168,10 +156,6 @@ class ArbolEntityModelo extends ArbolEntity {
         alturaCopaArbolMt: double.parse(json["alturaCopaArbolMt"]),
         estadoGeneralArbol: json["estadoGeneralArbol"],
         estadoSanitarioArbol: json["estadoSanitarioArbol"],
-        agentePatogeno: json["agentePatogeno"],
-        sintoma: json["sintoma"],
-        plaga: json["plaga"],
-        lugarPlaga: json["lugarPlaga"],
         enfermedad: json['enfermedad'] != null
             ? Enfermedad.fromJson(json['enfermedad'])
             : null,
@@ -216,13 +200,8 @@ class ArbolEntityModelo extends ArbolEntity {
     data['alturaCopaArbolMt'] = this.alturaCopaArbolMt.toString();
     data['estadoGeneralArbol'] = this.estadoGeneralArbol;
     data['estadoSanitarioArbol'] = this.estadoSanitarioArbol;
-    data['agentePatogeno'] = this.agentePatogeno;
-    data['sintoma'] = this.sintoma;
-    data['plaga'] = this.plaga;
-    data['lugarPlaga'] = this.lugarPlaga;
     data['enfermedad'] = this.enfermedad.toJson();
     data['inclinacionTroncoArbol'] = this.inclinacionTroncoArbol;
-
     data['orientacionInclinacionArbol'] = this.orientacionInclinacionArbol;
     data['obsArbolHistoria'] = this.obsArbolHistoria;
     data['accionObsArbol'] = this.accionObsArbol;

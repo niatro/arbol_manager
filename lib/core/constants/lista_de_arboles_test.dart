@@ -19,10 +19,6 @@ ArbolEntity arbolUno = ArbolEntity(
   alturaCopaArbolMt: 7.0,
   estadoGeneralArbol: "Bueno",
   estadoSanitarioArbol: "Sano",
-  agentePatogeno: "Pulgon",
-  sintoma: "Aserrin",
-  plaga: "Escarabajo",
-  lugarPlaga: "Follaje y Ramillas",
   enfermedad: Enfermedad(
       sintoma: "Fumagina", agentePatogeno: "Conchuelas", lugarPlaga: "Fuste"),
   inclinacionTroncoArbol: "Menor o igual a 30 grados",
@@ -58,10 +54,6 @@ ArbolEntity arbolDos = ArbolEntity(
   alturaCopaArbolMt: 7.0,
   estadoGeneralArbol: "bueno",
   estadoSanitarioArbol: "Sano",
-  agentePatogeno: "Pulgon",
-  sintoma: "Aserrin",
-  plaga: "Escarabajo",
-  lugarPlaga: "Follaje y Ramillas",
   enfermedad: Enfermedad(
       sintoma: "Fumagina", agentePatogeno: "Conchuelas", lugarPlaga: "Fuste"),
   inclinacionTroncoArbol: "Menor o igual a 30 grados",
@@ -101,10 +93,6 @@ ArbolEntityModelo arbolUnoModel = ArbolEntityModelo(
   alturaCopaArbolMt: 7.0,
   estadoGeneralArbol: "Bueno",
   estadoSanitarioArbol: "Sano",
-  agentePatogeno: "Pulgon",
-  sintoma: "Aserrin",
-  plaga: "Escarabajo",
-  lugarPlaga: "Follaje y Ramillas",
   enfermedad: Enfermedad(
       sintoma: "Fumagina", agentePatogeno: "Conchuelas", lugarPlaga: "Fuste"),
   inclinacionTroncoArbol: "Menor o igual a 30 grados",
@@ -140,10 +128,6 @@ ArbolEntityModelo arbolDosModel = ArbolEntityModelo(
   alturaCopaArbolMt: 7.0,
   estadoGeneralArbol: "bueno",
   estadoSanitarioArbol: "Sano",
-  agentePatogeno: "Pulgon",
-  sintoma: "Aserrin",
-  plaga: "Escarabajo",
-  lugarPlaga: "Follaje y Ramillas",
   enfermedad: Enfermedad(
       sintoma: "Fumagina", agentePatogeno: "Conchuelas", lugarPlaga: "Fuste"),
   inclinacionTroncoArbol: "Menor o igual a 30 grados",
