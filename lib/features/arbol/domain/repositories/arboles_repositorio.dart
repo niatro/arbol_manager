@@ -4,6 +4,7 @@ import 'package:flutterapparbol/core/usecases/usecase.dart';
 import 'package:flutterapparbol/features/arbol/data/models/arboles_entity_modelo.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/form_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/idnfc_entity.dart';
+import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../core/error/failure.dart';
@@ -29,6 +30,11 @@ abstract class ArbolesRepositorio {
   Future<Either<Failure, Success>> actualizarDatosForm({String idUsuario});
   //LISTO: implementado
   Future<Either<Failure, Success>> crearDatosForm();
+//LISTO: implementado
+  Future<Either<Failure, Success>> updateArbol(
+      {ArbolesEntity arboles, int nArbol});
+  Future<Either<Failure, Success>> login(
+      {String usuario});
 
 // Los métodos abajo deberían ir en el layer de presentación
 /*Future<Either<Failure, Success>> agregarArbolPorNFC(String idNFC);

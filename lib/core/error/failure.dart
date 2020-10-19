@@ -8,7 +8,7 @@ abstract class Failure extends Equatable {
 
 class ServerFailure extends Failure {}
 
-class ServerFailureGrabando extends Failure {}
+class ServerGrabarFailure extends Failure {}
 
 class CacheFailure extends Failure {}
 
@@ -16,10 +16,14 @@ class NfcFailure extends Failure {}
 
 class DataBaseFailure extends Failure {}
 
-class IdNfcNoGrabaYaExisteFailure extends Failure {}
+class ArbolNoGrabaYaExisteFailure extends Failure {}
+
+class ArbolNoUpdateNoExisteFailure extends Failure {}
 
 class LocalDataBaseFailure extends Failure {}
 
 class ConexionFailure extends Failure {}
 
 class LocalGpsFailure extends Failure {}
+
+class ServerUpdateFailure extends Failure {}

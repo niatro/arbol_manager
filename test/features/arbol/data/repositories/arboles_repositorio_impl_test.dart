@@ -188,6 +188,7 @@ void main() {
       });
     });
   });
+
   //OJO: repositorio getArbolPorIdNFC Test
   group('getArbolPorIdNFC', () {
     final String tIdNFC = "JJS97GB2300T43a";
@@ -395,8 +396,8 @@ void main() {
       });
     });
   });
-  //OJO: repositorio comprobarIdNFC Test
 
+  //OJO: repositorio comprobarIdNFC Test
   group('comprobarIdNFC', () {
     final String idUsuario = "usuarioPrueba";
     final String idNFC = "AS4576";
@@ -460,6 +461,7 @@ void main() {
       });
     });
   });
+
   //OJO: Repositorio grabar árboles una vez que están capturados,
   // Si se esta online se graba en la nube, si se esta offline debe arrojar un error
   // Se debe entrega el parámetro que dic que árbol se debe guardar de la lista
@@ -470,6 +472,11 @@ void main() {
         ArbolesEntityModelo(listaArbolesEntity: [arbolUno, arbolDos]);
     final int tNumeroArbolesInicial =
         tArbolesEntityModel.listaArbolEntity.length;
+
+    final ArbolEntity arbolSeleccionado =
+        tArbolesEntityModel.listaArbolEntity[0];
+    final String nfcEntrante =
+        tArbolesEntityModel.listaArbolEntity[0].idNfcHistoria.last;
     runTestsOnline(() {
       test(
           '''DEBERIA grabar el Arbol a la BD  CUANDO  esta online'''
@@ -477,22 +484,21 @@ void main() {
           '''CUANDO el idNFC del arbol no esta registrado''', () async {
         // arrange
         // Cuando el IdNFC no esta en la base de datos OnLine
-        when(mockRemoteDataSource.verificarIdNFCRemoteData(
-                idNFC: anyNamed('idNFC')))
+        when(mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: nfcEntrante))
             .thenAnswer((_) async => false);
         // Cuando se graban exitosamente  los datos
         when(mockRemoteDataSource.grabarArboleRemoteData(
-                arbol: tArbolesEntityModel.listaArbolEntity[0]))
+                arbol: arbolSeleccionado))
             .thenAnswer((_) async => true);
 
         // act
         final result = await repositorio.grabarArboles(
             arboles: tArbolesEntityModel, nArbol: params.nArbol);
         // assert
-        verifyNever(mockRemoteDataSource.verificarIdNFCRemoteData(
-            idNFC: tArbolesEntityModel.listaArbolEntity[0].guiArbol));
-        verifyNever(mockRemoteDataSource.grabarArboleRemoteData(
-            arbol: tArbolesEntityModel.listaArbolEntity[0]));
+        verify(
+            mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: nfcEntrante));
+        verify(mockRemoteDataSource.grabarArboleRemoteData(
+            arbol: arbolSeleccionado));
         verifyZeroInteractions(mockLocalDataSource);
         expect(result, equals(Right(ServerGrabarSuccess())));
         expect(tArbolesEntityModel.listaArbolEntity.length,
@@ -503,8 +509,7 @@ void main() {
           ''' idNFC del arbol ya esta en la base de datos''', () async {
         // arrange
         // Cuando el IdNFC esta en la base de datos OnLine
-        when(mockRemoteDataSource.verificarIdNFCRemoteData(
-                idNFC: anyNamed('idNFC')))
+        when(mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: nfcEntrante))
             .thenAnswer((_) async => true);
         // act
         // El proceso de grabar los datos dio falso
@@ -512,8 +517,8 @@ void main() {
             arboles: tArbolesEntityModel, nArbol: params.nArbol);
         // assert
         //Se checkea que el procedimiento de verificación de datos alla sido llamado
-        verify(mockRemoteDataSource.verificarIdNFCRemoteData(
-            idNFC: tArbolesEntityModel.listaArbolEntity[0].guiArbol));
+        verify(
+            mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: nfcEntrante));
         verifyZeroInteractions(mockLocalDataSource);
       });
       test(
@@ -522,8 +527,7 @@ void main() {
           () async {
         // arrange
         // Cuando el IdNFC no esta en la base de datos OnLine
-        when(mockRemoteDataSource.verificarIdNFCRemoteData(
-                idNFC: anyNamed('idNFC')))
+        when(mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: nfcEntrante))
             .thenAnswer((_) async => false);
         // Cuando se graban exitosamente  los datos
         when(mockRemoteDataSource.grabarArboleRemoteData(
@@ -557,8 +561,8 @@ void main() {
         final result = await repositorio.grabarArboles(
             arboles: tArbolesEntityModel, nArbol: params.nArbol);
         // assert
-        verify(mockRemoteDataSource.verificarIdNFCRemoteData(
-            idNFC: tArbolesEntityModel.listaArbolEntity[0].guiArbol));
+        verify(
+            mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: nfcEntrante));
         verifyNever(mockRemoteDataSource.grabarArboleRemoteData(
             arbol: tArbolesEntityModel.listaArbolEntity[0]));
         verifyZeroInteractions(mockLocalDataSource);
@@ -569,8 +573,86 @@ void main() {
     runTestsOffline(() {});
   });
 
-  //OJO: Repositorio actualizar Datos Form si se esta online y el usuario lo solicita 🔃
+  //OJO: repositorio updateArboles
+  group('updateArboles', () {
+    final Params params = Params(nArbol: 0);
+    final ArbolesEntityModelo tArbolesEntityModel =
+        ArbolesEntityModelo(listaArbolesEntity: [arbolUno, arbolDos]);
+    final int tNumeroArbolesInicial =
+        tArbolesEntityModel.listaArbolEntity.length;
 
+    final ArbolEntity arbolSeleccionado =
+        tArbolesEntityModel.listaArbolEntity[0];
+    final String nfcEntrante =
+        tArbolesEntityModel.listaArbolEntity[0].idNfcHistoria.last;
+
+    runTestsOnline(() {
+      test(
+          '''DEBERIA actualizar el Arbol a la BD-SERVER  CUANDO  esta online'''
+          ''' DEBERIA borrar el arbol grabado del listado de arboles'''
+          '''CUANDO el idNFC del arbol  esta registrado''', () async {
+        // arrange
+        // Cuando el IdNFC  esta en la base de datos OnLine
+        when(mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: nfcEntrante))
+            .thenAnswer((_) async => true);
+        // Cuando se updatean exitosamente  los datos
+        when(mockRemoteDataSource.updateArbolRemoteData(
+                arbol: arbolSeleccionado))
+            .thenAnswer((_) async => true);
+
+        // act
+        final result = await repositorio.updateArbol(
+            arboles: tArbolesEntityModel, nArbol: params.nArbol);
+        // assert
+
+        verify(
+            mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: nfcEntrante));
+        verify(mockRemoteDataSource.updateArbolRemoteData(
+            arbol: arbolSeleccionado));
+        verifyZeroInteractions(mockLocalDataSource);
+        expect(result, equals(Right(ServerUpdateSuccess())));
+        expect(tArbolesEntityModel.listaArbolEntity.length,
+            tNumeroArbolesInicial - 1);
+      });
+      test(
+          '''DEBERIA arrojar un ArbolNoUpdateNoExisteFailure'''
+          '''CUANDO el idNFC no esta en el servidor''', () async {
+        // arrange
+        when(mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: nfcEntrante))
+            .thenAnswer((_) async => false);
+
+        // act
+        final result = await repositorio.updateArbol(
+            arboles: tArbolesEntityModel, nArbol: params.nArbol);
+        // assert
+        verifyNever(mockRemoteDataSource.updateArbolRemoteData(
+            arbol: arbolSeleccionado));
+        expect(result, equals(Left(ArbolNoUpdateNoExisteFailure())));
+      });
+      test(
+          '''''DEBERIA arrojar un Left(ServerUpdateFailure()'''
+          '''CUANDO el idNFC esta pero por alguna razon no se updatea en el servidor''',
+          () async {
+        // arrange
+        when(mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: nfcEntrante))
+            .thenAnswer((_) async => true);
+        when(mockRemoteDataSource.updateArbolRemoteData(
+                arbol: arbolSeleccionado))
+            .thenAnswer((_) async => false);
+        // act
+        final result = await repositorio.updateArbol(
+            arboles: tArbolesEntityModel, nArbol: params.nArbol);
+        // assert
+        verifyNever(mockRemoteDataSource.updateArbolRemoteData(
+            arbol: arbolSeleccionado));
+        expect(result, equals(Left(ServerUpdateFailure())));
+      });
+    });
+    //OJO: No hay test offline
+    runTestsOffline(() {});
+  });
+
+  //OJO: Repositorio actualizar Datos Form si se esta online y el usuario lo solicita 🔃
   group('actualizarDatosForm', () {
     final String idUsuario = "usuarioPrueba";
     final ArbolesEntityModelo tArbolesEntityModel =

@@ -34,6 +34,7 @@ class ArbolEntity extends Equatable {
   final String alertaArbol;
   final String revisionArbol;
   final List<dynamic> fotosArbol;
+  final List<dynamic> fotosEnfermedad;
 
   ArbolEntity({
     @required this.guiArbol,
@@ -67,6 +68,7 @@ class ArbolEntity extends Equatable {
     @required this.alertaArbol,
     @required this.revisionArbol,
     @required this.fotosArbol,
+    @required this.fotosEnfermedad,
   }) : super([
           guiArbol,
           idArbol,
@@ -99,6 +101,7 @@ class ArbolEntity extends Equatable {
           alertaArbol,
           revisionArbol,
           fotosArbol,
+          fotosEnfermedad,
         ]);
 }
 

@@ -32,7 +32,8 @@ final List<Map> listaMapDeArbolesSerializadosTest = [
     "fechaUltimaModArbol": "2019-04-22 00:00:00.000",
     "alertaArbol": "No",
     "revisionArbol": "Si",
-    "fotosArbol": ["foto1", "foto2"]
+    "fotosArbol": ["foto1", "foto2"],
+    "fotosEnfermedad": ["enfermedad1", "enfermedad2"],
   },
   {
     "guiArbol": "044a75652d96480",
@@ -67,6 +68,7 @@ final List<Map> listaMapDeArbolesSerializadosTest = [
     "fechaUltimaModArbol": "2019-04-22 00:00:00.000",
     "alertaArbol": "No",
     "revisionArbol": "Si",
-    "fotosArbol": ["foto1", "foto2"]
+    "fotosArbol": ["foto1", "foto2"],
+    "fotosEnfermedad": ["enfermedad1", "enfermedad2"]
   }
 ];

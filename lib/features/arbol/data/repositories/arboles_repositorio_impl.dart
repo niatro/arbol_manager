@@ -75,31 +75,6 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
   }
 
   @override
-  Future<Either<Failure, ServerGrabarSuccess>> grabarArboles(
-      {ArbolesEntity arboles, int nArbol}) async {
-    if (await netWorkInfo.isConnected) {
-      try {
-        bool verificado = await remoteDataSource.verificarIdNFCRemoteData(
-            idNFC: arboles.listaArbolEntity[nArbol].guiArbol);
-        if (verificado == false) {
-          bool grabadoSioNo = await remoteDataSource.grabarArboleRemoteData(
-              arbol: arboles.listaArbolEntity[nArbol]);
-          if (grabadoSioNo == true) {
-            arboles.listaArbolEntity.removeAt(nArbol);
-            return Right(ServerGrabarSuccess());
-          } else {
-            return Left(ServerFailureGrabando());
-          }
-        } else {
-          return Left(IdNfcNoGrabaYaExisteFailure());
-        }
-      } on ServerException {
-        return Left(ServerFailure());
-      }
-    }
-  }
-
-  @override
   Future<Either<Failure, ServerActualizarFormSuccess>> actualizarDatosForm(
       {String idUsuario}) async {
     if (await netWorkInfo.isConnected) {
@@ -164,5 +139,65 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
     } on LocationException {
       return (Left(LocalGpsFailure()));
     }
+  }
+
+  @override
+  Future<Either<Failure, ServerUpdateSuccess>> updateArbol(
+      {ArbolesEntity arboles, int nArbol}) async {
+    if (await netWorkInfo.isConnected) {
+      try {
+        bool verificado = await remoteDataSource.verificarIdNFCRemoteData(
+            idNFC: arboles.listaArbolEntity[nArbol].idNfcHistoria.last);
+        if (verificado == true) {
+          bool updateSioNo = await remoteDataSource.updateArbolRemoteData(
+              arbol: arboles.listaArbolEntity[nArbol]);
+          if (updateSioNo == true) {
+            arboles.listaArbolEntity.removeAt(nArbol);
+            return Right(ServerUpdateSuccess());
+          } else {
+            return Left(ServerUpdateFailure());
+          }
+        } else {
+          return Left(ArbolNoUpdateNoExisteFailure());
+        }
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(ConexionFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, ServerGrabarSuccess>> grabarArboles(
+      {ArbolesEntity arboles, int nArbol}) async {
+    if (await netWorkInfo.isConnected) {
+      try {
+        bool verificado = await remoteDataSource.verificarIdNFCRemoteData(
+            idNFC: arboles.listaArbolEntity[nArbol].idNfcHistoria.last);
+        if (verificado == false) {
+          bool grabadoSioNo = await remoteDataSource.grabarArboleRemoteData(
+              arbol: arboles.listaArbolEntity[nArbol]);
+          if (grabadoSioNo == true) {
+            arboles.listaArbolEntity.removeAt(nArbol);
+            return Right(ServerGrabarSuccess());
+          } else {
+            return Left(ServerGrabarFailure());
+          }
+        } else {
+          return Left(ArbolNoGrabaYaExisteFailure());
+        }
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(ConexionFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, Success>> login({String usuario}) {
+    // TODO: implement login
+    throw UnimplementedError();
   }
 }

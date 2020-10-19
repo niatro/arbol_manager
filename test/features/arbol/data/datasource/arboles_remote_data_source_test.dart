@@ -57,7 +57,7 @@ void main() {
         List<Map<String, dynamic>>.from(json.decode(fixture('arboles.json')));
     final tArbolesTestModelo =
         ArbolesEntityModelo.fromJson(parsedListMapFromJson: jsonMaped);
-    test('''DEBERIA hacer un request al URL con las coordenadas y 
+    test('''DEBERIA hacer un request al URL con las coordenadas y
     recibir arboles cercanos  en un radio por definir''', () async {
       // arrange
       setUpMockHttpSuccess200('arboles.json');

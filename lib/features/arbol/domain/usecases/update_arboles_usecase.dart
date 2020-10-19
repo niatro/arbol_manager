@@ -5,14 +5,14 @@ import '../../../../core/error/failure.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../repositories/arboles_repositorio.dart';
 
-class GrabarArbolesUseCase implements UseCase<Success, Params> {
+class UpdateArbolesUseCase implements UseCase<Success, Params> {
   final ArbolesRepositorio repositorio;
-  GrabarArbolesUseCase(this.repositorio);
+  UpdateArbolesUseCase(this.repositorio);
   @override
   Future<Either<Failure, Success>> call(
     Params params,
   ) async {
-    return await repositorio.grabarArboles(
+    return await repositorio.updateArbol(
         arboles: params.arbolesEntity, nArbol: params.nArbol);
   }
 }
