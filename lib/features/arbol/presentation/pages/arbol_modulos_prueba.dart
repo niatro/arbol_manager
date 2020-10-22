@@ -5,6 +5,9 @@ import 'package:flutterapparbol/features/arbol/data/datasources/arboles_remote_d
 import 'package:flutterapparbol/features/arbol/data/datasources/form_local_source_sql.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/local_data_estructuras.dart';
 import 'package:flutterapparbol/features/arbol/data/models/form_entity_modelo.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
@@ -62,10 +65,19 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
 
   ArbolesRemoteDataSourceImpl remoteDataSource;
   int count = 0;
+  List<String> imagenesArbol = [];
   final EsquemaDataDeSQL referencia = EsquemaDataDeSQL();
+  final picker = ImagePicker();
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<List<String>> tomarImagenArbol(ImagePicker picker) async {
+    var pickedImage = await picker.getImage(source: ImageSource.gallery);
+    imagenesArbol.add(pickedImage.path);
+    imagenesArbol.forEach((foto) => print(foto));
+    return imagenesArbol;
   }
 
   @override
@@ -214,6 +226,17 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
                   child: Text('Crear toda BD'),
                 ),
                 SizedBox(height: 10.0),
+                FlatButton(
+                  onPressed: () async {
+                    List<String> foto = await tomarImagenArbol(picker);
+                    setState(() {
+                      count = imagenesArbol.length;
+                      arbolUno.fotosArbol.add(foto.last);
+                    });
+                  },
+                  color: Colors.purple,
+                  child: Text('Sacar Foto ($count)'),
+                ),
                 FlatButton(
                   onPressed: () async {
                     await remoteDataSource.grabarArboleRemoteData(

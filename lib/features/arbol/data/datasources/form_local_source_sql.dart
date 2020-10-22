@@ -333,7 +333,7 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
         listaPlaga.add(object);
       });
       List<SintomaModelo> listaSintoma = [];
-      lista[13]['tablaSintomas'].forEach((object) {
+      lista[13]['tablaSintoma'].forEach((object) {
         listaSintoma.add(object);
       });
       List<EspecieModelo> listaEspecie = [];
@@ -373,6 +373,7 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
         nombreTabla: nombreTabla['nombre'],
         campoOrdenador: nombreTabla['orden'],
       );
+      print('el mapa es $listaMapas');
       List<ObjetoFila> listaObjetos = [];
       listaMapas.forEach((mapa) {
         listaObjetos.add(nombreTabla['objeto'](mapa));

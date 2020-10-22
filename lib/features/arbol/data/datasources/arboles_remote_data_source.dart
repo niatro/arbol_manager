@@ -101,67 +101,8 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
   @override
   Future<bool> grabarArboleRemoteData({ArbolEntity arbol}) async {
     print('apretado el boton');
-    File _image;
-    final picker = ImagePicker();
-    //TODO: implementar en base de datos interna una tabla con todas las obs de los arboles
 
-// TEST
-    /*  print('id_nfc_arbol: ${arbol.idNfcHistoria.last} ');
-    print(
-        'gui_arbol: ${await buscaValoresIdentificadores(arbol, 'gui_arbol')}');
-    print(
-        'id_entidad_arbol: ${await buscaValoresIdentificadores(arbol, 'id_entidad_arbol')} ');
-    print(
-        'id_sector_entidad_arbol: ${await buscaValoresIdentificadores(arbol, 'id_sector_entidad_arbol')}');
-    print(
-        'id_calle_arbol: ${await buscaValoresIdentificadores(arbol, 'id_calle_arbol')}');
-    print('n_calle_arbol: ${arbol.nCalleArbol.toString()}');
-    print(
-        'id_especie_arbol: ${await buscaValoresIdentificadores(arbol, 'id_especie_arbol')}');
-    print('id_diametro_tronco: ${arbol.diametroTroncoArbolCm.toString()}');
-    print(
-        'id_diametro_copa_ns_arbol: ${arbol.diametroCopaNsArbolMt.toString()}');
-    print(
-        'id_diametro_copa_eo_arbol: ${arbol.diametroCopaEoArbolMt.toString()}');
-    print('id_altura_arbol_arbol: ${arbol.alturaArbolArbolMt.toString()}');
-    print('id_altura_copa_arbol: ${arbol.alturaCopaArbolMt.toString()}');
-    print(
-        'id_estado_general_arbol: ${await buscaValoresIdentificadores(arbol, 'id_estado_general_arbol')}');
-    print(
-        'id_estado_sanitario_arbol: ${await buscaValoresIdentificadores(arbol, 'id_estado_sanitario_arbol')}');
-    print(
-        'id_agentes_patogenos_arbol: ${await buscaValoresIdentificadores(arbol, 'id_agentes_patogenos_arbol')}');
-    print(
-        'id_sintoma_arbol: ${await buscaValoresIdentificadores(arbol, 'id_sintoma_arbol')}');
-    print(
-        'id_lugar_plaga_arbol: ${await buscaValoresIdentificadores(arbol, 'id_lugar_plaga_arbol')}');
-    print(
-        'id_inclinacion_tronco_arbol: ${await buscaValoresIdentificadores(arbol, 'id_inclinacion_tronco_arbol')}');
-    print(
-        'id_orientacion_inclinacion_arbol: ${await buscaValoresIdentificadores(arbol, 'id_orientacion_inclinacion_arbol')}');
-    print(
-        '"id_accion_obs_arbol": ${await buscaValoresIdentificadores(arbol, 'id_accion_obs_arbol')}');
-    print(
-        'id_accion_obs_arbol_2: ${await buscaValoresIdentificadores(arbol, 'id_accion_obs_arbol_2')}');
-    print(
-        'id_accion_obs_arbol_3: ${await buscaValoresIdentificadores(arbol, 'id_accion_obs_arbol_3')}');
-    print('observaciones_arbol : ${arbol.obsArbolHistoria.last.toString()}');
-    print('geo_referencia_gps_arbol: ""');
-    print('geo_referencia_captura_arbol: ""');
-    print(
-        'geo_referencia_google_arbol: ${arbol.geoReferenciaCapturaArbol.latitude.toString()},${arbol.geoReferenciaCapturaArbol.longitude.toString()}');
-    print('alerta_arbol: ${arbol.alertaArbol}');
-    print('revision_arbol: ${arbol.revisionArbol}');
-    print(
-        'esquina_calle_arbol: ${await buscaValoresIdentificadores(arbol, 'esquina_calle_arbol')}');
-    print(
-        'id_usuario_creacion_arbol: ${await buscaValoresIdentificadores(arbol, 'id_usuario_creacion_arbol')}');
-    print(
-        '"id_usuario_modifica_arbol": ${await buscaValoresIdentificadores(arbol, 'id_usuario_modifica_arbol')}');
-    print(
-        'fecha_creacion_arbol: ${await arbol.fechaCreacionArbol.toLocal().toString()}');
-    print(
-        'fecha_ultima_mod_arbol: ${arbol.fechaUltimaModArbol.toLocal().toString()}');*/
+    //TODO: implementar en base de datos interna una tabla con todas las obs de los arboles
 
     var uri = Uri.parse(_url + "/bd/insertArbol.php");
     var request = http.MultipartRequest('POST', uri)
@@ -224,14 +165,15 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
           arbol.fechaCreacionArbol.toLocal().toString()
       ..fields["fecha_ultima_mod_arbol"] =
           arbol.fechaUltimaModArbol.toLocal().toString();
-    File elPath = await choiceImage(picker);
-    request.files.add(
-        await http.MultipartFile.fromPath('fotografia_arbol_1', elPath.path));
-//    for (String pathFoto in arbol.fotosArbol) {
-//      request.files.add(await http.MultipartFile.fromPath(
-//          'fotografia_arbol_${arbol.fotosArbol.indexOf(pathFoto) + 1}',
-//          pathFoto.toString()));
-//    }
+//    File elPath = await choiceImage(picker);
+//    request.files.add(
+//        await http.MultipartFile.fromPath('fotografia_arbol_1', elPath.path));
+    for (String pathFoto in arbol.fotosArbol) {
+      request.files.add(await http.MultipartFile.fromPath(
+          'fotografia_arbol_${arbol.fotosArbol.indexOf(pathFoto) + 1}',
+          pathFoto.toString()));
+      print('fotografia_arbol_${arbol.fotosArbol.indexOf(pathFoto) + 1}');
+    }
 //    for (String pathFoto in arbol.fotosEnfermedad) {
 //      request.files.add(await http.MultipartFile.fromPath(
 //          'fotografia_arbol_sanitario_${arbol.fotosEnfermedad.indexOf(pathFoto) + 1}',
@@ -248,7 +190,8 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
         throw ServerException();
       }
     } catch (e) {
-      print('El error es: $e');
+      print(
+          'Remote Data Source llamada a servidor, hay un error en el requeset: $e');
       return null;
     }
 
@@ -676,3 +619,61 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
     return File(pickedImage.path);
   }
 }
+
+// TEST
+/*  print('id_nfc_arbol: ${arbol.idNfcHistoria.last} ');
+    print(
+        'gui_arbol: ${await buscaValoresIdentificadores(arbol, 'gui_arbol')}');
+    print(
+        'id_entidad_arbol: ${await buscaValoresIdentificadores(arbol, 'id_entidad_arbol')} ');
+    print(
+        'id_sector_entidad_arbol: ${await buscaValoresIdentificadores(arbol, 'id_sector_entidad_arbol')}');
+    print(
+        'id_calle_arbol: ${await buscaValoresIdentificadores(arbol, 'id_calle_arbol')}');
+    print('n_calle_arbol: ${arbol.nCalleArbol.toString()}');
+    print(
+        'id_especie_arbol: ${await buscaValoresIdentificadores(arbol, 'id_especie_arbol')}');
+    print('id_diametro_tronco: ${arbol.diametroTroncoArbolCm.toString()}');
+    print(
+        'id_diametro_copa_ns_arbol: ${arbol.diametroCopaNsArbolMt.toString()}');
+    print(
+        'id_diametro_copa_eo_arbol: ${arbol.diametroCopaEoArbolMt.toString()}');
+    print('id_altura_arbol_arbol: ${arbol.alturaArbolArbolMt.toString()}');
+    print('id_altura_copa_arbol: ${arbol.alturaCopaArbolMt.toString()}');
+    print(
+        'id_estado_general_arbol: ${await buscaValoresIdentificadores(arbol, 'id_estado_general_arbol')}');
+    print(
+        'id_estado_sanitario_arbol: ${await buscaValoresIdentificadores(arbol, 'id_estado_sanitario_arbol')}');
+    print(
+        'id_agentes_patogenos_arbol: ${await buscaValoresIdentificadores(arbol, 'id_agentes_patogenos_arbol')}');
+    print(
+        'id_sintoma_arbol: ${await buscaValoresIdentificadores(arbol, 'id_sintoma_arbol')}');
+    print(
+        'id_lugar_plaga_arbol: ${await buscaValoresIdentificadores(arbol, 'id_lugar_plaga_arbol')}');
+    print(
+        'id_inclinacion_tronco_arbol: ${await buscaValoresIdentificadores(arbol, 'id_inclinacion_tronco_arbol')}');
+    print(
+        'id_orientacion_inclinacion_arbol: ${await buscaValoresIdentificadores(arbol, 'id_orientacion_inclinacion_arbol')}');
+    print(
+        '"id_accion_obs_arbol": ${await buscaValoresIdentificadores(arbol, 'id_accion_obs_arbol')}');
+    print(
+        'id_accion_obs_arbol_2: ${await buscaValoresIdentificadores(arbol, 'id_accion_obs_arbol_2')}');
+    print(
+        'id_accion_obs_arbol_3: ${await buscaValoresIdentificadores(arbol, 'id_accion_obs_arbol_3')}');
+    print('observaciones_arbol : ${arbol.obsArbolHistoria.last.toString()}');
+    print('geo_referencia_gps_arbol: ""');
+    print('geo_referencia_captura_arbol: ""');
+    print(
+        'geo_referencia_google_arbol: ${arbol.geoReferenciaCapturaArbol.latitude.toString()},${arbol.geoReferenciaCapturaArbol.longitude.toString()}');
+    print('alerta_arbol: ${arbol.alertaArbol}');
+    print('revision_arbol: ${arbol.revisionArbol}');
+    print(
+        'esquina_calle_arbol: ${await buscaValoresIdentificadores(arbol, 'esquina_calle_arbol')}');
+    print(
+        'id_usuario_creacion_arbol: ${await buscaValoresIdentificadores(arbol, 'id_usuario_creacion_arbol')}');
+    print(
+        '"id_usuario_modifica_arbol": ${await buscaValoresIdentificadores(arbol, 'id_usuario_modifica_arbol')}');
+    print(
+        'fecha_creacion_arbol: ${await arbol.fechaCreacionArbol.toLocal().toString()}');
+    print(
+        'fecha_ultima_mod_arbol: ${arbol.fechaUltimaModArbol.toLocal().toString()}');*/

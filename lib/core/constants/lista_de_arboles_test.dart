@@ -34,8 +34,8 @@ ArbolEntity arbolUno = ArbolEntity(
   fechaUltimaModArbol: DateTime(2019, 4, 22),
   alertaArbol: "No",
   revisionArbol: "Si",
-  fotosArbol: ["foto1", "foto2"],
-  fotosEnfermedad: ["enfermedad1", "enfermedad2"],
+  fotosArbol: [],
+  fotosEnfermedad: [],
 );
 
 ArbolEntity arbolDos = ArbolEntity(
@@ -110,8 +110,8 @@ ArbolEntityModelo arbolUnoModel = ArbolEntityModelo(
     fechaUltimaModArbol: DateTime(2019, 4, 22),
     alertaArbol: "No",
     revisionArbol: "Si",
-    fotosArbol: ["foto1", "foto2"],
-    fotosEnfermedad: ["enfermedad1", "enfermedad2"]);
+    fotosArbol: [],
+    fotosEnfermedad: []);
 
 ArbolEntityModelo arbolDosModel = ArbolEntityModelo(
   guiArbol: "044a75652d96480",

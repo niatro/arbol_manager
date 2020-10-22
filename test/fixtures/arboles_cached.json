@@ -63,7 +63,7 @@
     "fechaUltimaModArbol": "2019-04-22 00:00:00.000",
     "alertaArbol": "No",
     "revisionArbol": "Si",
-    "fotosArbol": ["foto1", "foto2"],
-    "fotosEnfermedad": ["enfermedad1", "enfermedad2"]
+    "fotosArbol": [],
+    "fotosEnfermedad": []
   }
 ]

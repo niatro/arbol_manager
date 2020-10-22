@@ -919,6 +919,7 @@ class ListaUsuarioModelo extends ObjetoLista implements ObjetoFila {
     throw UnimplementedError();
   }
 }
+//OJO: Hacer enfermedad
 
 //OJO: Agente Patogeno     / Rev 1
 
