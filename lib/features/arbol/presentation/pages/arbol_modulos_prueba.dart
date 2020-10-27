@@ -64,8 +64,10 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
   FormLocalSourceSqlImpl sqlDataSource = FormLocalSourceSqlImpl();
 
   ArbolesRemoteDataSourceImpl remoteDataSource;
-  int count = 0;
+  int count_arbol = 0;
+  int count_enf = 0;
   List<String> imagenesArbol = [];
+  List<String> imagenesEnfermedad = [];
   final EsquemaDataDeSQL referencia = EsquemaDataDeSQL();
   final picker = ImagePicker();
   @override
@@ -78,6 +80,13 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
     imagenesArbol.add(pickedImage.path);
     imagenesArbol.forEach((foto) => print(foto));
     return imagenesArbol;
+  }
+
+  Future<List<String>> tomarImagenEnfermedad(ImagePicker picker) async {
+    var pickedImage = await picker.getImage(source: ImageSource.gallery);
+    imagenesEnfermedad.add(pickedImage.path);
+    imagenesEnfermedad.forEach((foto) => print(foto));
+    return imagenesEnfermedad;
   }
 
   @override
@@ -228,14 +237,26 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
                 SizedBox(height: 10.0),
                 FlatButton(
                   onPressed: () async {
+                    List<String> foto = await tomarImagenEnfermedad(picker);
+                    setState(() {
+                      count_enf = imagenesEnfermedad.length;
+                      arbolUno.fotosEnfermedad.add(foto.last);
+                    });
+                  },
+                  color: Colors.purple,
+                  child: Text('Sacar Foto Enfermedad ($count_enf)'),
+                ),
+                SizedBox(height: 10.0),
+                FlatButton(
+                  onPressed: () async {
                     List<String> foto = await tomarImagenArbol(picker);
                     setState(() {
-                      count = imagenesArbol.length;
+                      count_arbol = imagenesArbol.length;
                       arbolUno.fotosArbol.add(foto.last);
                     });
                   },
                   color: Colors.purple,
-                  child: Text('Sacar Foto ($count)'),
+                  child: Text('Sacar Foto Arbol ($count_arbol)'),
                 ),
                 FlatButton(
                   onPressed: () async {

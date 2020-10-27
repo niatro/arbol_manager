@@ -417,14 +417,14 @@ void main() {
           'DEBERIA retornar un valor true CUANDO encuentra el idNFC en el servidor',
           () async {
         // arrange
-        when(mockRemoteDataSource.verificarIdNFCRemoteData(
+        when(mockRemoteDataSource.verificarSiExisteIdNfcRemoteData(
                 idNFC: anyNamed('idNFC')))
             .thenAnswer((_) async => true);
         // act
         final result = await repositorio.comprobarIdNFC(idNFC: idNFC);
 
         // assert
-        verify(mockRemoteDataSource.verificarIdNFCRemoteData(
+        verify(mockRemoteDataSource.verificarSiExisteIdNfcRemoteData(
             idNFC: anyNamed('idNFC')));
         expect(result, equals(Right(true)));
       });
@@ -432,14 +432,14 @@ void main() {
           'DEBERIA retornar un valor false CUANDO no encuentra el idNFC en el servidor',
           () async {
         // arrange
-        when(mockRemoteDataSource.verificarIdNFCRemoteData(
+        when(mockRemoteDataSource.verificarSiExisteIdNfcRemoteData(
                 idNFC: anyNamed('idNFC')))
             .thenAnswer((_) async => false);
         // act
         final result = await repositorio.comprobarIdNFC(idNFC: idNFC);
 
         // assert
-        verify(mockRemoteDataSource.verificarIdNFCRemoteData(
+        verify(mockRemoteDataSource.verificarSiExisteIdNfcRemoteData(
             idNFC: anyNamed('idNFC')));
         expect(result, equals(Right(false)));
       });
@@ -448,13 +448,14 @@ void main() {
           'DEBERIA retornar un Server failure CUANDO la llamada a la data remota no exitosa',
           () async {
         // arrange
-        when(mockRemoteDataSource.verificarIdNFCRemoteData(
+        when(mockRemoteDataSource.verificarSiExisteIdNfcRemoteData(
                 idNFC: anyNamed('idNFC')))
             .thenThrow(ServerException());
         // act
         final result = await repositorio.comprobarIdNFC(idNFC: idNFC);
         // assert
-        verify(mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: idNFC));
+        verify(mockRemoteDataSource.verificarSiExisteIdNfcRemoteData(
+            idNFC: idNFC));
         verifyZeroInteractions(mockLocalDataSource);
 
         expect(result, equals(Left(ServerFailure())));
@@ -484,7 +485,8 @@ void main() {
           '''CUANDO el idNFC del arbol no esta registrado''', () async {
         // arrange
         // Cuando el IdNFC no esta en la base de datos OnLine
-        when(mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: nfcEntrante))
+        when(mockRemoteDataSource.verificarSiExisteIdNfcRemoteData(
+                idNFC: nfcEntrante))
             .thenAnswer((_) async => false);
         // Cuando se graban exitosamente  los datos
         when(mockRemoteDataSource.grabarArboleRemoteData(
@@ -495,8 +497,8 @@ void main() {
         final result = await repositorio.grabarArboles(
             arboles: tArbolesEntityModel, nArbol: params.nArbol);
         // assert
-        verify(
-            mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: nfcEntrante));
+        verify(mockRemoteDataSource.verificarSiExisteIdNfcRemoteData(
+            idNFC: nfcEntrante));
         verify(mockRemoteDataSource.grabarArboleRemoteData(
             arbol: arbolSeleccionado));
         verifyZeroInteractions(mockLocalDataSource);
@@ -509,7 +511,8 @@ void main() {
           ''' idNFC del arbol ya esta en la base de datos''', () async {
         // arrange
         // Cuando el IdNFC esta en la base de datos OnLine
-        when(mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: nfcEntrante))
+        when(mockRemoteDataSource.verificarSiExisteIdNfcRemoteData(
+                idNFC: nfcEntrante))
             .thenAnswer((_) async => true);
         // act
         // El proceso de grabar los datos dio falso
@@ -517,8 +520,8 @@ void main() {
             arboles: tArbolesEntityModel, nArbol: params.nArbol);
         // assert
         //Se checkea que el procedimiento de verificación de datos alla sido llamado
-        verify(
-            mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: nfcEntrante));
+        verify(mockRemoteDataSource.verificarSiExisteIdNfcRemoteData(
+            idNFC: nfcEntrante));
         verifyZeroInteractions(mockLocalDataSource);
       });
       test(
@@ -527,7 +530,8 @@ void main() {
           () async {
         // arrange
         // Cuando el IdNFC no esta en la base de datos OnLine
-        when(mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: nfcEntrante))
+        when(mockRemoteDataSource.verificarSiExisteIdNfcRemoteData(
+                idNFC: nfcEntrante))
             .thenAnswer((_) async => false);
         // Cuando se graban exitosamente  los datos
         when(mockRemoteDataSource.grabarArboleRemoteData(
@@ -537,7 +541,7 @@ void main() {
         final result = await repositorio.grabarArboles(
             arboles: tArbolesEntityModel, nArbol: params.nArbol);
         // assert
-        verifyNever(mockRemoteDataSource.verificarIdNFCRemoteData(
+        verifyNever(mockRemoteDataSource.verificarSiExisteIdNfcRemoteData(
             idNFC: arbolUno.guiArbol));
         verify(mockRemoteDataSource.grabarArboleRemoteData(
             arbol: tArbolesEntityModel.listaArbolEntity[0]));
@@ -550,7 +554,7 @@ void main() {
           () async {
         // arrange
         // Cuando el IdNFC no esta en la base de datos OnLine
-        when(mockRemoteDataSource.verificarIdNFCRemoteData(
+        when(mockRemoteDataSource.verificarSiExisteIdNfcRemoteData(
                 idNFC: anyNamed('idNFC')))
             .thenThrow(ServerException());
         // Cuando se graban exitosamente  los datos
@@ -561,8 +565,8 @@ void main() {
         final result = await repositorio.grabarArboles(
             arboles: tArbolesEntityModel, nArbol: params.nArbol);
         // assert
-        verify(
-            mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: nfcEntrante));
+        verify(mockRemoteDataSource.verificarSiExisteIdNfcRemoteData(
+            idNFC: nfcEntrante));
         verifyNever(mockRemoteDataSource.grabarArboleRemoteData(
             arbol: tArbolesEntityModel.listaArbolEntity[0]));
         verifyZeroInteractions(mockLocalDataSource);
@@ -589,11 +593,12 @@ void main() {
     runTestsOnline(() {
       test(
           '''DEBERIA actualizar el Arbol a la BD-SERVER  CUANDO  esta online'''
-          ''' DEBERIA borrar el arbol grabado del listado de arboles'''
+          ''' DEBERIA borrar el arbol grabado del listado de arboles posteriormente'''
           '''CUANDO el idNFC del arbol  esta registrado''', () async {
         // arrange
         // Cuando el IdNFC  esta en la base de datos OnLine
-        when(mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: nfcEntrante))
+        when(mockRemoteDataSource.verificarSiExisteIdNfcRemoteData(
+                idNFC: nfcEntrante))
             .thenAnswer((_) async => true);
         // Cuando se updatean exitosamente  los datos
         when(mockRemoteDataSource.updateArbolRemoteData(
@@ -605,8 +610,8 @@ void main() {
             arboles: tArbolesEntityModel, nArbol: params.nArbol);
         // assert
 
-        verify(
-            mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: nfcEntrante));
+        verify(mockRemoteDataSource.verificarSiExisteIdNfcRemoteData(
+            idNFC: nfcEntrante));
         verify(mockRemoteDataSource.updateArbolRemoteData(
             arbol: arbolSeleccionado));
         verifyZeroInteractions(mockLocalDataSource);
@@ -618,7 +623,8 @@ void main() {
           '''DEBERIA arrojar un ArbolNoUpdateNoExisteFailure'''
           '''CUANDO el idNFC no esta en el servidor''', () async {
         // arrange
-        when(mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: nfcEntrante))
+        when(mockRemoteDataSource.verificarSiExisteIdNfcRemoteData(
+                idNFC: nfcEntrante))
             .thenAnswer((_) async => false);
 
         // act
@@ -634,7 +640,8 @@ void main() {
           '''CUANDO el idNFC esta pero por alguna razon no se updatea en el servidor''',
           () async {
         // arrange
-        when(mockRemoteDataSource.verificarIdNFCRemoteData(idNFC: nfcEntrante))
+        when(mockRemoteDataSource.verificarSiExisteIdNfcRemoteData(
+                idNFC: nfcEntrante))
             .thenAnswer((_) async => true);
         when(mockRemoteDataSource.updateArbolRemoteData(
                 arbol: arbolSeleccionado))
@@ -649,7 +656,24 @@ void main() {
       });
     });
     //OJO: No hay test offline
-    runTestsOffline(() {});
+    runTestsOffline(() {
+      test(
+          '''DEBERIA arrojar un ConexionFailure'''
+          '''CUANDO no hay internet''', () async {
+        // arrange
+
+        // act
+        final result = await repositorio.updateArbol(
+            arboles: tArbolesEntityModel, nArbol: params.nArbol);
+        // assert
+        verifyNever(mockRemoteDataSource.verificarSiExisteIdNfcRemoteData(
+            idNFC: nfcEntrante));
+        verifyNever(mockRemoteDataSource.updateArbolRemoteData(
+            arbol: arbolSeleccionado));
+
+        expect(result, equals(Left(ConexionFailure())));
+      });
+    });
   });
 
   //OJO: Repositorio actualizar Datos Form si se esta online y el usuario lo solicita 🔃

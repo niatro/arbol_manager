@@ -29,7 +29,7 @@ abstract class ArbolesRemoteDataSource {
   //OJO: no terminado
   Future<bool> grabarArboleRemoteData({ArbolEntity arbol});
   //OJO: no terminado
-  Future<bool> verificarIdNFCRemoteData({String idNFC});
+  Future<bool> verificarSiExisteIdNfcRemoteData({String idNFC});
   //OJO: no terminado
   Future<ArbolesEntityModelo> getArbolPorIdNFCRemoteData({String idNFC});
   Future<ObjetoLista> llenarObjetoListaDesdeHttp({String tabla});
@@ -82,7 +82,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
   }
 
   @override
-  Future<bool> verificarIdNFCRemoteData({String idNFC}) async {
+  Future<bool> verificarSiExisteIdNfcRemoteData({String idNFC}) async {
     final response = await client.post(
       _url + "/bd/comprobarIdNFC.php",
       body: {
@@ -93,9 +93,97 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
   }
 
   @override
-  Future<bool> updateArbolRemoteData({ArbolEntity arbol}) {
+  Future<bool> updateArbolRemoteData({ArbolEntity arbol}) async {
     // TODO: implement updateArboleRemoteData
-    throw UnimplementedError();
+    var uri = Uri.parse(_url + "/bd/updateArbol.php");
+    var request = http.MultipartRequest('POST', uri)
+      ..fields["id_nfc_arbol"] = arbol.idNfcHistoria.last
+      ..fields["gui_arbol"] =
+          await buscaValoresIdentificadores(arbol, 'gui_arbol')
+      ..fields["id_entidad_arbol"] =
+          await buscaValoresIdentificadores(arbol, 'id_entidad_arbol')
+      ..fields["id_sector_entidad_arbol"] =
+          await buscaValoresIdentificadores(arbol, 'id_sector_entidad_arbol')
+      ..fields["id_calle_arbol"] =
+          await buscaValoresIdentificadores(arbol, 'id_calle_arbol')
+      ..fields["n_calle_arbol"] = arbol.nCalleArbol.toString()
+      ..fields["id_especie_arbol"] =
+          await buscaValoresIdentificadores(arbol, 'id_especie_arbol')
+      ..fields["id_diametro_tronco_arbol"] =
+          arbol.diametroTroncoArbolCm.toString()
+      ..fields["id_diametro_copa_ns_arbol"] =
+          arbol.diametroCopaNsArbolMt.toString()
+      ..fields["id_diametro_copa_eo_arbol"] =
+          arbol.diametroCopaEoArbolMt.toString()
+      ..fields["id_altura_arbol_arbol"] = arbol.alturaArbolArbolMt.toString()
+      ..fields["id_altura_copa_arbol"] = arbol.alturaCopaArbolMt.toString()
+      ..fields["id_estado_general_arbol"] =
+          await buscaValoresIdentificadores(arbol, 'id_estado_general_arbol')
+      ..fields["id_estado_sanitario_arbol"] =
+          await buscaValoresIdentificadores(arbol, 'id_estado_sanitario_arbol')
+      ..fields["id_agentes_patogenos_arbol"] =
+          await buscaValoresIdentificadores(arbol, 'id_agentes_patogenos_arbol')
+      ..fields["id_sintoma_arbol"] =
+          await buscaValoresIdentificadores(arbol, 'id_sintoma_arbol')
+      ..fields["id_lugar_plaga_arbol"] =
+          await buscaValoresIdentificadores(arbol, 'id_lugar_plaga_arbol')
+      ..fields["id_inclinacion_tronco_arbol"] =
+          await buscaValoresIdentificadores(
+              arbol, 'id_inclinacion_tronco_arbol')
+      ..fields["id_orientacion_inclinacion_arbol"] =
+          await buscaValoresIdentificadores(
+              arbol, 'id_orientacion_inclinacion_arbol')
+      ..fields["id_accion_obs_arbol"] =
+          await buscaValoresIdentificadores(arbol, 'id_accion_obs_arbol')
+      ..fields["id_accion_obs_arbol_2"] =
+          await buscaValoresIdentificadores(arbol, 'id_accion_obs_arbol_2')
+      ..fields["id_accion_obs_arbol_3"] =
+          await buscaValoresIdentificadores(arbol, 'id_accion_obs_arbol_3')
+      ..fields["observaciones_arbol"] = arbol.obsArbolHistoria.last.toString()
+      ..fields["geo_referencia_gps_arbol"] = ""
+      ..fields["geo_referencia_captura_arbol"] = ""
+      ..fields["geo_referencia_google_arbol"] =
+          "${arbol.geoReferenciaCapturaArbol.latitude.toString()},${arbol.geoReferenciaCapturaArbol.longitude.toString()}"
+      ..fields["alerta_arbol"] = arbol.alertaArbol
+      ..fields["revision_arbol"] = arbol.revisionArbol
+      ..fields["esquina_calle_arbol"] =
+          await buscaValoresIdentificadores(arbol, 'esquina_calle_arbol')
+      ..fields["id_usuario_creacion_arbol"] =
+          await buscaValoresIdentificadores(arbol, 'id_usuario_creacion_arbol')
+      ..fields["id_usuario_modifica_arbol"] =
+          await buscaValoresIdentificadores(arbol, 'id_usuario_modifica_arbol')
+      ..fields["fecha_creacion_arbol"] =
+          arbol.fechaCreacionArbol.toLocal().toString()
+      ..fields["fecha_ultima_mod_arbol"] =
+          arbol.fechaUltimaModArbol.toLocal().toString();
+    for (String pathFoto in arbol.fotosArbol) {
+      request.files.add(await http.MultipartFile.fromPath(
+          'fotografia_arbol_${arbol.fotosArbol.indexOf(pathFoto) + 1}',
+          pathFoto.toString()));
+      print('fotografia_arbol_${arbol.fotosArbol.indexOf(pathFoto) + 1}');
+    }
+    for (String pathFoto in arbol.fotosEnfermedad) {
+      request.files.add(await http.MultipartFile.fromPath(
+          'fotografia_arbol_sanitario_${arbol.fotosEnfermedad.indexOf(pathFoto) + 1}',
+          pathFoto.toString()));
+      print(
+          'fotografia_arbol_sanitario_${arbol.fotosEnfermedad.indexOf(pathFoto) + 1}');
+    }
+    print('asignadas variables a update');
+
+    try {
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        print('Arbol Enviado con Exito a Servidor');
+        return true;
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
+      print(
+          'Remote Data Source llamada a servidor, hay un error en el requeset: $e');
+      return null;
+    }
   }
 
   @override
@@ -164,23 +252,24 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
       ..fields["fecha_creacion_arbol"] =
           arbol.fechaCreacionArbol.toLocal().toString()
       ..fields["fecha_ultima_mod_arbol"] =
-          arbol.fechaUltimaModArbol.toLocal().toString();
-//    File elPath = await choiceImage(picker);
-//    request.files.add(
-//        await http.MultipartFile.fromPath('fotografia_arbol_1', elPath.path));
+          arbol.fechaUltimaModArbol.toLocal().toString()
+      ..fields["id_arbol"] = arbol.idArbol.toString();
+
     for (String pathFoto in arbol.fotosArbol) {
       request.files.add(await http.MultipartFile.fromPath(
           'fotografia_arbol_${arbol.fotosArbol.indexOf(pathFoto) + 1}',
           pathFoto.toString()));
       print('fotografia_arbol_${arbol.fotosArbol.indexOf(pathFoto) + 1}');
     }
-//    for (String pathFoto in arbol.fotosEnfermedad) {
-//      request.files.add(await http.MultipartFile.fromPath(
-//          'fotografia_arbol_sanitario_${arbol.fotosEnfermedad.indexOf(pathFoto) + 1}',
-//          pathFoto.toString()));
-//    }
+    for (String pathFoto in arbol.fotosEnfermedad) {
+      request.files.add(await http.MultipartFile.fromPath(
+          'fotografia_arbol_sanitario_${arbol.fotosEnfermedad.indexOf(pathFoto) + 1}',
+          pathFoto.toString()));
+      print(
+          'fotografia_arbol_sanitario_${arbol.fotosEnfermedad.indexOf(pathFoto) + 1}');
+    }
+    print('asignadas variables a insert');
 
-    print('asignadas variables');
     try {
       var response = await request.send();
       if (response.statusCode == 200) {
@@ -194,10 +283,6 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
           'Remote Data Source llamada a servidor, hay un error en el requeset: $e');
       return null;
     }
-
-    print('response listo');
-
-    //TODO: escribir el procedimiento para grabar el árbol en PHP 😥
   }
 
   bool _respuestaIdNFC(http.Response response) {

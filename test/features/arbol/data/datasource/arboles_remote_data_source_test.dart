@@ -8,6 +8,7 @@ import 'package:flutterapparbol/features/arbol/data/datasources/arboles_remote_d
 import 'package:flutterapparbol/features/arbol/data/datasources/form_local_source_sql.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/local_data_estructuras.dart';
 import 'package:flutterapparbol/features/arbol/data/models/arboles_entity_modelo.dart';
+import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mockito/mockito.dart';
 import 'package:matcher/matcher.dart';
@@ -138,13 +139,20 @@ void main() {
       expect(() => call(idNFC: idNFC), throwsA(TypeMatcher<ServerException>()));
     });
   });
+  //TODO: ver que falla con este test
   group('grabarArbolRemoteData', () {
-    test('Deberia', () async {
+    final ArbolesEntityModelo tArbolesEntityModel =
+        ArbolesEntityModelo(listaArbolesEntity: [arbolUno, arbolDos]);
+    final ArbolEntity arbolSeleccionado =
+        tArbolesEntityModel.listaArbolEntity[0];
+    test('''Deberia retornar un true CUANDO el response.statusCode == 200''',
+        () async {
       // arrange
-
+      setUpMockHttpJustSuccess200();
       // act
-
+      final call = remoteDataSource.grabarArboleRemoteData;
       // assert
+      // expect(()  =>  call(arbol: arbolSeleccionado), Future<true>);
     });
   });
 }

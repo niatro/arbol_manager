@@ -54,7 +54,7 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
     // TODO: implement comprobarExistenciaIdNFC
     try {
       bool verdaderoOfalso =
-          await remoteDataSource.verificarIdNFCRemoteData(idNFC: idNFC);
+          await remoteDataSource.verificarSiExisteIdNfcRemoteData(idNFC: idNFC);
       return Right(verdaderoOfalso);
     } on ServerException {
       return Left(ServerFailure());
@@ -146,8 +146,9 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
       {ArbolesEntity arboles, int nArbol}) async {
     if (await netWorkInfo.isConnected) {
       try {
-        bool verificado = await remoteDataSource.verificarIdNFCRemoteData(
-            idNFC: arboles.listaArbolEntity[nArbol].idNfcHistoria.last);
+        bool verificado =
+            await remoteDataSource.verificarSiExisteIdNfcRemoteData(
+                idNFC: arboles.listaArbolEntity[nArbol].idNfcHistoria.last);
         if (verificado == true) {
           bool updateSioNo = await remoteDataSource.updateArbolRemoteData(
               arbol: arboles.listaArbolEntity[nArbol]);
@@ -173,8 +174,9 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
       {ArbolesEntity arboles, int nArbol}) async {
     if (await netWorkInfo.isConnected) {
       try {
-        bool verificado = await remoteDataSource.verificarIdNFCRemoteData(
-            idNFC: arboles.listaArbolEntity[nArbol].idNfcHistoria.last);
+        bool verificado =
+            await remoteDataSource.verificarSiExisteIdNfcRemoteData(
+                idNFC: arboles.listaArbolEntity[nArbol].idNfcHistoria.last);
         if (verificado == false) {
           bool grabadoSioNo = await remoteDataSource.grabarArboleRemoteData(
               arbol: arboles.listaArbolEntity[nArbol]);
