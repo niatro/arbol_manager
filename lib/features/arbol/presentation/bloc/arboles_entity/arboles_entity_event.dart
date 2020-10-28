@@ -16,3 +16,17 @@ class GetArbolesEntityPorIdNFCEvent extends ArbolesEntityEvent {
 
   GetArbolesEntityPorIdNFCEvent(this.idNFC) : super([idNFC]);
 }
+
+class GrabarArbolEvent extends ArbolesEntityEvent {
+  final ArbolesEntity arboles;
+  final int nArbol;
+
+  GrabarArbolEvent(this.arboles, this.nArbol) : super([arboles, nArbol]);
+}
+
+class UpdateArbolEvent extends ArbolesEntityEvent {
+  final ArbolesEntity arboles;
+  final int nArbol;
+
+  UpdateArbolEvent(this.arboles, this.nArbol) : super([arboles, nArbol]);
+}

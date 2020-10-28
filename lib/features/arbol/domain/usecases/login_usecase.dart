@@ -5,14 +5,13 @@ import '../../../../core/error/failure.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../repositories/arboles_repositorio.dart';
 
-class LoginUsecase implements UseCase<Success, Params> {
+class LoginUseCase implements UseCase<Success, Params> {
   final ArbolesRepositorio repositorio;
-  LoginUsecase(this.repositorio);
+  LoginUseCase(this.repositorio);
   @override
   Future<Either<Failure, Success>> call(
-      Params params,
-      ) async {
-    return await repositorio.login(
-       usuario: params.idUsuario);
+    Params params,
+  ) async {
+    return await repositorio.login(usuario: params.idUsuario);
   }
 }

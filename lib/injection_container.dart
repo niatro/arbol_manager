@@ -22,7 +22,7 @@ Future<void> init() async {
     () => ArbolesEntityBloc(
       arbolesCercanosUseCase: sl(),
       arbolPorIdNFCUseCase: sl(),
-      grabarArbolesUseCase: sl(),
+      grabarArbolUseCase: sl(),
       comprobarIdNFCUseCase: sl(),
       inputConverterFromIdNFCToStr: sl(),
       inputConverter: sl(),
@@ -32,7 +32,7 @@ Future<void> init() async {
   //y no es StateFull
   sl.registerLazySingleton(() => GetArbolesCercanosUseCase(sl()));
   sl.registerLazySingleton(() => GetArbolPorIdNFCUseCase(sl()));
-  sl.registerLazySingleton(() => GrabarArbolesUseCase(sl()));
+  sl.registerLazySingleton(() => GrabarArbolUseCase(sl()));
   sl.registerLazySingleton(() => ComprobarIdNFCUseCase(sl()));
   // Repositorios
   sl.registerLazySingleton<ArbolesRepositorio>(

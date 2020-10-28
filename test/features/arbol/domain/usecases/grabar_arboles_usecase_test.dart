@@ -14,10 +14,10 @@ class MockListaArbolRepositorio extends Mock implements ArbolesRepositorio {}
 void main() {
   ///Abajo van los nombres de las variables que me interesan
   MockListaArbolRepositorio mockListaArbolRepositorio;
-  GrabarArbolesUseCase usecase;
+  GrabarArbolUseCase usecase;
   setUp(() {
     mockListaArbolRepositorio = MockListaArbolRepositorio();
-    usecase = GrabarArbolesUseCase(mockListaArbolRepositorio);
+    usecase = GrabarArbolUseCase(mockListaArbolRepositorio);
   });
 
   final ArbolesEntity listaDeArbolesEntity = arbolesEntityTest;

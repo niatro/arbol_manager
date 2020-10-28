@@ -5,9 +5,9 @@ import '../../../../core/error/failure.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../repositories/arboles_repositorio.dart';
 
-class GrabarArbolesUseCase implements UseCase<Success, Params> {
+class GrabarArbolUseCase implements UseCase<Success, Params> {
   final ArbolesRepositorio repositorio;
-  GrabarArbolesUseCase(this.repositorio);
+  GrabarArbolUseCase(this.repositorio);
   @override
   Future<Either<Failure, Success>> call(
     Params params,
