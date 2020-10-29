@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutterapparbol/core/constants/form_entity_test.dart';
 import 'package:flutterapparbol/core/constants/lista_de_arboles_test.dart';
+import 'package:flutterapparbol/core/constants/usuario_test.dart';
 import 'package:flutterapparbol/core/database/no_data.dart';
 import 'package:flutterapparbol/core/error/exceptions.dart';
 import 'package:flutterapparbol/core/error/failure.dart';
@@ -14,6 +15,7 @@ import 'package:flutterapparbol/features/arbol/data/models/arboles_entity_modelo
 import 'package:flutterapparbol/features/arbol/data/repositories/arboles_repositorio_impl.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/idnfc_entity.dart';
+import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mockito/mockito.dart';
@@ -74,7 +76,6 @@ void main() {
 //OJO: repositorio getArbolesCercanos Test
   group('getArbolesCercanos', () {
     final tCoordenadas = LatLng(-33.40022111646666, -70.59898554630922);
-    final String tIdNFC = "JJS97GB2300T43a";
     final ArbolesEntityModelo tArbolesEntityModel =
         ArbolesEntityModelo(listaArbolesEntity: [arbolUno, arbolDos]);
     final ArbolesEntity tArbolesEntity = tArbolesEntityModel;
@@ -91,9 +92,8 @@ void main() {
       expect(result, isA<Future<Either>>());
     });
     runTestsOnline(() {
-      test(
-          ''''DEBERIA el repositorio debe retornar datos de arboles '''
-          ''' CUANDO el RemoteDataSource obtiene datos''', () async {
+      test(''''DEBERIA el repositorio debe retornar ArbolesEntity
+           CUANDO el RemoteDataSource obtiene datos''', () async {
         // arrange, se activa de donde viene la data y se dice lo que produce
         when(mockRemoteDataSource.getArbolesCercanosRemoteData(
                 coordenadas: anyNamed("coordenadas")))
@@ -808,6 +808,64 @@ void main() {
 
       // assert
       expect(result, Left(LocalGpsFailure()));
+    });
+  });
+
+  //OJO: repositorio login Test
+  group('login', () {
+    final UserEntity usuarioTest = usuarioUno;
+    final String password = '12345';
+
+    test('Deberia', () async {
+      // arrange
+      when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      // act
+      final Future result = repositorio.login(password: password);
+
+      // assert
+      verify(mockNetworkInfo.isConnected);
+      expect(result, isA<Future<Either>>());
+    });
+    runTestsOnline(() {
+      test(
+          '''DEBERIA retornar un UserEntity CUANDO no hay problemas en el servidor y el password esta OK''',
+          () async {
+        // arrange
+        when(mockRemoteDataSource.loginRemoteData(
+                password: anyNamed("password")))
+            .thenAnswer((_) async => usuarioTest);
+        // act
+        final result = await repositorio.login(password: password);
+        // assert
+        verify(mockRemoteDataSource.loginRemoteData(password: password));
+        expect(result, equals(Right(usuarioTest)));
+      });
+      test('''DEBERIA retornar un ServerFailure CUANDO hay problemas en el 
+          servidor y no se puede conectar''', () async {
+        // arrange
+        when(mockRemoteDataSource.loginRemoteData(
+                password: anyNamed("password")))
+            .thenThrow(ServerException());
+        // act
+        final result = await repositorio.login(password: password);
+        // assert
+        verify(mockRemoteDataSource.loginRemoteData(password: password));
+        expect(result, equals(Left(ServerFailure())));
+      });
+
+      test(
+          '''DEBERIA retornar un PasswordNoExisteFailure CUANDO no hay problemas en el 
+      servidor y no se encuentra el password''', () async {
+        // arrange
+        when(mockRemoteDataSource.loginRemoteData(
+                password: anyNamed("password")))
+            .thenThrow(PassException());
+        // act
+        final result = await repositorio.login(password: password);
+        // assert
+        verify(mockRemoteDataSource.loginRemoteData(password: password));
+        expect(result, equals(Left(PassNoExisteFailure())));
+      });
     });
   });
 }

@@ -27,3 +27,5 @@ class ConexionFailure extends Failure {}
 class LocalGpsFailure extends Failure {}
 
 class ServerUpdateFailure extends Failure {}
+
+class PassNoExisteFailure extends Failure {}

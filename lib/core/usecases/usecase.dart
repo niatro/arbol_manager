@@ -17,13 +17,15 @@ class Params extends Equatable {
   final LatLng coordenada;
   final ArbolEntity arbolEntity;
   final int nArbol;
-  Params({
-    this.idNFC,
-    this.idUsuario,
-    this.arbolesEntity,
-    this.coordenada,
-    this.arbolEntity,
-    this.nArbol,
-  }) : super(
+  final String password;
+  Params(
+      {this.idNFC,
+      this.idUsuario,
+      this.arbolesEntity,
+      this.coordenada,
+      this.arbolEntity,
+      this.nArbol,
+      this.password})
+      : super(
             [idNFC, idUsuario, arbolesEntity, coordenada, arbolEntity, nArbol]);
 }

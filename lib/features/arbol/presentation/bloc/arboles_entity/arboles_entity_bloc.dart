@@ -7,6 +7,7 @@ import 'package:flutterapparbol/core/error/failure.dart';
 import 'package:flutterapparbol/core/success/success.dart';
 import 'package:flutterapparbol/core/usecases/usecase.dart';
 import 'package:flutterapparbol/core/util/input_converter.dart';
+import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/usecases/actualizar_datos_form_usecase.dart';
 import 'package:flutterapparbol/features/arbol/domain/usecases/get_coordenadas_usecase.dart';
 import 'package:flutterapparbol/features/arbol/domain/usecases/get_datos_form_usecase.dart';
@@ -142,7 +143,7 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
         },
       );
     } else if (event is UpdateArbolEvent) {
-      yield Updating();
+      yield UpdatingArbol();
       final Either<Failure, Success> failOrSuccess = await updateArbolUseCase(
           Params(arbolesEntity: event.arboles, nArbol: event.nArbol));
       yield* failOrSuccess.fold(
@@ -156,7 +157,24 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
           }
         },
         (Success) async* {
-          yield Updated(success: ServerUpdateSuccess());
+          yield UpdatedArbol(success: ServerUpdateSuccess());
+        },
+      );
+    } else if (event is ActualizarFormEvent) {
+      yield UpdatingForm();
+      final Either<Failure, Success> failOrSuccess =
+          await actualizarDatosFormUseCase(
+              Params(idUsuario: event.usuario.usuarioID));
+      yield* failOrSuccess.fold(
+        (Failure) async* {
+          if (Failure == ConexionFailure()) {
+            yield Error(message: CONEXION_FAILURE_MESSAGE);
+          } else if (Failure == ServerFailure()) {
+            yield Error(message: SERVER_FAILURE_MESSAGE);
+          }
+        },
+        (Success) async* {
+          yield UpdatedForm(success: ServerActualizarFormSuccess());
         },
       );
     }

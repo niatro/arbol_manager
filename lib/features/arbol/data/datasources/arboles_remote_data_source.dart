@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:io';
@@ -35,6 +36,7 @@ abstract class ArbolesRemoteDataSource {
   Future<ObjetoLista> llenarObjetoListaDesdeHttp({String tabla});
   Future<bool> actualizarBaseDatosFormularios();
   Future<bool> updateArbolRemoteData({ArbolEntity arbol});
+  Future<UserEntity> loginRemoteData({String password});
 }
 
 class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
@@ -702,6 +704,12 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
     var pickedImage = await picker.getImage(source: ImageSource.gallery);
     print('la imagen esta en : ${pickedImage.path}');
     return File(pickedImage.path);
+  }
+
+  @override
+  Future<UserEntity> loginRemoteData({String password}) {
+    // TODO: implement loginRemoteData
+    throw UnimplementedError();
   }
 }
 

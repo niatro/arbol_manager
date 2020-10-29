@@ -11,4 +11,6 @@ class DataBaseException implements Exception {}
 
 class LocationException implements Exception {}
 
+class PassException implements Exception {}
+
 /// Cuando ocurren errores con la lectura del NFC

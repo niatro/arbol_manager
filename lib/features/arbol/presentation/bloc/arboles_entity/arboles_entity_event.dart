@@ -24,6 +24,11 @@ class GrabarArbolEvent extends ArbolesEntityEvent {
   GrabarArbolEvent(this.arboles, this.nArbol) : super([arboles, nArbol]);
 }
 
+class ActualizarFormEvent extends ArbolesEntityEvent {
+  final UserEntity usuario;
+  ActualizarFormEvent(this.usuario) : super([usuario]);
+}
+
 class UpdateArbolEvent extends ArbolesEntityEvent {
   final ArbolesEntity arboles;
   final int nArbol;

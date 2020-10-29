@@ -5,6 +5,7 @@ import 'package:flutterapparbol/features/arbol/data/datasources/form_local_sourc
 import 'package:flutterapparbol/features/arbol/data/models/form_entity_modelo.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/form_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/idnfc_entity.dart';
+import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:meta/meta.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
@@ -198,8 +199,18 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
   }
 
   @override
-  Future<Either<Failure, Success>> login({String usuario}) {
+  Future<Either<Failure, UserEntity>> login({String password}) async {
     // TODO: implement login
-    throw UnimplementedError();
+    if (await netWorkInfo.isConnected) {
+      try {
+        UserEntity usuario =
+            await remoteDataSource.loginRemoteData(password: password);
+        return Right(usuario);
+      } on ServerException {
+        return left(ServerFailure());
+      } on PassException {
+        return left(PassNoExisteFailure());
+      }
+    }
   }
 }

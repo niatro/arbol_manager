@@ -1,8 +1,10 @@
+import 'package:flutterapparbol/core/constants/usuario_test.dart';
 import 'package:flutterapparbol/core/error/failure.dart';
 import 'package:flutterapparbol/core/success/success.dart';
 import 'package:flutterapparbol/core/usecases/usecase.dart';
 import 'package:flutterapparbol/core/util/input_converter.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
+import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/usecases/actualizar_datos_form_usecase.dart';
 import 'package:flutterapparbol/features/arbol/domain/usecases/comprobar_idnfc_usecase.dart';
 import 'package:flutterapparbol/features/arbol/domain/usecases/get_arbol_por_idnfc_usecase.dart';
@@ -348,81 +350,122 @@ void main() {
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
   });
-  group(
-    'UpdateArbol Event',
-    () {
-      final ArbolesEntity tArbolesEntity =
-          ArbolesEntity(listaArbolEntity: [arbolUno, arbolDos]);
-      final bool respuesta = true;
-      test(
-          '''DEBERIA tomar un arbol previamente seleccionado de la base de datos
+  group('UpdateArbol Event', () {
+    final ArbolesEntity tArbolesEntity =
+        ArbolesEntity(listaArbolEntity: [arbolUno, arbolDos]);
+    test('''DEBERIA tomar un arbol previamente seleccionado de la base de datos
     y hacer un Update CUANDO se gatille
     el evento de actualizar''', () async {
-        // arrange
-        when(mockUpdateArbolesUseCase.call(any))
-            .thenAnswer((_) async => Right(ServerUpdateSuccess()));
-        final expected = [
-          Empty(),
-          Updating(),
-          Updated(success: ServerUpdateSuccess()),
-        ];
-        // act
-        arbolesEntityBloc.dispatch(UpdateArbolEvent(tArbolesEntity, 1));
+      // arrange
+      when(mockUpdateArbolesUseCase.call(any))
+          .thenAnswer((_) async => Right(ServerUpdateSuccess()));
+      final expected = [
+        Empty(),
+        UpdatingArbol(),
+        UpdatedArbol(success: ServerUpdateSuccess()),
+      ];
+      // act
+      arbolesEntityBloc.dispatch(UpdateArbolEvent(tArbolesEntity, 1));
 
-        // assert
-        expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
-      });
-      test('DEBERIA emitir un [error] CUANDO hay un problema de conxión ',
-          () async {
-        // arrange
-        when(mockUpdateArbolesUseCase.call(any))
-            .thenAnswer((_) async => Left(ConexionFailure()));
-        final expected = [
-          Empty(),
-          Updating(),
-          Error(message: CONEXION_FAILURE_MESSAGE),
-        ];
-        // act
-        arbolesEntityBloc.dispatch(UpdateArbolEvent(tArbolesEntity, 1));
-        // assert
-        expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
-      });
+      // assert
+      expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
+    });
+    test('DEBERIA emitir un [error] CUANDO hay un problema de conxión ',
+        () async {
+      // arrange
+      when(mockUpdateArbolesUseCase.call(any))
+          .thenAnswer((_) async => Left(ConexionFailure()));
+      final expected = [
+        Empty(),
+        UpdatingArbol(),
+        Error(message: CONEXION_FAILURE_MESSAGE),
+      ];
+      // act
+      arbolesEntityBloc.dispatch(UpdateArbolEvent(tArbolesEntity, 1));
+      // assert
+      expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
+    });
 
-      test(
-          'DEBERIA emitir un [error] CUANDO hay un problema el arbol ya existe ',
-          () async {
-        // arrange
-        when(mockUpdateArbolesUseCase(any))
-            .thenAnswer((_) async => Left(ArbolNoUpdateNoExisteFailure()));
-        final expected = [
-          Empty(),
-          Updating(),
-          Error(message: UPDATE_NFC_FAILURE_MESSAGE),
-        ];
-        // act
-        arbolesEntityBloc.dispatch(UpdateArbolEvent(tArbolesEntity, 1));
-        // assert
-        expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
-      });
+    test('DEBERIA emitir un [error] CUANDO hay un problema el arbol ya existe ',
+        () async {
+      // arrange
+      when(mockUpdateArbolesUseCase(any))
+          .thenAnswer((_) async => Left(ArbolNoUpdateNoExisteFailure()));
+      final expected = [
+        Empty(),
+        UpdatingArbol(),
+        Error(message: UPDATE_NFC_FAILURE_MESSAGE),
+      ];
+      // act
+      arbolesEntityBloc.dispatch(UpdateArbolEvent(tArbolesEntity, 1));
+      // assert
+      expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
+    });
 
-      test('DEBERIA emitir un [error] CUANDO no se puede actualizar ',
-          () async {
-        // arrange
-        when(mockUpdateArbolesUseCase(any))
-            .thenAnswer((_) async => Left(ServerUpdateFailure()));
-        final expected = [
-          Empty(),
-          Updating(),
-          Error(message: SERVER_FAILURE_MESSAGE),
-        ];
-        // act
-        arbolesEntityBloc.dispatch(UpdateArbolEvent(tArbolesEntity, 1));
-        // assert
-        expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
-      });
-    },
-  );
-  group('ActualizarDatosForm Event', () {});
+    test('DEBERIA emitir un [error] CUANDO no se puede actualizar ', () async {
+      // arrange
+      when(mockUpdateArbolesUseCase(any))
+          .thenAnswer((_) async => Left(ServerUpdateFailure()));
+      final expected = [
+        Empty(),
+        UpdatingArbol(),
+        Error(message: SERVER_FAILURE_MESSAGE),
+      ];
+      // act
+      arbolesEntityBloc.dispatch(UpdateArbolEvent(tArbolesEntity, 1));
+      // assert
+      expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
+    });
+  });
+  group('ActualizarDatosForm Event', () {
+    UserEntity usuario = usuarioUno;
+    test('DEBERIA dar un success CUANDO la data sql se puede actualizar',
+        () async {
+      // arrange
+      when(mockActualizarDatosFormUseCase.call(any))
+          .thenAnswer((_) async => Right(ServerActualizarFormSuccess()));
+      // act
+      final expected = [
+        Empty(),
+        UpdatingForm(),
+        UpdatedForm(success: ServerActualizarFormSuccess()),
+      ];
+      arbolesEntityBloc.dispatch(ActualizarFormEvent(usuario));
+      // assert
+      expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
+    });
+    test('DEBERIA emitir un [error] CUANDO hay un problema de conxión ',
+        () async {
+      // arrange
+      when(mockActualizarDatosFormUseCase.call(any))
+          .thenAnswer((_) async => Left(ConexionFailure()));
+      final expected = [
+        Empty(),
+        UpdatingForm(),
+        Error(message: CONEXION_FAILURE_MESSAGE),
+      ];
+      // act
+      arbolesEntityBloc.dispatch(ActualizarFormEvent(usuario));
+      // assert
+      expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
+    });
+    test(
+        'DEBERIA emitir un [error] CUANDO hay un problema preguntando los datos del servidor ',
+        () async {
+      // arrange
+      when(mockActualizarDatosFormUseCase.call(any))
+          .thenAnswer((_) async => Left(ServerFailure()));
+      final expected = [
+        Empty(),
+        UpdatingForm(),
+        Error(message: SERVER_FAILURE_MESSAGE),
+      ];
+      // act
+      arbolesEntityBloc.dispatch(ActualizarFormEvent(usuario));
+      // assert
+      expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
+    });
+  });
   group('GetDatosForm Event', () {});
   group('LoginUseCase Event', () {});
   group('LeerIdNFCUseCase Event', () {});

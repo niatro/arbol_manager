@@ -9,7 +9,9 @@ class Empty extends ArbolesEntityState {}
 
 class Loading extends ArbolesEntityState {}
 
-class Updating extends ArbolesEntityState {}
+class UpdatingArbol extends ArbolesEntityState {}
+
+class UpdatingForm extends ArbolesEntityState {}
 
 class Saving extends ArbolesEntityState {}
 
@@ -18,9 +20,14 @@ class Saved extends ArbolesEntityState {
   Saved({@required this.success}) : super([success]);
 }
 
-class Updated extends ArbolesEntityState {
+class UpdatedArbol extends ArbolesEntityState {
   final ServerUpdateSuccess success;
-  Updated({@required this.success}) : super([success]);
+  UpdatedArbol({@required this.success}) : super([success]);
+}
+
+class UpdatedForm extends ArbolesEntityState {
+  final ServerActualizarFormSuccess success;
+  UpdatedForm({@required this.success}) : super([success]);
 }
 
 class Loaded extends ArbolesEntityState {

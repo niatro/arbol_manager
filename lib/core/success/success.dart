@@ -11,3 +11,5 @@ class ServerActualizarFormSuccess extends Success {}
 class SqfliteGrabarSuccess extends Success {}
 
 class ServerUpdateSuccess extends Success {}
+
+class LoginSuccess extends Success {}

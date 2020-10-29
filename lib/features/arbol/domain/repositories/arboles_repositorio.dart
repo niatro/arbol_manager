@@ -33,8 +33,7 @@ abstract class ArbolesRepositorio {
 //LISTO: implementado
   Future<Either<Failure, Success>> updateArbol(
       {ArbolesEntity arboles, int nArbol});
-  Future<Either<Failure, Success>> login(
-      {String usuario});
+  Future<Either<Failure, UserEntity>> login({String password});
 
 // Los métodos abajo deberían ir en el layer de presentación
 /*Future<Either<Failure, Success>> agregarArbolPorNFC(String idNFC);
