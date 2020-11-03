@@ -5,13 +5,13 @@ import '../../../../core/error/failure.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../repositories/arboles_repositorio.dart';
 
-class LeerIdNFCUseCase implements UseCase<IdNFCEntity, Params> {
+class LeerIdNfcUseCase implements UseCase<NfcEntity, Params> {
   final ArbolesRepositorio repositorio;
-  LeerIdNFCUseCase(this.repositorio);
+  LeerIdNfcUseCase(this.repositorio);
   @override
-  Future<Either<Failure, IdNFCEntity>> call(
+  Future<Either<Failure, NfcEntity>> call(
     Params params,
   ) async {
-    return await repositorio.leerIdNFC(idUsuario: params.idUsuario);
+    return await repositorio.leerIdNfc(idUsuario: params.idUsuario);
   }
 }

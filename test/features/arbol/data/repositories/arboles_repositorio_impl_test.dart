@@ -321,7 +321,7 @@ void main() {
 
   //OJO: repositorio leerIdNFC Test
   group('leerIdNFC', () {
-    final IdNFCEntity idNFCEntity = IdNFCEntity(idNfc: "AS4576");
+    final NfcEntity idNFCEntity = NfcEntity(idNfc: "AS4576");
     final String idUsuario = "usuarioPrueba";
     final String idNFC = "AS4576";
 
@@ -331,7 +331,7 @@ void main() {
       // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       // act
-      final Future result = repositorio.leerIdNFC(idUsuario: idUsuario);
+      final Future result = repositorio.leerIdNfc(idUsuario: idUsuario);
       // assert
       expect(result, isA<Future<Either>>());
     });
@@ -344,7 +344,7 @@ void main() {
         when(mockLocalDataSource.leerIdNFCLocalData(idUsuario: idUsuario))
             .thenAnswer((_) async => idNFC);
         // act
-        final result = await repositorio.leerIdNFC(idUsuario: idUsuario);
+        final result = await repositorio.leerIdNfc(idUsuario: idUsuario);
         // assert
         //TODO: revisar el repositorio y que pasa ahi
         verify(mockLocalDataSource.leerIdNFCLocalData(idUsuario: idUsuario));
@@ -358,7 +358,7 @@ void main() {
                 idUsuario: anyNamed("idUsuario")))
             .thenThrow(NfcException());
         // act
-        final result = await repositorio.leerIdNFC(idUsuario: idUsuario);
+        final result = await repositorio.leerIdNfc(idUsuario: idUsuario);
         // assert
         verify(mockLocalDataSource.leerIdNFCLocalData(
             idUsuario: anyNamed("idUsuario")));
@@ -374,7 +374,7 @@ void main() {
         when(mockLocalDataSource.leerIdNFCLocalData(idUsuario: idUsuario))
             .thenAnswer((_) async => idNFC);
         // act
-        final result = await repositorio.leerIdNFC(idUsuario: idUsuario);
+        final result = await repositorio.leerIdNfc(idUsuario: idUsuario);
         // assert
         //TODO: revisar el repositorio y que pasa ahi
         verify(mockLocalDataSource.leerIdNFCLocalData(idUsuario: idUsuario));
@@ -388,7 +388,7 @@ void main() {
                 idUsuario: anyNamed("idUsuario")))
             .thenThrow(NfcException());
         // act
-        final result = await repositorio.leerIdNFC(idUsuario: idUsuario);
+        final result = await repositorio.leerIdNfc(idUsuario: idUsuario);
         // assert
         verify(mockLocalDataSource.leerIdNFCLocalData(
             idUsuario: anyNamed("idUsuario")));
@@ -778,7 +778,7 @@ void main() {
       final result = await repositorio.getDatosForm(idUsuario: idUsuario);
       verify(mockSqlDataSource.getDatosFormSql(idUsuario: idUsuario));
       // assert
-      expect(result, Left(DataBaseFailure()));
+      expect(result, Left(SqlFailure()));
     });
   });
 

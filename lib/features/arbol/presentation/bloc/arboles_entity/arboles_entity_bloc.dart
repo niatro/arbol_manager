@@ -7,6 +7,8 @@ import 'package:flutterapparbol/core/error/failure.dart';
 import 'package:flutterapparbol/core/success/success.dart';
 import 'package:flutterapparbol/core/usecases/usecase.dart';
 import 'package:flutterapparbol/core/util/input_converter.dart';
+import 'package:flutterapparbol/features/arbol/domain/entities/form_entity.dart';
+import 'package:flutterapparbol/features/arbol/domain/entities/idnfc_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/usecases/actualizar_datos_form_usecase.dart';
 import 'package:flutterapparbol/features/arbol/domain/usecases/get_coordenadas_usecase.dart';
@@ -14,6 +16,7 @@ import 'package:flutterapparbol/features/arbol/domain/usecases/get_datos_form_us
 import 'package:flutterapparbol/features/arbol/domain/usecases/leer_idnfc_usecase.dart';
 import 'package:flutterapparbol/features/arbol/domain/usecases/login_usecase.dart';
 import 'package:flutterapparbol/features/arbol/domain/usecases/update_arboles_usecase.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 
 import '../../../domain/entities/arboles_entity.dart';
@@ -37,6 +40,12 @@ const String SERVER_SAVE_FAILURE_MESSAGE =
 const String INVALID_NFC_FAILURE_MESSAGE = 'Invalid Nfc';
 const String UPDATE_NFC_FAILURE_MESSAGE =
     'El IdNfc no esta en la base de datos';
+const String PASSWORD_FAILURE =
+    'El password no existe o no tiene derechos de acceso';
+const String READ_NFC_FAILURE_MESSAGE = 'Problema al leer el Nfc';
+const String SQL_FAILURE =
+    'Ocurrio algun error al intentar leer la base de datos interna';
+const String COORD_FAILURE = 'Ocurrio algun error obteniendo las coordenadas';
 
 class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
   final GetArbolesCercanosUseCase getArbolesCercanosUseCase;
@@ -46,7 +55,7 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
   final UpdateArbolesUseCase updateArbolUseCase;
   final ActualizarDatosFormUseCase actualizarDatosFormUseCase;
   final GetDatosFormUseCase getDatosFormUseCase;
-  final LeerIdNFCUseCase leerIdNFCUseCase;
+  final LeerIdNfcUseCase leerIdNfcUseCase;
   final GetCoordUseCase getCoordUseCase;
   final LoginUseCase loginUseCase;
   final InputConverterStrToLatLng inputConverterStrToLatLng;
@@ -60,7 +69,7 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
       @required UpdateArbolesUseCase updateArbolesUseCase,
       @required ActualizarDatosFormUseCase actualizarDatosFormUseCase,
       @required GetDatosFormUseCase getDatosFormUseCase,
-      @required LeerIdNFCUseCase leerIdNFCUseCase,
+      @required LeerIdNfcUseCase leerIdNfcUseCase,
       @required GetCoordUseCase getCoordUseCase,
       @required LoginUseCase loginUseCase,
       @required InputConverterStrToLatLng inputConverter,
@@ -72,7 +81,7 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
         assert(actualizarDatosFormUseCase != null),
         assert(getDatosFormUseCase != null),
         assert(updateArbolesUseCase != null),
-        assert(leerIdNFCUseCase != null),
+        assert(leerIdNfcUseCase != null),
         assert(getCoordUseCase != null),
         assert(loginUseCase != null),
         assert(inputConverter != null),
@@ -84,7 +93,7 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
         actualizarDatosFormUseCase = actualizarDatosFormUseCase,
         getDatosFormUseCase = getDatosFormUseCase,
         updateArbolUseCase = updateArbolesUseCase,
-        leerIdNFCUseCase = leerIdNFCUseCase,
+        leerIdNfcUseCase = leerIdNfcUseCase,
         getCoordUseCase = getCoordUseCase,
         loginUseCase = loginUseCase,
         inputConverterStrToLatLng = inputConverter,
@@ -174,7 +183,83 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
           }
         },
         (Success) async* {
-          yield UpdatedForm(success: ServerActualizarFormSuccess());
+          yield UpdatedSql(success: ServerActualizarFormSuccess());
+        },
+      );
+    } else if (event is GetDatosFormEvent) {
+      yield GettingForm();
+      final Either<Failure, FormEntity> failOrSuccess =
+          await getDatosFormUseCase(Params(idUsuario: event.idUsuario));
+      yield* failOrSuccess.fold(
+        (Failure) async* {
+          if (Failure == SqlFailure()) {
+            yield Error(message: SQL_FAILURE);
+          } else if (Failure == ServerFailure()) {
+            yield Error(message: SERVER_FAILURE_MESSAGE);
+          }
+        },
+        (FormEntity) async* {
+          yield UpdatedForm(formData: FormEntity);
+        },
+      );
+    } else if (event is LoginUserEvent) {
+      yield GettingUser();
+      final Either<Failure, UserEntity> failOrSuccess =
+          await loginUseCase(Params(idUsuario: event.password));
+      yield* failOrSuccess.fold(
+        (Failure) async* {
+          if (Failure == PassNoExisteFailure()) {
+            yield Error(message: PASSWORD_FAILURE);
+          } else if (Failure == ServerFailure()) {
+            yield Error(message: SERVER_FAILURE_MESSAGE);
+          } else if (Failure == ConexionFailure()) {
+            yield Error(message: CONEXION_FAILURE_MESSAGE);
+          }
+        },
+        (UserEntity) async* {
+          yield LoadedUser(usuario: UserEntity);
+        },
+      );
+    } else if (event is LeerIdNfcEvent) {
+      yield GettingNfc();
+      final Either<Failure, NfcEntity> failOrNfcEntity =
+          await leerIdNfcUseCase(Params(usuario: event.usuario));
+      yield* failOrNfcEntity.fold(
+        (Failure) async* {
+          if (Failure == NfcFailure()) {
+            yield Error(message: READ_NFC_FAILURE_MESSAGE);
+          }
+        },
+        (NfcEntity) async* {
+          yield ReadedNfc(nfcEntity: NfcEntity);
+        },
+      );
+    } else if (event is GetCoordEvent) {
+      yield GettingCoord();
+      final Either<Failure, LatLng> failOrLatLng =
+          await getCoordUseCase(NoParams());
+      yield* failOrLatLng.fold(
+        (Failure) async* {
+          if (Failure == CoordFailure()) {
+            yield Error(message: COORD_FAILURE);
+          }
+        },
+        (LatLng) async* {
+          yield GettedCoord(latLng: LatLng);
+        },
+      );
+    } else if (event is ComprobarIdNfcEvent) {
+      yield ComprobandoIdNfc();
+      final Either<Failure, bool> failOrBool =
+          await comprobarIdNFCUseCase(Params(idNFC: event.idNfc));
+      yield* failOrBool.fold(
+        (Failure) async* {
+          if (Failure == ServerFailure()) {
+            yield Error(message: SERVER_FAILURE_MESSAGE);
+          }
+        },
+        (bool) async* {
+          yield CheckedIdNfc(existe: bool);
         },
       );
     }
@@ -184,7 +269,7 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
       Either<Failure, ArbolesEntity> failureOrArboles) async* {
     yield failureOrArboles.fold(
       (failure) => Error(message: _mapFailureToMessage(failure)),
-      (arboles) => Loaded(arboles: arboles),
+      (arboles) => LoadedArboles(arboles: arboles),
     );
   }
 

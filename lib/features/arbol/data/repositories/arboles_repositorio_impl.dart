@@ -19,7 +19,7 @@ import '../datasources/arboles_local_data_source.dart';
 import '../datasources/arboles_remote_data_source.dart';
 
 typedef Future<ArbolesEntity> _ArbolesEntityPorCoordOIdNFC();
-typedef Future<IdNFCEntity> _LecturaChip();
+typedef Future<NfcEntity> _LecturaChip();
 typedef Future<FormEntity> _FormEntityPorActualizacion();
 
 class ArbolesRepositorioImpl implements ArbolesRepositorio {
@@ -63,12 +63,12 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
   }
 
   @override
-  Future<Either<Failure, IdNFCEntity>> leerIdNFC({String idUsuario}) async {
+  Future<Either<Failure, NfcEntity>> leerIdNfc({String idUsuario}) async {
     // TODO: implement fromChipReadAndGetIdNFC
     try {
       String idNFC =
           await localDatasource.leerIdNFCLocalData(idUsuario: idUsuario);
-      final IdNFCEntity idNFCEntity = IdNFCEntity(idNfc: idNFC);
+      final NfcEntity idNFCEntity = NfcEntity(idNfc: idNFC);
       return Right(idNFCEntity);
     } on NfcException {
       return Left(NfcFailure());
@@ -97,7 +97,7 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
       final result = await sqlDataSource.getDatosFormSql(idUsuario: idUsuario);
       return Right(result);
     } on DataBaseException {
-      return Left(DataBaseFailure());
+      return Left(SqlFailure());
     }
   }
 
@@ -211,6 +211,8 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
       } on PassException {
         return left(PassNoExisteFailure());
       }
+    } else {
+      return Left(ConexionFailure());
     }
   }
 }

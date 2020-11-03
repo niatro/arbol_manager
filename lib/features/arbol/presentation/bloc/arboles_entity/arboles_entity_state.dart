@@ -13,6 +13,16 @@ class UpdatingArbol extends ArbolesEntityState {}
 
 class UpdatingForm extends ArbolesEntityState {}
 
+class GettingForm extends ArbolesEntityState {}
+
+class GettingUser extends ArbolesEntityState {}
+
+class GettingNfc extends ArbolesEntityState {}
+
+class GettingCoord extends ArbolesEntityState {}
+
+class ComprobandoIdNfc extends ArbolesEntityState {}
+
 class Saving extends ArbolesEntityState {}
 
 class Saved extends ArbolesEntityState {
@@ -25,14 +35,39 @@ class UpdatedArbol extends ArbolesEntityState {
   UpdatedArbol({@required this.success}) : super([success]);
 }
 
-class UpdatedForm extends ArbolesEntityState {
+class UpdatedSql extends ArbolesEntityState {
   final ServerActualizarFormSuccess success;
-  UpdatedForm({@required this.success}) : super([success]);
+  UpdatedSql({@required this.success}) : super([success]);
 }
 
-class Loaded extends ArbolesEntityState {
+class UpdatedForm extends ArbolesEntityState {
+  final FormEntity formData;
+  UpdatedForm({@required this.formData}) : super([formData]);
+}
+
+class LoadedArboles extends ArbolesEntityState {
   final ArbolesEntity arboles;
-  Loaded({@required this.arboles}) : super([arboles]);
+  LoadedArboles({@required this.arboles}) : super([arboles]);
+}
+
+class LoadedUser extends ArbolesEntityState {
+  final UserEntity usuario;
+  LoadedUser({@required this.usuario}) : super([usuario]);
+}
+
+class ReadedNfc extends ArbolesEntityState {
+  final NfcEntity nfcEntity;
+  ReadedNfc({@required this.nfcEntity}) : super([nfcEntity]);
+}
+
+class GettedCoord extends ArbolesEntityState {
+  final LatLng latLng;
+  GettedCoord({@required this.latLng}) : super([latLng]);
+}
+
+class CheckedIdNfc extends ArbolesEntityState {
+  final bool existe;
+  CheckedIdNfc({@required this.existe}) : super([existe]);
 }
 
 class Error extends ArbolesEntityState {

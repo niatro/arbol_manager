@@ -18,7 +18,7 @@ abstract class ArbolesRepositorio {
   //LISTO: implementado
   Future<Either<Failure, bool>> comprobarIdNFC({String idNFC});
   //LISTO: implementado
-  Future<Either<Failure, IdNFCEntity>> leerIdNFC({String idUsuario});
+  Future<Either<Failure, NfcEntity>> leerIdNfc({String idUsuario});
   //LISTO: implementado
   Future<Either<Failure, LatLng>> getCoordenadas({NoParams params});
   //LISTO: implementado

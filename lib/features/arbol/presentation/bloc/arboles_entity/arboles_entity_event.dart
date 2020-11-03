@@ -20,7 +20,6 @@ class GetArbolesEntityPorIdNFCEvent extends ArbolesEntityEvent {
 class GrabarArbolEvent extends ArbolesEntityEvent {
   final ArbolesEntity arboles;
   final int nArbol;
-
   GrabarArbolEvent(this.arboles, this.nArbol) : super([arboles, nArbol]);
 }
 
@@ -29,9 +28,31 @@ class ActualizarFormEvent extends ArbolesEntityEvent {
   ActualizarFormEvent(this.usuario) : super([usuario]);
 }
 
+class LoginUserEvent extends ArbolesEntityEvent {
+  final String password;
+  LoginUserEvent(this.password) : super([password]);
+}
+
 class UpdateArbolEvent extends ArbolesEntityEvent {
   final ArbolesEntity arboles;
   final int nArbol;
 
   UpdateArbolEvent(this.arboles, this.nArbol) : super([arboles, nArbol]);
+}
+
+class GetDatosFormEvent extends ArbolesEntityEvent {
+  final String idUsuario;
+  GetDatosFormEvent(this.idUsuario) : super([idUsuario]);
+}
+
+class LeerIdNfcEvent extends ArbolesEntityEvent {
+  final UserEntity usuario;
+  LeerIdNfcEvent(this.usuario) : super([usuario]);
+}
+
+class GetCoordEvent extends ArbolesEntityEvent {}
+
+class ComprobarIdNfcEvent extends ArbolesEntityEvent {
+  final String idNfc;
+  ComprobarIdNfcEvent(this.idNfc) : super([idNfc]);
 }

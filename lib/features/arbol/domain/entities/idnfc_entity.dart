@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-class IdNFCEntity extends Equatable {
+class NfcEntity extends Equatable {
   final String idNfc;
-  IdNFCEntity({@required this.idNfc}) : super([idNfc]);
+  final String body;
+  NfcEntity({@required this.idNfc, this.body}) : super([idNfc]);
 }

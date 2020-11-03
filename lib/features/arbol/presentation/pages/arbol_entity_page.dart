@@ -32,7 +32,7 @@ class ArbolesEntityPage extends StatelessWidget {
                       return MessageDisplay(message: 'Start Searching !');
                     } else if (state is Loading) {
                       return LoadingWidget();
-                    } else if (state is Loaded) {
+                    } else if (state is LoadedArboles) {
                       return ArbolesDisplay(arbolesEntity: state.arboles);
                     } else if (state is Error) {
                       return MessageDisplay(message: state.message);

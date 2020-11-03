@@ -11,27 +11,27 @@ class MockArbolesRepositorio extends Mock implements ArbolesRepositorio {}
 
 void main() {
   MockArbolesRepositorio mockArbolesRepositorio;
-  LeerIdNFCUseCase usecase;
+  LeerIdNfcUseCase usecase;
 
   setUp(() {
     mockArbolesRepositorio = MockArbolesRepositorio();
-    usecase = LeerIdNFCUseCase(mockArbolesRepositorio);
+    usecase = LeerIdNfcUseCase(mockArbolesRepositorio);
   });
 
-  final IdNFCEntity idNFCEntity = IdNFCEntity(idNfc: "AS4576");
+  final NfcEntity idNFCEntity = NfcEntity(idNfc: "AS4576");
   final String idUsuario = "usuarioPrueba";
 
   test(
     'DEBERIA  recibir un IdNFCEntity CUANDO se produce la lectura de los datos',
     () async {
       // arrange
-      when(mockArbolesRepositorio.leerIdNFC(idUsuario: anyNamed("idUsuario")))
+      when(mockArbolesRepositorio.leerIdNfc(idUsuario: anyNamed("idUsuario")))
           .thenAnswer((_) async => Right(idNFCEntity));
       // act
       final result = await usecase.call(Params(idUsuario: idUsuario));
       // assert
       expect(result, Right(idNFCEntity));
-      verify(mockArbolesRepositorio.leerIdNFC(idUsuario: idUsuario));
+      verify(mockArbolesRepositorio.leerIdNfc(idUsuario: idUsuario));
       verifyNoMoreInteractions(mockArbolesRepositorio);
     },
   );
@@ -40,13 +40,13 @@ void main() {
     'DEBERIA  recibir un nfcFailure CUANDO no se pueden leer los datos',
     () async {
       // arrange
-      when(mockArbolesRepositorio.leerIdNFC(idUsuario: anyNamed("idUsuario")))
+      when(mockArbolesRepositorio.leerIdNfc(idUsuario: anyNamed("idUsuario")))
           .thenAnswer((_) async => Left(NfcFailure()));
       // act
       final result = await usecase.call(Params(idUsuario: idUsuario));
       // assert
       expect(result, Left(NfcFailure()));
-      verify(mockArbolesRepositorio.leerIdNFC(idUsuario: idUsuario));
+      verify(mockArbolesRepositorio.leerIdNfc(idUsuario: idUsuario));
       verifyNoMoreInteractions(mockArbolesRepositorio);
     },
   );
