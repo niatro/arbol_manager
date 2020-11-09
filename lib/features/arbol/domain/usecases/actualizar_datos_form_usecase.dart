@@ -6,15 +6,15 @@ import '../../../../core/error/failure.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../repositories/arboles_repositorio.dart';
 
-class ActualizarDatosFormUseCase implements UseCase<Success, Params> {
+class ActualizarDatosFormUseCase implements UseCase<Success, NoParams> {
   final ArbolesRepositorio repositorio;
 //Aquí revisa en los dispositivos del teléfono y devuelve la coordenada
   ActualizarDatosFormUseCase(this.repositorio);
 
   @override
   Future<Either<Failure, Success>> call(
-    Params params,
+    NoParams params,
   ) async {
-    return await repositorio.actualizarDatosForm(idUsuario: params.idUsuario);
+    return await repositorio.actualizarDatosForm(params: NoParams());
   }
 }

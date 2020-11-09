@@ -77,7 +77,7 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
 
   @override
   Future<Either<Failure, ServerActualizarFormSuccess>> actualizarDatosForm(
-      {String idUsuario}) async {
+      {NoParams params}) async {
     if (await netWorkInfo.isConnected) {
       bool result = await remoteDataSource.actualizarBaseDatosFormularios();
       if (result == true) {
@@ -92,7 +92,7 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
 
 //OJO: TDD Realizado
   @override
-  Future<Either<Failure, FormEntity>> getDatosForm({String idUsuario}) async {
+  Future<Either<Failure, FormEntity>> getDatosForm({idUsuario}) async {
     try {
       final result = await sqlDataSource.getDatosFormSql(idUsuario: idUsuario);
       return Right(result);
@@ -199,12 +199,13 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
   }
 
   @override
-  Future<Either<Failure, UserEntity>> login({String password}) async {
+  Future<Either<Failure, UserEntity>> login(
+      {String password, String rut}) async {
     // TODO: implement login
     if (await netWorkInfo.isConnected) {
       try {
-        UserEntity usuario =
-            await remoteDataSource.loginRemoteData(password: password);
+        UserEntity usuario = await remoteDataSource.loginRemoteData(
+            password: password, rut: rut);
         return Right(usuario);
       } on ServerException {
         return left(ServerFailure());

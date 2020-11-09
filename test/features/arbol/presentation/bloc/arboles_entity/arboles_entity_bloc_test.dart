@@ -346,7 +346,7 @@ void main() {
       final expected = [
         Empty(),
         Saving(),
-        Error(message: INVALID_NFC_FAILURE_MESSAGE),
+        Error(message: IDFNC_EXISTE_FAILURE_MESSAGE),
       ];
       // act
       arbolesEntityBloc.dispatch(GrabarArbolEvent(tArbolesEntity, 1));
@@ -361,7 +361,7 @@ void main() {
       final expected = [
         Empty(),
         Saving(),
-        Error(message: SERVER_FAILURE_MESSAGE),
+        Error(message: SERVER_SAVE_FAILURE_MESSAGE),
       ];
       // act
       arbolesEntityBloc.dispatch(GrabarArbolEvent(tArbolesEntity, 1));
@@ -393,7 +393,7 @@ void main() {
           .thenAnswer((_) async => Right(ServerUpdateSuccess()));
       final expected = [
         Empty(),
-        UpdatingArbol(),
+        Saving(),
         UpdatedArbol(success: ServerUpdateSuccess()),
       ];
       // act
@@ -409,7 +409,7 @@ void main() {
           .thenAnswer((_) async => Left(ConexionFailure()));
       final expected = [
         Empty(),
-        UpdatingArbol(),
+        Saving(),
         Error(message: CONEXION_FAILURE_MESSAGE),
       ];
       // act
@@ -425,7 +425,7 @@ void main() {
           .thenAnswer((_) async => Left(ArbolNoUpdateNoExisteFailure()));
       final expected = [
         Empty(),
-        UpdatingArbol(),
+        Saving(),
         Error(message: UPDATE_NFC_FAILURE_MESSAGE),
       ];
       // act
@@ -440,7 +440,7 @@ void main() {
           .thenAnswer((_) async => Left(ServerUpdateFailure()));
       final expected = [
         Empty(),
-        UpdatingArbol(),
+        Saving(),
         Error(message: SERVER_FAILURE_MESSAGE),
       ];
       // act
@@ -472,7 +472,7 @@ void main() {
       // act
       final expected = [
         Empty(),
-        UpdatingForm(),
+        Loading(),
         UpdatedSql(success: ServerActualizarFormSuccess()),
       ];
       arbolesEntityBloc.dispatch(ActualizarFormEvent(usuario));
@@ -486,7 +486,7 @@ void main() {
           .thenAnswer((_) async => Left(ConexionFailure()));
       final expected = [
         Empty(),
-        UpdatingForm(),
+        Loading(),
         Error(message: CONEXION_FAILURE_MESSAGE),
       ];
       // act
@@ -502,7 +502,7 @@ void main() {
           .thenAnswer((_) async => Left(ServerFailure()));
       final expected = [
         Empty(),
-        UpdatingForm(),
+        Loading(),
         Error(message: SERVER_FAILURE_MESSAGE),
       ];
       // act
@@ -524,7 +524,7 @@ void main() {
       // act
       final expected = [
         Empty(),
-        GettingForm(),
+        Loading(),
         Error(message: SQL_FAILURE),
       ];
       arbolesEntityBloc.dispatch(GetDatosFormEvent(usuario.usuarioID));
@@ -539,7 +539,7 @@ void main() {
       // act
       final expected = [
         Empty(),
-        GettingForm(),
+        Loading(),
         Error(message: SERVER_FAILURE_MESSAGE),
       ];
       arbolesEntityBloc.dispatch(GetDatosFormEvent(usuario.usuarioID));
@@ -554,7 +554,7 @@ void main() {
           .thenAnswer((_) async => Right(formTest));
       final expected = [
         Empty(),
-        GettingForm(),
+        Loading(),
         UpdatedForm(formData: formEntity),
       ];
       // act
@@ -585,7 +585,7 @@ void main() {
       // act
       final expected = [
         Empty(),
-        GettingUser(),
+        Loading(),
         LoadedUser(usuario: usuario),
       ];
       arbolesEntityBloc.dispatch(LoginUserEvent(password));
@@ -603,7 +603,7 @@ void main() {
       // act
       final expected = [
         Empty(),
-        GettingUser(),
+        Loading(),
         Error(message: PASSWORD_FAILURE),
       ];
       arbolesEntityBloc.dispatch(LoginUserEvent(password));
@@ -620,7 +620,7 @@ void main() {
       // act
       final expected = [
         Empty(),
-        GettingUser(),
+        Loading(),
         Error(message: SERVER_FAILURE_MESSAGE),
       ];
       arbolesEntityBloc.dispatch(LoginUserEvent(password));
@@ -636,7 +636,7 @@ void main() {
       // act
       final expected = [
         Empty(),
-        GettingUser(),
+        Loading(),
         Error(message: CONEXION_FAILURE_MESSAGE),
       ];
       arbolesEntityBloc.dispatch(LoginUserEvent(password));
@@ -669,7 +669,7 @@ void main() {
       // act
       final expected = [
         Empty(),
-        GettingNfc(),
+        Loading(),
         ReadedNfc(nfcEntity: nfcEntity),
       ];
       arbolesEntityBloc.dispatch(LeerIdNfcEvent(usuario));
@@ -683,7 +683,7 @@ void main() {
       // act
       final expected = [
         Empty(),
-        GettingNfc(),
+        Loading(),
         Error(message: READ_NFC_FAILURE_MESSAGE),
       ];
 
@@ -715,7 +715,7 @@ void main() {
       // act
       final expected = [
         Empty(),
-        GettingCoord(),
+        Loading(),
         GettedCoord(latLng: latLng),
       ];
       arbolesEntityBloc.dispatch(GetCoordEvent());
@@ -730,7 +730,7 @@ void main() {
       // act
       final expected = [
         Empty(),
-        GettingCoord(),
+        Loading(),
         Error(message: COORD_FAILURE),
       ];
       arbolesEntityBloc.dispatch(GetCoordEvent());
@@ -740,9 +740,6 @@ void main() {
   });
   group('comprobarIdNFfcseCase', () {
     final String tIdNFC = "uh387qs123J4";
-    final LatLng latLng = LatLng(-34.56, -72.98);
-    UserEntity usuario = usuarioUno;
-    final NfcEntity nfcEntity = NfcEntity(idNfc: tIdNFC);
     test(
         'DEBERIA llamarse el método ComprobarIdNfcUseCase CUANDO se pasa un evento al Bloc',
         () async {
@@ -764,7 +761,7 @@ void main() {
       // act
       final expected = [
         Empty(),
-        ComprobandoIdNfc(),
+        Loading(),
         CheckedIdNfc(existe: true),
       ];
       arbolesEntityBloc.dispatch(ComprobarIdNfcEvent(tIdNFC));
@@ -780,7 +777,7 @@ void main() {
       // act
       final expected = [
         Empty(),
-        ComprobandoIdNfc(),
+        Loading(),
         Error(message: SERVER_FAILURE_MESSAGE),
       ];
       // assert

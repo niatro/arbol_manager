@@ -25,7 +25,6 @@ abstract class ArbolesRemoteDataSource {
   Future<ArbolesEntityModelo> getArbolesCercanosRemoteData(
       {LatLng coordenadas});
 
-  // Esto esta mal porque no se necesita devolver una entidad de ListaDeArboles
   // Solo necesito que la operación se haya realizado correctamente
   //OJO: no terminado
   Future<bool> grabarArboleRemoteData({ArbolEntity arbol});
@@ -36,15 +35,20 @@ abstract class ArbolesRemoteDataSource {
   Future<ObjetoLista> llenarObjetoListaDesdeHttp({String tabla});
   Future<bool> actualizarBaseDatosFormularios();
   Future<bool> updateArbolRemoteData({ArbolEntity arbol});
-  Future<UserEntity> loginRemoteData({String password});
+  Future<UserEntity> loginRemoteData({String password, String rut});
 }
 
 class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
   final http.Client client;
-  ArbolesRemoteDataSourceImpl({@required this.client});
-  final EsquemaDataDeSQL referencia = EsquemaDataDeSQL();
+  final EsquemaDataDeSQL referencia;
+  FormLocalSourceSqlImpl databaseHelper;
+  ArbolesRemoteDataSourceImpl(
+      {@required this.client,
+      @required this.referencia,
+      @required this.databaseHelper});
+//  final EsquemaDataDeSQL referencia = EsquemaDataDeSQL();
   final String _url = urlPruebas;
-  FormLocalSourceSqlImpl _databaseHelper = FormLocalSourceSqlImpl();
+//  FormLocalSourceSqlImpl _databaseHelper = FormLocalSourceSqlImpl();
 
   @override
   Future<ArbolesEntityModelo> getArbolesCercanosRemoteData(
@@ -319,8 +323,8 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
   @override
   Future<bool> actualizarBaseDatosFormularios() async {
     try {
-      await _databaseHelper.borrarBasedatos();
-      await _databaseHelper.inicializarDatabase();
+      await databaseHelper.borrarBasedatos();
+      await databaseHelper.inicializarDatabase();
       nombreTablasFormBD.forEach((nombreTabla) async {
 //        print(nombreTabla);
         await this
@@ -328,7 +332,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
             .then((_objetoLista) {
 //          print(nombreTabla['nombre']);
           _objetoLista.elementos.forEach((fila) async {
-            await _databaseHelper.insertFila(
+            await databaseHelper.insertFila(
               objetoFila: fila,
               nombreTabla: nombreTabla['nombre'],
             );
@@ -341,11 +345,28 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
     return true;
   }
 
+  @override
+  Future<UserEntity> loginRemoteData({String password, String rut}) async {
+    final _response = await http.post(
+      _url + "/bd/loginApp.php",
+      body: {
+        "rut_usuario": rut,
+        "password_usuario": password,
+      },
+    );
+    if (_response.statusCode == 200) {
+      final respuestaDecodificada = json.decode(_response.body);
+//      return funcionSwitch(respuestaDecodificada, tabla);
+    } else {
+      throw ServerException();
+    }
+  }
+
   Future<String> buscaValoresIdentificadores(
       ArbolEntity _arbol, String campo) async {
     switch (campo) {
       case 'id_entidad_arbol':
-        List resultCliente = await _databaseHelper.getFilasMapList(
+        List resultCliente = await databaseHelper.getFilasMapList(
           nombreTabla: referencia.cliente.nombreTabla,
           campoOrdenador: referencia.cliente.clienteNombre,
         );
@@ -359,7 +380,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
         break;
 
       case 'id_sector_entidad_arbol':
-        List resultZona = await _databaseHelper.getFilasMapList(
+        List resultZona = await databaseHelper.getFilasMapList(
           nombreTabla: referencia.zona.nombreTabla,
           campoOrdenador: referencia.zona.zonaOrigenId,
         );
@@ -373,7 +394,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
         break;
 
       case 'id_calle_arbol':
-        List resultCalle = await _databaseHelper.getFilasMapList(
+        List resultCalle = await databaseHelper.getFilasMapList(
           nombreTabla: referencia.calle.nombreTabla,
           campoOrdenador: referencia.calle.calleOrigenId,
         );
@@ -398,7 +419,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
         break;
 
       case 'id_especie_arbol':
-        List resultEspecie = await _databaseHelper.getFilasMapList(
+        List resultEspecie = await databaseHelper.getFilasMapList(
           nombreTabla: referencia.especie.nombreTabla,
           campoOrdenador: referencia.especie.especieOrden,
         );
@@ -412,7 +433,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
         break;
 
       case 'id_estado_general_arbol':
-        List resultEstadoGeneral = await _databaseHelper.getFilasMapList(
+        List resultEstadoGeneral = await databaseHelper.getFilasMapList(
           nombreTabla: referencia.estadoGeneral.nombreTabla,
           campoOrdenador: referencia.estadoGeneral.estadoGeneralId,
         );
@@ -426,7 +447,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
         break;
 
       case 'id_estado_sanitario_arbol':
-        List resultEstadoSanitario = await _databaseHelper.getFilasMapList(
+        List resultEstadoSanitario = await databaseHelper.getFilasMapList(
           nombreTabla: referencia.estadoSanitario.nombreTabla,
           campoOrdenador: referencia.estadoSanitario.estadoSanitarioOrigenId,
         );
@@ -441,7 +462,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
         break;
 
       case 'id_agentes_patogenos_arbol':
-        List resultAgentesPatogenos = await _databaseHelper.getFilasMapList(
+        List resultAgentesPatogenos = await databaseHelper.getFilasMapList(
           nombreTabla: referencia.agentesPatogenos.nombreTabla,
           campoOrdenador: referencia.agentesPatogenos.agentePatogenoDesc,
         );
@@ -457,7 +478,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
         break;
 
       case 'id_sintoma_arbol':
-        List resultSintomas = await _databaseHelper.getFilasMapList(
+        List resultSintomas = await databaseHelper.getFilasMapList(
           nombreTabla: referencia.sintomas.nombreTabla,
           campoOrdenador: referencia.sintomas.sintomaDesc,
         );
@@ -471,7 +492,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
         break;
 
       case 'id_lugar_plaga_arbol':
-        List resultLugarPlaga = await _databaseHelper.getFilasMapList(
+        List resultLugarPlaga = await databaseHelper.getFilasMapList(
           nombreTabla: referencia.lugarPlaga.nombreTabla,
           campoOrdenador: referencia.lugarPlaga.lugarPlagaDesc,
         );
@@ -485,7 +506,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
         break;
 
       case 'id_inclinacion_tronco_arbol':
-        List resultInclinacionTronco = await _databaseHelper.getFilasMapList(
+        List resultInclinacionTronco = await databaseHelper.getFilasMapList(
           nombreTabla: referencia.inclinacionTronco.nombreTabla,
           campoOrdenador: referencia.inclinacionTronco.inclinacionTroncoId,
         );
@@ -502,7 +523,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
 
       case 'id_orientacion_inclinacion_arbol':
         List resultOrientacionInclinacion =
-            await _databaseHelper.getFilasMapList(
+            await databaseHelper.getFilasMapList(
           nombreTabla: referencia.orientacionInclinacion.nombreTabla,
           campoOrdenador:
               referencia.orientacionInclinacion.orientacionInclinacionId,
@@ -519,7 +540,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
         break;
 
       case 'id_accion_obs_arbol':
-        List resultAccionObs = await _databaseHelper.getFilasMapList(
+        List resultAccionObs = await databaseHelper.getFilasMapList(
           nombreTabla: referencia.accionObs.nombreTabla,
           campoOrdenador: referencia.accionObs.accionObsDesc,
         );
@@ -533,7 +554,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
         break;
 
       case 'id_accion_obs_arbol_2':
-        List resultSegundaAccionObs = await _databaseHelper.getFilasMapList(
+        List resultSegundaAccionObs = await databaseHelper.getFilasMapList(
           nombreTabla: referencia.accionObs.nombreTabla,
           campoOrdenador: referencia.accionObs.accionObsDesc,
         );
@@ -547,7 +568,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
         break;
 
       case 'id_accion_obs_arbol_3':
-        List resultTerceraAccionObs = await _databaseHelper.getFilasMapList(
+        List resultTerceraAccionObs = await databaseHelper.getFilasMapList(
           nombreTabla: referencia.accionObs.nombreTabla,
           campoOrdenador: referencia.accionObs.accionObsDesc,
         );
@@ -561,7 +582,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
         break;
 
       case 'esquina_calle_arbol':
-        List resultZona = await _databaseHelper.getFilasMapList(
+        List resultZona = await databaseHelper.getFilasMapList(
           nombreTabla: referencia.zona.nombreTabla,
           campoOrdenador: referencia.zona.zonaOrigenId,
         );
@@ -571,7 +592,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
             id_sector_entidad_arbol = zona['zonaOrigenId'].toString();
           }
         });
-        List resultEsquinaCalle = await _databaseHelper.getFilasMapListWhere(
+        List resultEsquinaCalle = await databaseHelper.getFilasMapListWhere(
           nombreTabla: referencia.calleEsquina.nombreTabla,
           campoOrdenador: referencia.calleEsquina.calleEsquinaOrigenId,
           campoRestringido: referencia.calleEsquina.calleEsquinaZonaId,
@@ -588,7 +609,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
         break;
 
       case 'id_usuario_creacion_arbol':
-        List resultUsuarioCreacion = await _databaseHelper.getFilasMapList(
+        List resultUsuarioCreacion = await databaseHelper.getFilasMapList(
           nombreTabla: referencia.usuario.nombreTabla,
           campoOrdenador: referencia.usuario.usuarioOrigenId,
         );
@@ -604,7 +625,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
         break;
 
       case 'id_usuario_modifica_arbol':
-        List resultUsuarioModificacion = await _databaseHelper.getFilasMapList(
+        List resultUsuarioModificacion = await databaseHelper.getFilasMapList(
           nombreTabla: referencia.usuario.nombreTabla,
           campoOrdenador: referencia.usuario.usuarioOrigenId,
         );
@@ -704,12 +725,6 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
     var pickedImage = await picker.getImage(source: ImageSource.gallery);
     print('la imagen esta en : ${pickedImage.path}');
     return File(pickedImage.path);
-  }
-
-  @override
-  Future<UserEntity> loginRemoteData({String password}) {
-    // TODO: implement loginRemoteData
-    throw UnimplementedError();
   }
 }
 

@@ -12,6 +12,7 @@ class LoginUseCase implements UseCase<UserEntity, Params> {
   Future<Either<Failure, UserEntity>> call(
     Params params,
   ) async {
-    return await repositorio.login(password: params.password);
+    return await repositorio.login(
+        password: params.password, rut: params.usuario.rut);
   }
 }

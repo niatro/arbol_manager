@@ -140,11 +140,11 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
       yield* failOrSuccess.fold(
         (Failure) async* {
           if (Failure == ConexionFailure()) {
-            yield Error(message: CONEXION_FAILURE_MESSAGE);
+            yield Error(message: _mapFailureToMessage(Failure));
           } else if (Failure == ArbolNoGrabaYaExisteFailure()) {
-            yield Error(message: INVALID_NFC_FAILURE_MESSAGE);
+            yield Error(message: _mapFailureToMessage(Failure));
           } else if (Failure == ServerGrabarFailure()) {
-            yield Error(message: SERVER_FAILURE_MESSAGE);
+            yield Error(message: _mapFailureToMessage(Failure));
           }
         },
         (Success) async* {
@@ -152,17 +152,17 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
         },
       );
     } else if (event is UpdateArbolEvent) {
-      yield UpdatingArbol();
+      yield Saving();
       final Either<Failure, Success> failOrSuccess = await updateArbolUseCase(
           Params(arbolesEntity: event.arboles, nArbol: event.nArbol));
       yield* failOrSuccess.fold(
         (Failure) async* {
           if (Failure == ConexionFailure()) {
-            yield Error(message: CONEXION_FAILURE_MESSAGE);
+            yield Error(message: _mapFailureToMessage(Failure));
           } else if (Failure == ArbolNoUpdateNoExisteFailure()) {
-            yield Error(message: UPDATE_NFC_FAILURE_MESSAGE);
+            yield Error(message: _mapFailureToMessage(Failure));
           } else if (Failure == ServerUpdateFailure()) {
-            yield Error(message: SERVER_FAILURE_MESSAGE);
+            yield Error(message: _mapFailureToMessage(Failure));
           }
         },
         (Success) async* {
@@ -170,16 +170,15 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
         },
       );
     } else if (event is ActualizarFormEvent) {
-      yield UpdatingForm();
+      yield Loading();
       final Either<Failure, Success> failOrSuccess =
-          await actualizarDatosFormUseCase(
-              Params(idUsuario: event.usuario.usuarioID));
+          await actualizarDatosFormUseCase(NoParams());
       yield* failOrSuccess.fold(
         (Failure) async* {
           if (Failure == ConexionFailure()) {
-            yield Error(message: CONEXION_FAILURE_MESSAGE);
+            yield Error(message: _mapFailureToMessage(Failure));
           } else if (Failure == ServerFailure()) {
-            yield Error(message: SERVER_FAILURE_MESSAGE);
+            yield Error(message: _mapFailureToMessage(Failure));
           }
         },
         (Success) async* {
@@ -187,15 +186,15 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
         },
       );
     } else if (event is GetDatosFormEvent) {
-      yield GettingForm();
+      yield Loading();
       final Either<Failure, FormEntity> failOrSuccess =
           await getDatosFormUseCase(Params(idUsuario: event.idUsuario));
       yield* failOrSuccess.fold(
         (Failure) async* {
           if (Failure == SqlFailure()) {
-            yield Error(message: SQL_FAILURE);
+            yield Error(message: _mapFailureToMessage(Failure));
           } else if (Failure == ServerFailure()) {
-            yield Error(message: SERVER_FAILURE_MESSAGE);
+            yield Error(message: _mapFailureToMessage(Failure));
           }
         },
         (FormEntity) async* {
@@ -203,17 +202,17 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
         },
       );
     } else if (event is LoginUserEvent) {
-      yield GettingUser();
+      yield Loading();
       final Either<Failure, UserEntity> failOrSuccess =
           await loginUseCase(Params(idUsuario: event.password));
       yield* failOrSuccess.fold(
         (Failure) async* {
           if (Failure == PassNoExisteFailure()) {
-            yield Error(message: PASSWORD_FAILURE);
+            yield Error(message: _mapFailureToMessage(Failure));
           } else if (Failure == ServerFailure()) {
-            yield Error(message: SERVER_FAILURE_MESSAGE);
+            yield Error(message: _mapFailureToMessage(Failure));
           } else if (Failure == ConexionFailure()) {
-            yield Error(message: CONEXION_FAILURE_MESSAGE);
+            yield Error(message: _mapFailureToMessage(Failure));
           }
         },
         (UserEntity) async* {
@@ -221,13 +220,13 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
         },
       );
     } else if (event is LeerIdNfcEvent) {
-      yield GettingNfc();
+      yield Loading();
       final Either<Failure, NfcEntity> failOrNfcEntity =
           await leerIdNfcUseCase(Params(usuario: event.usuario));
       yield* failOrNfcEntity.fold(
         (Failure) async* {
           if (Failure == NfcFailure()) {
-            yield Error(message: READ_NFC_FAILURE_MESSAGE);
+            yield Error(message: _mapFailureToMessage(Failure));
           }
         },
         (NfcEntity) async* {
@@ -235,13 +234,13 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
         },
       );
     } else if (event is GetCoordEvent) {
-      yield GettingCoord();
+      yield Loading();
       final Either<Failure, LatLng> failOrLatLng =
           await getCoordUseCase(NoParams());
       yield* failOrLatLng.fold(
         (Failure) async* {
           if (Failure == CoordFailure()) {
-            yield Error(message: COORD_FAILURE);
+            yield Error(message: _mapFailureToMessage(Failure));
           }
         },
         (LatLng) async* {
@@ -249,13 +248,13 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
         },
       );
     } else if (event is ComprobarIdNfcEvent) {
-      yield ComprobandoIdNfc();
+      yield Loading();
       final Either<Failure, bool> failOrBool =
           await comprobarIdNFCUseCase(Params(idNFC: event.idNfc));
       yield* failOrBool.fold(
         (Failure) async* {
           if (Failure == ServerFailure()) {
-            yield Error(message: SERVER_FAILURE_MESSAGE);
+            yield Error(message: _mapFailureToMessage(Failure));
           }
         },
         (bool) async* {
@@ -273,14 +272,6 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
     );
   }
 
-  Stream<ArbolesEntityState> _eatherSavedOrErrorState(
-      Either<Failure, Success> failureOrSuccess) async* {
-    yield failureOrSuccess.fold(
-      (failure) => Error(message: _mapFailureToMessage(failure)),
-      (success) => Saved(success: success),
-    );
-  }
-
   String _mapFailureToMessage(Failure failure) {
     switch (failure.runtimeType) {
       case ServerFailure:
@@ -293,6 +284,20 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
         return IDFNC_EXISTE_FAILURE_MESSAGE;
       case ServerGrabarFailure:
         return SERVER_SAVE_FAILURE_MESSAGE;
+      case ArbolNoGrabaYaExisteFailure:
+        return INVALID_NFC_FAILURE_MESSAGE;
+      case ArbolNoUpdateNoExisteFailure:
+        return UPDATE_NFC_FAILURE_MESSAGE;
+      case ServerUpdateFailure:
+        return SERVER_FAILURE_MESSAGE;
+      case SqlFailure:
+        return SQL_FAILURE;
+      case PassNoExisteFailure:
+        return PASSWORD_FAILURE;
+      case NfcFailure:
+        return READ_NFC_FAILURE_MESSAGE;
+      case CoordFailure:
+        return COORD_FAILURE;
       default:
         return 'Unexpected error';
     }

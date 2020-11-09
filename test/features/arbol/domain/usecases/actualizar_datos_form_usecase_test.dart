@@ -25,28 +25,26 @@ void main() {
       'DEBERIA entregar un GrabarSuccess CUANDO se actualizan los datos llamados desde el UseCase',
       () async {
     // arrange
-    when(mockArbolesRepositorio.actualizarDatosForm(
-            idUsuario: anyNamed('idUsuario')))
+    when(mockArbolesRepositorio.actualizarDatosForm(params: NoParams()))
         .thenAnswer((_) async => Right(SqfliteGrabarSuccess()));
     // act
-    final result = await usecase.call(Params(idUsuario: idUsuario));
+    final result = await usecase.call(NoParams());
     // assert
     expect(result, Right(SqfliteGrabarSuccess()));
-    verify(mockArbolesRepositorio.actualizarDatosForm(idUsuario: idUsuario));
+    verify(mockArbolesRepositorio.actualizarDatosForm(params: NoParams()));
     verifyNoMoreInteractions(mockArbolesRepositorio);
   });
   test(
       'DEBERIA entregar un Failure de server CUANDO no se actualizan los datos ',
       () async {
     // arrange
-    when(mockArbolesRepositorio.actualizarDatosForm(
-            idUsuario: anyNamed('idUsuario')))
+    when(mockArbolesRepositorio.actualizarDatosForm(params: NoParams()))
         .thenAnswer((_) async => Left(ServerFailure()));
     // act
-    final result = await usecase.call(Params(idUsuario: idUsuario));
+    final result = await usecase.call(NoParams());
     // assert
     expect(result, Left(ServerFailure()));
-    verify(mockArbolesRepositorio.actualizarDatosForm(idUsuario: idUsuario));
+    verify(mockArbolesRepositorio.actualizarDatosForm(params: NoParams()));
     verifyNoMoreInteractions(mockArbolesRepositorio);
   });
 }

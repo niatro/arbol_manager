@@ -27,13 +27,13 @@ abstract class ArbolesRepositorio {
   //LISTO: implementado
   Future<Either<Failure, FormEntity>> getDatosForm({String idUsuario});
   //LISTO: implementado
-  Future<Either<Failure, Success>> actualizarDatosForm({String idUsuario});
+  Future<Either<Failure, Success>> actualizarDatosForm({NoParams params});
   //LISTO: implementado
   Future<Either<Failure, Success>> crearDatosForm();
 //LISTO: implementado
   Future<Either<Failure, Success>> updateArbol(
       {ArbolesEntity arboles, int nArbol});
-  Future<Either<Failure, UserEntity>> login({String password});
+  Future<Either<Failure, UserEntity>> login({String password, String rut});
 
 // Los métodos abajo deberían ir en el layer de presentación
 /*Future<Either<Failure, Success>> agregarArbolPorNFC(String idNFC);

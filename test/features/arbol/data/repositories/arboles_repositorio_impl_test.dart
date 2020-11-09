@@ -689,7 +689,7 @@ void main() {
       // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       // act
-      final result = repositorio.actualizarDatosForm(idUsuario: idUsuario);
+      final result = repositorio.actualizarDatosForm(params: NoParams());
       // assert
       verify(mockNetworkInfo.isConnected);
       expect(result, isA<Future<Either>>());
@@ -700,7 +700,7 @@ void main() {
       // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
       // act
-      final result = repositorio.actualizarDatosForm(idUsuario: idUsuario);
+      final result = repositorio.actualizarDatosForm(params: NoParams());
       // assert
       verify(mockNetworkInfo.isConnected);
       expect(result, isA<Future<Either>>());
@@ -714,7 +714,7 @@ void main() {
             .thenAnswer((_) async => true);
         // act
         final result =
-            await repositorio.actualizarDatosForm(idUsuario: idUsuario);
+            await repositorio.actualizarDatosForm(params: NoParams());
         verify(mockRemoteDataSource.actualizarBaseDatosFormularios());
         // assert
         expect(result, equals(Right(ServerActualizarFormSuccess())));
@@ -727,7 +727,7 @@ void main() {
             .thenAnswer((_) async => false);
         // act
         final result =
-            await repositorio.actualizarDatosForm(idUsuario: idUsuario);
+            await repositorio.actualizarDatosForm(params: NoParams());
         verify(mockRemoteDataSource.actualizarBaseDatosFormularios());
         // assert
         expect(result, equals(Left(ServerFailure())));
@@ -743,7 +743,7 @@ void main() {
             .thenThrow((_) async => false);
         // act
         final result =
-            await repositorio.actualizarDatosForm(idUsuario: idUsuario);
+            await repositorio.actualizarDatosForm(params: NoParams());
 
         // assert
         expect(result, Left(ConexionFailure()));

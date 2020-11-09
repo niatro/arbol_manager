@@ -92,8 +92,11 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
   @override
   Widget build(BuildContext context) {
     http.Client client = http.Client();
-    ArbolesRemoteDataSourceImpl remoteDataSource =
-        ArbolesRemoteDataSourceImpl(client: client);
+    EsquemaDataDeSQL referencia = EsquemaDataDeSQL();
+    FormLocalSourceSql sqlDatabase = FormLocalSourceSqlImpl();
+
+    ArbolesRemoteDataSourceImpl remoteDataSource = ArbolesRemoteDataSourceImpl(
+        client: client, referencia: referencia, databaseHelper: sqlDatabase);
 
     return MaterialApp(
       title: 'Modulo BD Test',
