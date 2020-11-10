@@ -10,13 +10,16 @@ class ArbolesEntityPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Arboles'),
+        title: Text('Log In'),
       ),
-      body: SingleChildScrollView(child: buildBody(context)),
+      body: BlocProvider(
+        builder: (_) => sl<ArbolesEntityBloc>(),
+        child: Container(),
+      ),
     );
   }
 
-  BlocProvider<ArbolesEntityBloc> buildBody(BuildContext context) {
+/*  BlocProvider<ArbolesEntityBloc> buildBody(BuildContext context) {
     return BlocProvider(
       builder: (_) => sl<ArbolesEntityBloc>(),
       child: Container(
@@ -51,5 +54,5 @@ class ArbolesEntityPage extends StatelessWidget {
         ),
       ),
     );
-  }
+  }*/
 }
