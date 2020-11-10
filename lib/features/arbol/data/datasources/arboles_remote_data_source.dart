@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutterapparbol/features/arbol/data/models/user_entity_modelo.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
@@ -60,7 +61,35 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
         "longitud": coordenadas.longitude.toString(),
       },
     );
-    return _getArbolesOrFailureDeAcuerdoToServerResponse(response);
+
+    if (response.statusCode == 200) {
+      final List<Map> jsonMaped =
+          List<Map<String, dynamic>>.from(json.decode(response.body));
+      final ArbolesEntityModelo arbolesEntityModelo =
+          ArbolesEntityModelo.fromJson(parsedListMapFromJson: jsonMaped);
+      return arbolesEntityModelo;
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<UserEntity> loginRemoteData({String password, String rut}) async {
+    final response = await client.post(
+      _url + "/bd/loginApp.php",
+      body: {
+        "rut_usuario": rut,
+        "password_usuario": password,
+      },
+    );
+    if (response.statusCode == 200) {
+      final List<Map> jsonMaped =
+          List<Map<String, dynamic>>.from(json.decode(response.body));
+      final UserEntityModel usuario = UserEntityModel.fromJson(jsonMaped[0]);
+      return usuario;
+    } else {
+      throw ServerException();
+    }
   }
 
   @override
@@ -343,23 +372,6 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
       print(s);
     }
     return true;
-  }
-
-  @override
-  Future<UserEntity> loginRemoteData({String password, String rut}) async {
-    final _response = await http.post(
-      _url + "/bd/loginApp.php",
-      body: {
-        "rut_usuario": rut,
-        "password_usuario": password,
-      },
-    );
-    if (_response.statusCode == 200) {
-      final respuestaDecodificada = json.decode(_response.body);
-//      return funcionSwitch(respuestaDecodificada, tabla);
-    } else {
-      throw ServerException();
-    }
   }
 
   Future<String> buscaValoresIdentificadores(

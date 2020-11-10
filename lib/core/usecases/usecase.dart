@@ -20,6 +20,7 @@ class Params extends Equatable {
   final ArbolEntity arbolEntity;
   final int nArbol;
   final String password;
+  final String rut;
   Params(
       {this.idNFC,
       this.idUsuario,
@@ -28,7 +29,8 @@ class Params extends Equatable {
       this.coordenada,
       this.arbolEntity,
       this.nArbol,
-      this.password})
+      this.password,
+      this.rut})
       : super([
           idNFC,
           idUsuario,
@@ -36,6 +38,8 @@ class Params extends Equatable {
           arbolesEntity,
           coordenada,
           arbolEntity,
-          nArbol
+          nArbol,
+          password,
+          rut,
         ]);
 }

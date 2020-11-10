@@ -8,6 +8,7 @@ import 'package:flutterapparbol/features/arbol/data/datasources/arboles_remote_d
 import 'package:flutterapparbol/features/arbol/data/datasources/form_local_source_sql.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/local_data_estructuras.dart';
 import 'package:flutterapparbol/features/arbol/data/models/arboles_entity_modelo.dart';
+import 'package:flutterapparbol/features/arbol/data/models/user_entity_modelo.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mockito/mockito.dart';
@@ -18,20 +19,32 @@ import '../../../../fixtures/fixture_reader.dart';
 
 class MockHttpClient extends Mock implements http.Client {}
 
+class MockEsquema extends Mock implements EsquemaDataDeSQL {}
+
+class MockDataBaseHelper extends Mock implements FormLocalSourceSqlImpl {}
+
 class MockFormLocalSourceSqlImpl extends Mock
     implements FormLocalSourceSqlImpl {}
 
 void main() {
   ArbolesRemoteDataSourceImpl remoteDataSource;
   MockHttpClient mockHttpClient;
+  MockEsquema esquemaDatos;
+  MockDataBaseHelper dataBaseHelper;
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() {
     mockHttpClient = MockHttpClient();
-    remoteDataSource = ArbolesRemoteDataSourceImpl(client: mockHttpClient);
+    esquemaDatos = MockEsquema();
+    dataBaseHelper = MockDataBaseHelper();
+    remoteDataSource = ArbolesRemoteDataSourceImpl(
+        client: mockHttpClient,
+        databaseHelper: dataBaseHelper,
+        referencia: esquemaDatos);
   });
   final EsquemaDataDeSQL referencia = EsquemaDataDeSQL();
   final String _url = urlPruebas;
+
   void setUpMockHttpSuccess200(String file) {
     when(mockHttpClient.post(any,
             headers: anyNamed('headers'), body: anyNamed('body')))
@@ -139,7 +152,6 @@ void main() {
       expect(() => call(idNFC: idNFC), throwsA(TypeMatcher<ServerException>()));
     });
   });
-  //TODO: ver que falla con este test
   group('grabarArbolRemoteData', () {
     final ArbolesEntityModelo tArbolesEntityModel =
         ArbolesEntityModelo(listaArbolesEntity: [arbolUno, arbolDos]);
@@ -152,7 +164,73 @@ void main() {
       // act
       final call = remoteDataSource.grabarArboleRemoteData;
       // assert
-      // expect(()  =>  call(arbol: arbolSeleccionado), Future<true>);
+//       expect(()  =>  call(arbol: arbolSeleccionado), Future<true>);
+    });
+  });
+
+  group('loginUser', () {
+    UserEntityModel tUserSinInicializar;
+    final UserEntityModel tUserEntityModelo = UserEntityModel(
+        idUsuario: '6',
+        nombreUsuario: 'Nicolas',
+        rutUsuario: '10647342',
+        apellidoUsuario: 'Sanhueza',
+        activoUsuario: 'si',
+        detallePerfilUser: 'Admin',
+        cliente: 'Vitacura');
+    final Map mapaPropiedadesUsuario = {
+      'id_usuario': '6',
+      'nombre_usuario': 'Nicolas',
+      'rut_usuario': '10647342',
+      'apellido_usuario': 'Sanhueza',
+      'activo_usuario': 'si',
+      'detalle_perfil_user': 'Admin',
+      'detalle_entidad': 'Vitacura'
+    };
+
+    final List<Map> jsonMaped =
+        List<Map<String, dynamic>>.from(json.decode(fixture('user.json')));
+    String password = '12345';
+    // act
+    final result = UserEntityModel.fromJson(jsonMaped[0]);
+    test('''DEBERIA hacer un request POST con el rut y el password y retornar 
+    el UserEntityModel con un solo usuario''', () async {
+      // arrange
+      setUpMockHttpSuccess200('user.json');
+
+      // act
+      remoteDataSource.loginRemoteData(
+          password: password, rut: tUserEntityModelo.rutUsuario);
+
+      // assert
+      verify(mockHttpClient.post(
+        _url + "/bd/loginApp.php",
+        body: {
+          "rut_usuario": tUserEntityModelo.rutUsuario.toString(),
+          "password_usuario": password.toString(),
+        },
+      ));
+    });
+    test(
+        'DEBERIA retornar UserEntityModel CUANDO el codigo de respuesta es 200',
+        () async {
+      // arrange
+      setUpMockHttpSuccess200('arbol.json');
+      // act
+      final UserEntityModel result = await remoteDataSource.loginRemoteData(
+          password: password, rut: tUserEntityModelo.rutUsuario);
+      // assert
+      expect(result, equals(tUserEntityModelo));
+    });
+    test('DEBERIA retornar un error si el codigo de respuesta es 404 u otro',
+        () async {
+      // arrange
+      setUpMockHttpFailure404();
+      // act
+      final call = remoteDataSource.loginRemoteData;
+      // assert
+      expect(() => call(password: password, rut: tUserEntityModelo.rutUsuario),
+          throwsA(TypeMatcher<ServerException>()));
     });
   });
 }

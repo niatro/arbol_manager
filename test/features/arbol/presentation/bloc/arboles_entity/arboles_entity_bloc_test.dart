@@ -527,7 +527,7 @@ void main() {
         Loading(),
         Error(message: SQL_FAILURE),
       ];
-      arbolesEntityBloc.dispatch(GetDatosFormEvent(usuario.usuarioID));
+      arbolesEntityBloc.dispatch(GetDatosFormEvent(usuario.idUsuario));
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -542,7 +542,7 @@ void main() {
         Loading(),
         Error(message: SERVER_FAILURE_MESSAGE),
       ];
-      arbolesEntityBloc.dispatch(GetDatosFormEvent(usuario.usuarioID));
+      arbolesEntityBloc.dispatch(GetDatosFormEvent(usuario.idUsuario));
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -558,7 +558,7 @@ void main() {
         UpdatedForm(formData: formEntity),
       ];
       // act
-      arbolesEntityBloc.dispatch(GetDatosFormEvent(usuario.usuarioID));
+      arbolesEntityBloc.dispatch(GetDatosFormEvent(usuario.idUsuario));
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });

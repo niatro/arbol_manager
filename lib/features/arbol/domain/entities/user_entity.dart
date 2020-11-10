@@ -3,24 +3,24 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 
 class UserEntity extends Equatable {
-  final String usuarioID;
-  final String nombre;
-  final String apellido;
-  final String rut;
+  final String idUsuario;
+  final String nombreUsuario;
+  final String apellidoUsuario;
+  final String rutUsuario;
   final String cliente;
-  final String perfil;
-  final String estado;
+  final String detallePerfilUser;
+  final String activoUsuario;
   final LatLng localizacion;
   final DateTime fechaHora;
 
   UserEntity(
-      {@required this.usuarioID,
-      @required this.nombre,
-      @required this.apellido,
-      @required this.rut,
+      {@required this.idUsuario,
+      @required this.nombreUsuario,
+      @required this.apellidoUsuario,
+      @required this.rutUsuario,
       @required this.cliente,
-      @required this.perfil,
-      @required this.estado,
-      @required this.localizacion,
-      @required this.fechaHora});
+      @required this.detallePerfilUser,
+      @required this.activoUsuario,
+      this.localizacion,
+      this.fechaHora});
 }

@@ -820,7 +820,8 @@ void main() {
       // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       // act
-      final Future result = repositorio.login(password: password);
+      final Future result =
+          repositorio.login(password: password, rut: usuarioTest.rutUsuario);
 
       // assert
       verify(mockNetworkInfo.isConnected);
@@ -832,24 +833,28 @@ void main() {
           () async {
         // arrange
         when(mockRemoteDataSource.loginRemoteData(
-                password: anyNamed("password")))
+                password: anyNamed("password"), rut: anyNamed("rut")))
             .thenAnswer((_) async => usuarioTest);
         // act
-        final result = await repositorio.login(password: password);
+        final result = await repositorio.login(
+            password: password, rut: usuarioTest.rutUsuario);
         // assert
-        verify(mockRemoteDataSource.loginRemoteData(password: password));
+        verify(mockRemoteDataSource.loginRemoteData(
+            password: password, rut: usuarioTest.rutUsuario));
         expect(result, equals(Right(usuarioTest)));
       });
       test('''DEBERIA retornar un ServerFailure CUANDO hay problemas en el 
           servidor y no se puede conectar''', () async {
         // arrange
         when(mockRemoteDataSource.loginRemoteData(
-                password: anyNamed("password")))
+                password: anyNamed("password"), rut: anyNamed("rut")))
             .thenThrow(ServerException());
         // act
-        final result = await repositorio.login(password: password);
+        final result = await repositorio.login(
+            password: password, rut: usuarioTest.rutUsuario);
         // assert
-        verify(mockRemoteDataSource.loginRemoteData(password: password));
+        verify(mockRemoteDataSource.loginRemoteData(
+            password: password, rut: usuarioTest.rutUsuario));
         expect(result, equals(Left(ServerFailure())));
       });
 
@@ -858,12 +863,14 @@ void main() {
       servidor y no se encuentra el password''', () async {
         // arrange
         when(mockRemoteDataSource.loginRemoteData(
-                password: anyNamed("password")))
+                password: anyNamed("password"), rut: anyNamed("rut")))
             .thenThrow(PassException());
         // act
-        final result = await repositorio.login(password: password);
+        final result = await repositorio.login(
+            password: password, rut: usuarioTest.rutUsuario);
         // assert
-        verify(mockRemoteDataSource.loginRemoteData(password: password));
+        verify(mockRemoteDataSource.loginRemoteData(
+            password: password, rut: usuarioTest.rutUsuario));
         expect(result, equals(Left(PassNoExisteFailure())));
       });
     });

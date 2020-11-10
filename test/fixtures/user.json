@@ -1,0 +1,12 @@
+[
+  {
+    "id_usuario": "6",
+    "nombre_usuario": "Nicolas",
+    "rut_usuario": "10647342",
+    "apellido_usuario": "Sanhueza",
+    "activo_usuario": "si",
+    "id_perfil_user_usuario": "1",
+    "detalle_perfil_user": "Admin",
+    "detalle_entidad": "Vitacura"
+  }
+]

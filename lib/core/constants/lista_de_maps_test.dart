@@ -72,3 +72,13 @@ final List<Map> listaMapDeArbolesSerializadosTest = [
     "fotosEnfermedad": ["enfermedad1", "enfermedad2"]
   }
 ];
+
+final Map mapaPropiedadesUsuario = {
+  'idUsuario': '6',
+  'nombreUsuario': 'Nicolas',
+  'rutUsuario': '10647342',
+  'apellidoUsuario': 'Sanhueza',
+  'activoUsuario': 'si',
+  'detallePerfilUser': 'Admin',
+  'cliente': 'Vitacura'
+};
