@@ -38,9 +38,7 @@ void main() {
     esquemaDatos = MockEsquema();
     dataBaseHelper = MockDataBaseHelper();
     remoteDataSource = ArbolesRemoteDataSourceImpl(
-        client: mockHttpClient,
-        databaseHelper: dataBaseHelper,
-        referencia: esquemaDatos);
+        client: mockHttpClient, referencia: esquemaDatos);
   });
   final EsquemaDataDeSQL referencia = EsquemaDataDeSQL();
   final String _url = urlPruebas;

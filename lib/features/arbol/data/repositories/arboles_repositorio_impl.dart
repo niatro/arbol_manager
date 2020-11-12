@@ -201,7 +201,6 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
   @override
   Future<Either<Failure, UserEntity>> login(
       {String password, String rut}) async {
-    // TODO: implement login
     if (await netWorkInfo.isConnected) {
       try {
         UserEntity usuario = await remoteDataSource.loginRemoteData(

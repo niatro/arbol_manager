@@ -42,15 +42,15 @@ abstract class ArbolesRemoteDataSource {
 class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
   final http.Client client;
   final EsquemaDataDeSQL referencia;
-  FormLocalSourceSqlImpl databaseHelper;
-  ArbolesRemoteDataSourceImpl(
-      {@required this.client,
-      @required this.referencia,
-      @required this.databaseHelper});
+
+  ArbolesRemoteDataSourceImpl({
+    @required this.client,
+    @required this.referencia,
+  });
 //  final EsquemaDataDeSQL referencia = EsquemaDataDeSQL();
   final String _url = urlPruebas;
 //  FormLocalSourceSqlImpl _databaseHelper = FormLocalSourceSqlImpl();
-
+  FormLocalSourceSqlImpl databaseHelper;
   @override
   Future<ArbolesEntityModelo> getArbolesCercanosRemoteData(
       {LatLng coordenadas}) async {
@@ -85,8 +85,12 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
     if (response.statusCode == 200) {
       final List<Map> jsonMaped =
           List<Map<String, dynamic>>.from(json.decode(response.body));
-      final UserEntityModel usuario = UserEntityModel.fromJson(jsonMaped[0]);
-      return usuario;
+      if (jsonMaped.toString() != '[]') {
+        final UserEntityModel usuario = UserEntityModel.fromJson(jsonMaped[0]);
+        return usuario;
+      } else {
+        throw PassException();
+      }
     } else {
       throw ServerException();
     }

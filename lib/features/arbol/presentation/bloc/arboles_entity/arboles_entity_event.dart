@@ -30,7 +30,8 @@ class ActualizarFormEvent extends ArbolesEntityEvent {
 
 class LoginUserEvent extends ArbolesEntityEvent {
   final String password;
-  LoginUserEvent(this.password) : super([password]);
+  final String rut;
+  LoginUserEvent(this.password, this.rut) : super([password, rut]);
 }
 
 class UpdateArbolEvent extends ArbolesEntityEvent {

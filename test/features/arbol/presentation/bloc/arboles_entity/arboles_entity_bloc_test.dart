@@ -566,14 +566,15 @@ void main() {
   group('LoginUseCase Event', () {
     UserEntity usuario = usuarioUno;
     FormEntity formEntity = formTest;
-    String password = '12345';
+    String rut = '10647342';
+    String password = 'mypass';
     test('DEBERIA llamarse el metodo login CUANDO se pasa un evento al Bloc',
         () async {
       // arrange
       when(mockLoginUseCase.call(any)).thenAnswer((_) async => Right(usuario));
       // act
 
-      arbolesEntityBloc.dispatch(LoginUserEvent(password));
+      arbolesEntityBloc.dispatch(LoginUserEvent(password, rut));
       await untilCalled(mockLoginUseCase.call(any));
       // assert
       verify(mockLoginUseCase.call(any));
@@ -588,7 +589,7 @@ void main() {
         Loading(),
         LoadedUser(usuario: usuario),
       ];
-      arbolesEntityBloc.dispatch(LoginUserEvent(password));
+      arbolesEntityBloc.dispatch(LoginUserEvent(password, rut));
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -606,7 +607,7 @@ void main() {
         Loading(),
         Error(message: PASSWORD_FAILURE),
       ];
-      arbolesEntityBloc.dispatch(LoginUserEvent(password));
+      arbolesEntityBloc.dispatch(LoginUserEvent(password, rut));
 
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
@@ -623,7 +624,7 @@ void main() {
         Loading(),
         Error(message: SERVER_FAILURE_MESSAGE),
       ];
-      arbolesEntityBloc.dispatch(LoginUserEvent(password));
+      arbolesEntityBloc.dispatch(LoginUserEvent(password, rut));
 
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
@@ -639,7 +640,7 @@ void main() {
         Loading(),
         Error(message: CONEXION_FAILURE_MESSAGE),
       ];
-      arbolesEntityBloc.dispatch(LoginUserEvent(password));
+      arbolesEntityBloc.dispatch(LoginUserEvent(password, rut));
 
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));

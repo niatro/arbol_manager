@@ -203,8 +203,9 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
       );
     } else if (event is LoginUserEvent) {
       yield Loading();
+
       final Either<Failure, UserEntity> failOrSuccess =
-          await loginUseCase(Params(idUsuario: event.password));
+          await loginUseCase(Params(password: event.password, rut: event.rut));
       yield* failOrSuccess.fold(
         (Failure) async* {
           if (Failure == PassNoExisteFailure()) {

@@ -28,7 +28,6 @@ final sl = GetIt.instance;
 Future<void> init() async {
   //OJO: Features (Arboles Entity....
   //Bloc registrado como un factory
-  print('register bloc');
   sl.registerFactory(
     () => ArbolesEntityBloc(
       arbolesCercanosUseCase: sl(),
@@ -45,7 +44,6 @@ Future<void> init() async {
       inputConverter: sl(),
     ),
   );
-  print('register usecase');
 
   // Use Cases que pueden ser singletones porque no necesitmos cerrarr streams
   //y no es StateFull
@@ -60,8 +58,6 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetCoordUseCase(sl()));
   sl.registerLazySingleton(() => LoginUseCase(sl()));
 
-  print('register repositorios');
-
   // Repositorios
   sl.registerLazySingleton<ArbolesRepositorio>(
     () => ArbolesRepositorioImpl(
@@ -70,7 +66,6 @@ Future<void> init() async {
         netWorkInfo: sl(),
         sqlDataSource: sl()),
   );
-  print('register datasources');
 
 // Data Sources
   sl.registerLazySingleton<ArbolesRemoteDataSource>(

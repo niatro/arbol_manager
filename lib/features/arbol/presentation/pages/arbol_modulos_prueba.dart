@@ -96,7 +96,9 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
     FormLocalSourceSql sqlDatabase = FormLocalSourceSqlImpl();
 
     ArbolesRemoteDataSourceImpl remoteDataSource = ArbolesRemoteDataSourceImpl(
-        client: client, referencia: referencia, databaseHelper: sqlDatabase);
+      client: client,
+      referencia: referencia,
+    );
 
     return MaterialApp(
       title: 'Modulo BD Test',

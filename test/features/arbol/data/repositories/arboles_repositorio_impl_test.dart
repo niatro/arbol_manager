@@ -814,14 +814,14 @@ void main() {
   //OJO: repositorio login Test
   group('login', () {
     final UserEntity usuarioTest = usuarioUno;
-    final String password = '12345';
+    final String password = 'mypass';
+    final String rut = '10647342';
 
     test('Deberia', () async {
       // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       // act
-      final Future result =
-          repositorio.login(password: password, rut: usuarioTest.rutUsuario);
+      final Future result = repositorio.login(password: password, rut: rut);
 
       // assert
       verify(mockNetworkInfo.isConnected);
@@ -836,8 +836,7 @@ void main() {
                 password: anyNamed("password"), rut: anyNamed("rut")))
             .thenAnswer((_) async => usuarioTest);
         // act
-        final result = await repositorio.login(
-            password: password, rut: usuarioTest.rutUsuario);
+        final result = await repositorio.login(password: password, rut: rut);
         // assert
         verify(mockRemoteDataSource.loginRemoteData(
             password: password, rut: usuarioTest.rutUsuario));
@@ -850,11 +849,10 @@ void main() {
                 password: anyNamed("password"), rut: anyNamed("rut")))
             .thenThrow(ServerException());
         // act
-        final result = await repositorio.login(
-            password: password, rut: usuarioTest.rutUsuario);
+        final result = await repositorio.login(password: password, rut: rut);
         // assert
-        verify(mockRemoteDataSource.loginRemoteData(
-            password: password, rut: usuarioTest.rutUsuario));
+        verify(
+            mockRemoteDataSource.loginRemoteData(password: password, rut: rut));
         expect(result, equals(Left(ServerFailure())));
       });
 
