@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class ServerException implements Exception {}
 
 ///Cuando ocurren errores en el lado del servidor
@@ -12,5 +14,10 @@ class DataBaseException implements Exception {}
 class LocationException implements Exception {}
 
 class PassException implements Exception {}
+
+class InvalidEmailException implements Exception {
+  final String failedValue;
+  InvalidEmailException({@required this.failedValue});
+}
 
 /// Cuando ocurren errores con la lectura del NFC

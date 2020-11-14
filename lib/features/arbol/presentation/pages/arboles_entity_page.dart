@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart' as bloc;
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
 import 'package:flutterapparbol/features/arbol/presentation/bloc/arboles_entity/arboles_entity_bloc.dart';
 import 'package:flutterapparbol/features/arbol/presentation/widgets/project_widgets.dart';
@@ -16,16 +16,16 @@ class ArbolesEntityPage extends StatelessWidget {
     );
   }
 
-  BlocProvider<ArbolesEntityBloc> buildBody(BuildContext context) {
-    return BlocProvider(
-      builder: (_) => sl<ArbolesEntityBloc>(),
+  bloc.BlocProvider<ArbolesEntityBloc> buildBody(BuildContext context) {
+    return bloc.BlocProvider(
+      create: (_) => sl<ArbolesEntityBloc>(),
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: <Widget>[
               SizedBox(height: 10),
-              BlocBuilder<ArbolesEntityBloc, ArbolesEntityState>(
+              bloc.BlocBuilder<ArbolesEntityBloc, ArbolesEntityState>(
                 builder: (context, state) {
                   if (state is Empty) {
                     return MessageDisplay(
@@ -108,7 +108,7 @@ class _LogInSectorState extends State<LogInSector> {
 
   void dispatchLoginUserEvent() {
     controller.clear();
-    BlocProvider.of<ArbolesEntityBloc>(context)
-        .dispatch(LoginUserEvent(inputPass, inputRut));
+    bloc.BlocProvider.of<ArbolesEntityBloc>(context)
+        .add(LoginUserEvent(inputPass, inputRut));
   }
 }

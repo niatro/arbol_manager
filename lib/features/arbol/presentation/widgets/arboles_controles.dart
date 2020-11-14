@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart' as bloc;
 import 'package:flutterapparbol/features/arbol/presentation/bloc/arboles_entity/arboles_entity_bloc.dart';
 
 class ArbolesControles extends StatefulWidget {
@@ -57,14 +57,14 @@ class _ArbolesControlesState extends State<ArbolesControles> {
 
   void getArbolesCercanos() {
     controller.clear();
-    BlocProvider.of<ArbolesEntityBloc>(context)
-        .dispatch(GetArbolesEntityCercanosEvent(inputStr));
+    bloc.BlocProvider.of<ArbolesEntityBloc>(context)
+        .add(GetArbolesEntityCercanosEvent(inputStr));
   }
 
 //TODO: este metodo debería dispararce despues del metodo getIdNFC
   void getArbolesPorNFC() {
     controller.clear();
-    BlocProvider.of<ArbolesEntityBloc>(context)
-        .dispatch(GetArbolesEntityPorIdNFCEvent('safoewfw'));
+    bloc.BlocProvider.of<ArbolesEntityBloc>(context)
+        .add(GetArbolesEntityPorIdNFCEvent('safoewfw'));
   }
 }

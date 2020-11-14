@@ -122,8 +122,7 @@ void main() {
       setUpinputCoverterSuccess();
 
       // act
-      arbolesEntityBloc
-          .dispatch(GetArbolesEntityCercanosEvent(tCoordenadasStr));
+      arbolesEntityBloc.add(GetArbolesEntityCercanosEvent(tCoordenadasStr));
       await untilCalled(mockInputConverter.stringToLatLng(any));
 
       // assert
@@ -142,8 +141,7 @@ void main() {
       // [expectLater] espera por 30 segundos a que lleguen los valores del
       // stream
       // act
-      arbolesEntityBloc
-          .dispatch(GetArbolesEntityCercanosEvent(tCoordenadasStr));
+      arbolesEntityBloc.add(GetArbolesEntityCercanosEvent(tCoordenadasStr));
 //      await untilCalled(mockInputConverter.stringToUnsignedLatLng(any));
     });
     test('DEBERIA emitir data de un CUANDO tenemos llega un UseCase Success',
@@ -153,8 +151,7 @@ void main() {
       when(mockGetArbolesCercanosUseCase(any))
           .thenAnswer((_) async => Right(tArbolesEntity));
       // act
-      arbolesEntityBloc
-          .dispatch(GetArbolesEntityCercanosEvent(tCoordenadasStr));
+      arbolesEntityBloc.add(GetArbolesEntityCercanosEvent(tCoordenadasStr));
       await untilCalled(mockGetArbolesCercanosUseCase(any));
       // assert
       verify(mockGetArbolesCercanosUseCase(
@@ -175,8 +172,7 @@ void main() {
       ];
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
       //
-      arbolesEntityBloc
-          .dispatch(GetArbolesEntityCercanosEvent(tCoordenadasStr));
+      arbolesEntityBloc.add(GetArbolesEntityCercanosEvent(tCoordenadasStr));
     });
     test('DEBERIA emitir [Loading, Error] cuando la data no pudo ser colectada',
         () async {
@@ -192,8 +188,7 @@ void main() {
       ];
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
       //
-      arbolesEntityBloc
-          .dispatch(GetArbolesEntityCercanosEvent(tCoordenadasStr));
+      arbolesEntityBloc.add(GetArbolesEntityCercanosEvent(tCoordenadasStr));
     });
     test(
         'DEBERIA emitir [Loading, Error] con el mensaje correcto cuando la data falla ',
@@ -210,8 +205,7 @@ void main() {
       ];
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
       //
-      arbolesEntityBloc
-          .dispatch(GetArbolesEntityCercanosEvent(tCoordenadasStr));
+      arbolesEntityBloc.add(GetArbolesEntityCercanosEvent(tCoordenadasStr));
     });
   });
   // Testea la funcionalidad de arboles por idNFC
@@ -232,7 +226,7 @@ void main() {
       when(mockGetArbolPorIdNFCUseCase(any))
           .thenAnswer((_) async => Right(tArbolesEntity));
       // act
-      arbolesEntityBloc.dispatch(GetArbolesEntityPorIdNFCEvent(tIdNFC));
+      arbolesEntityBloc.add(GetArbolesEntityPorIdNFCEvent(tIdNFC));
       await untilCalled(mockGetArbolPorIdNFCUseCase(any));
       // assert
       verify(mockGetArbolPorIdNFCUseCase(Params(idNFC: tIdNFC)));
@@ -252,7 +246,7 @@ void main() {
       ];
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
       //
-      arbolesEntityBloc.dispatch(GetArbolesEntityPorIdNFCEvent(tIdNFC));
+      arbolesEntityBloc.add(GetArbolesEntityPorIdNFCEvent(tIdNFC));
     });
     test(
         'DEBERIA emitir [Loading, Error] cuando no se pudo conectar con el servidor',
@@ -269,7 +263,7 @@ void main() {
       ];
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
       //
-      arbolesEntityBloc.dispatch(GetArbolesEntityPorIdNFCEvent(tIdNFC));
+      arbolesEntityBloc.add(GetArbolesEntityPorIdNFCEvent(tIdNFC));
     });
     test(
         'DEBERIA emitir [Loading, Error] con el mensaje correcto cuando la data falla ',
@@ -286,7 +280,7 @@ void main() {
       ];
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
       //
-      arbolesEntityBloc.dispatch(GetArbolesEntityPorIdNFCEvent(tIdNFC));
+      arbolesEntityBloc.add(GetArbolesEntityPorIdNFCEvent(tIdNFC));
     });
   });
   group('GrabarArboles Event', () {
@@ -301,7 +295,7 @@ void main() {
           .thenAnswer((_) async => Right(ServerGrabarSuccess()));
       // act
 
-      arbolesEntityBloc.dispatch(GrabarArbolEvent(tArbolesEntity, 1));
+      arbolesEntityBloc.add(GrabarArbolEvent(tArbolesEntity, 1));
       await untilCalled(mockGrabarArbolesUseCase.call(any));
       // assert
       verify(mockGrabarArbolesUseCase.call(any));
@@ -318,7 +312,7 @@ void main() {
         Saved(success: ServerGrabarSuccess()),
       ];
       // act
-      arbolesEntityBloc.dispatch(GrabarArbolEvent(tArbolesEntity, 1));
+      arbolesEntityBloc.add(GrabarArbolEvent(tArbolesEntity, 1));
 
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
@@ -334,7 +328,7 @@ void main() {
         Error(message: CONEXION_FAILURE_MESSAGE),
       ];
       // act
-      arbolesEntityBloc.dispatch(GrabarArbolEvent(tArbolesEntity, 1));
+      arbolesEntityBloc.add(GrabarArbolEvent(tArbolesEntity, 1));
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -349,7 +343,7 @@ void main() {
         Error(message: IDFNC_EXISTE_FAILURE_MESSAGE),
       ];
       // act
-      arbolesEntityBloc.dispatch(GrabarArbolEvent(tArbolesEntity, 1));
+      arbolesEntityBloc.add(GrabarArbolEvent(tArbolesEntity, 1));
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -364,7 +358,7 @@ void main() {
         Error(message: SERVER_SAVE_FAILURE_MESSAGE),
       ];
       // act
-      arbolesEntityBloc.dispatch(GrabarArbolEvent(tArbolesEntity, 1));
+      arbolesEntityBloc.add(GrabarArbolEvent(tArbolesEntity, 1));
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -380,7 +374,7 @@ void main() {
           .thenAnswer((_) async => Right(ServerUpdateSuccess()));
       // act
 
-      arbolesEntityBloc.dispatch(UpdateArbolEvent(tArbolesEntity, 1));
+      arbolesEntityBloc.add(UpdateArbolEvent(tArbolesEntity, 1));
       await untilCalled(mockUpdateArbolesUseCase.call(any));
       // assert
       verify(mockUpdateArbolesUseCase.call(any));
@@ -397,7 +391,7 @@ void main() {
         UpdatedArbol(success: ServerUpdateSuccess()),
       ];
       // act
-      arbolesEntityBloc.dispatch(UpdateArbolEvent(tArbolesEntity, 1));
+      arbolesEntityBloc.add(UpdateArbolEvent(tArbolesEntity, 1));
 
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
@@ -413,7 +407,7 @@ void main() {
         Error(message: CONEXION_FAILURE_MESSAGE),
       ];
       // act
-      arbolesEntityBloc.dispatch(UpdateArbolEvent(tArbolesEntity, 1));
+      arbolesEntityBloc.add(UpdateArbolEvent(tArbolesEntity, 1));
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -429,7 +423,7 @@ void main() {
         Error(message: UPDATE_NFC_FAILURE_MESSAGE),
       ];
       // act
-      arbolesEntityBloc.dispatch(UpdateArbolEvent(tArbolesEntity, 1));
+      arbolesEntityBloc.add(UpdateArbolEvent(tArbolesEntity, 1));
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -444,7 +438,7 @@ void main() {
         Error(message: SERVER_FAILURE_MESSAGE),
       ];
       // act
-      arbolesEntityBloc.dispatch(UpdateArbolEvent(tArbolesEntity, 1));
+      arbolesEntityBloc.add(UpdateArbolEvent(tArbolesEntity, 1));
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -459,7 +453,7 @@ void main() {
           .thenAnswer((_) async => Right(ServerActualizarFormSuccess()));
       // act
 
-      arbolesEntityBloc.dispatch(ActualizarFormEvent(usuario));
+      arbolesEntityBloc.add(ActualizarFormEvent(usuario));
       await untilCalled(mockActualizarDatosFormUseCase.call(any));
       // assert
       verify(mockActualizarDatosFormUseCase.call(any));
@@ -475,7 +469,7 @@ void main() {
         Loading(),
         UpdatedSql(success: ServerActualizarFormSuccess()),
       ];
-      arbolesEntityBloc.dispatch(ActualizarFormEvent(usuario));
+      arbolesEntityBloc.add(ActualizarFormEvent(usuario));
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -490,7 +484,7 @@ void main() {
         Error(message: CONEXION_FAILURE_MESSAGE),
       ];
       // act
-      arbolesEntityBloc.dispatch(ActualizarFormEvent(usuario));
+      arbolesEntityBloc.add(ActualizarFormEvent(usuario));
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -506,7 +500,7 @@ void main() {
         Error(message: SERVER_FAILURE_MESSAGE),
       ];
       // act
-      arbolesEntityBloc.dispatch(ActualizarFormEvent(usuario));
+      arbolesEntityBloc.add(ActualizarFormEvent(usuario));
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -527,7 +521,7 @@ void main() {
         Loading(),
         Error(message: SQL_FAILURE),
       ];
-      arbolesEntityBloc.dispatch(GetDatosFormEvent(usuario.idUsuario));
+      arbolesEntityBloc.add(GetDatosFormEvent(usuario.idUsuario));
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -542,7 +536,7 @@ void main() {
         Loading(),
         Error(message: SERVER_FAILURE_MESSAGE),
       ];
-      arbolesEntityBloc.dispatch(GetDatosFormEvent(usuario.idUsuario));
+      arbolesEntityBloc.add(GetDatosFormEvent(usuario.idUsuario));
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -558,7 +552,7 @@ void main() {
         UpdatedForm(formData: formEntity),
       ];
       // act
-      arbolesEntityBloc.dispatch(GetDatosFormEvent(usuario.idUsuario));
+      arbolesEntityBloc.add(GetDatosFormEvent(usuario.idUsuario));
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -574,7 +568,7 @@ void main() {
       when(mockLoginUseCase.call(any)).thenAnswer((_) async => Right(usuario));
       // act
 
-      arbolesEntityBloc.dispatch(LoginUserEvent(password, rut));
+      arbolesEntityBloc.add(LoginUserEvent(password, rut));
       await untilCalled(mockLoginUseCase.call(any));
       // assert
       verify(mockLoginUseCase.call(any));
@@ -589,7 +583,7 @@ void main() {
         Loading(),
         LoadedUser(usuario: usuario),
       ];
-      arbolesEntityBloc.dispatch(LoginUserEvent(password, rut));
+      arbolesEntityBloc.add(LoginUserEvent(password, rut));
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -607,7 +601,7 @@ void main() {
         Loading(),
         Error(message: PASSWORD_FAILURE),
       ];
-      arbolesEntityBloc.dispatch(LoginUserEvent(password, rut));
+      arbolesEntityBloc.add(LoginUserEvent(password, rut));
 
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
@@ -624,7 +618,7 @@ void main() {
         Loading(),
         Error(message: SERVER_FAILURE_MESSAGE),
       ];
-      arbolesEntityBloc.dispatch(LoginUserEvent(password, rut));
+      arbolesEntityBloc.add(LoginUserEvent(password, rut));
 
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
@@ -640,7 +634,7 @@ void main() {
         Loading(),
         Error(message: CONEXION_FAILURE_MESSAGE),
       ];
-      arbolesEntityBloc.dispatch(LoginUserEvent(password, rut));
+      arbolesEntityBloc.add(LoginUserEvent(password, rut));
 
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
@@ -658,7 +652,7 @@ void main() {
           .thenAnswer((_) async => Right(NfcEntity(idNfc: tIdNFC)));
       // act
 
-      arbolesEntityBloc.dispatch(LeerIdNfcEvent(usuario));
+      arbolesEntityBloc.add(LeerIdNfcEvent(usuario));
       await untilCalled(mockLeerIdNfcUseCase.call(any));
       // assert
       verify(mockLeerIdNfcUseCase.call(any));
@@ -673,7 +667,7 @@ void main() {
         Loading(),
         ReadedNfc(nfcEntity: nfcEntity),
       ];
-      arbolesEntityBloc.dispatch(LeerIdNfcEvent(usuario));
+      arbolesEntityBloc.add(LeerIdNfcEvent(usuario));
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -688,7 +682,7 @@ void main() {
         Error(message: READ_NFC_FAILURE_MESSAGE),
       ];
 
-      arbolesEntityBloc.dispatch(LeerIdNfcEvent(usuario));
+      arbolesEntityBloc.add(LeerIdNfcEvent(usuario));
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -704,7 +698,7 @@ void main() {
           .thenAnswer((_) async => Right(latLng));
       // act
 
-      arbolesEntityBloc.dispatch(GetCoordEvent());
+      arbolesEntityBloc.add(GetCoordEvent());
       await untilCalled(mockGetCoordUseCase.call(any));
       // assert
       verify(mockGetCoordUseCase.call(any));
@@ -719,7 +713,7 @@ void main() {
         Loading(),
         GettedCoord(latLng: latLng),
       ];
-      arbolesEntityBloc.dispatch(GetCoordEvent());
+      arbolesEntityBloc.add(GetCoordEvent());
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -734,7 +728,7 @@ void main() {
         Loading(),
         Error(message: COORD_FAILURE),
       ];
-      arbolesEntityBloc.dispatch(GetCoordEvent());
+      arbolesEntityBloc.add(GetCoordEvent());
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -749,7 +743,7 @@ void main() {
           .thenAnswer((_) async => Right(true));
       // act
 
-      arbolesEntityBloc.dispatch(ComprobarIdNfcEvent(tIdNFC));
+      arbolesEntityBloc.add(ComprobarIdNfcEvent(tIdNFC));
       await untilCalled(mockComprobarIdNFCUseCase.call(any));
       // assert
       verify(mockComprobarIdNFCUseCase.call(any));
@@ -765,7 +759,7 @@ void main() {
         Loading(),
         CheckedIdNfc(existe: true),
       ];
-      arbolesEntityBloc.dispatch(ComprobarIdNfcEvent(tIdNFC));
+      arbolesEntityBloc.add(ComprobarIdNfcEvent(tIdNFC));
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
     });
@@ -783,7 +777,7 @@ void main() {
       ];
       // assert
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
-      arbolesEntityBloc.dispatch(ComprobarIdNfcEvent(tIdNFC));
+      arbolesEntityBloc.add(ComprobarIdNfcEvent(tIdNFC));
     });
   });
 }
