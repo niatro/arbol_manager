@@ -16,5 +16,5 @@ abstract class IAuthFacade {
     @required EmailAddress emailAddress,
     @required Rut rut,
   });
-  Future<void> signInWithGoogle();
+  Future<Either<AuthFailure, Unit>> signInWithGoogle();
 }
