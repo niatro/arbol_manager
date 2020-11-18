@@ -137,11 +137,13 @@ void main() {
         Empty(),
         Error(message: INVALID_INPUT_FAILURE_MESSAGE),
       ];
+      arbolesEntityBloc.add(GetArbolesEntityCercanosEvent(tCoordenadasStr));
+      print(arbolesEntityBloc.state.toString());
+
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
       // [expectLater] espera por 30 segundos a que lleguen los valores del
       // stream
       // act
-      arbolesEntityBloc.add(GetArbolesEntityCercanosEvent(tCoordenadasStr));
 //      await untilCalled(mockInputConverter.stringToUnsignedLatLng(any));
     });
     test('DEBERIA emitir data de un CUANDO tenemos llega un UseCase Success',
@@ -209,7 +211,7 @@ void main() {
     });
   });
   // Testea la funcionalidad de arboles por idNFC
-  group('GetArbolesPorIdNFC Event es lo primero que probamos', () {
+  /*group('GetArbolesPorIdNFC Event es lo primero que probamos', () {
     final ArbolesEntity tArbolesEntity =
         ArbolesEntity(listaArbolEntity: [arbolUno, arbolDos]);
     final String tIdNFC = "uh387qs123J4";
@@ -779,5 +781,5 @@ void main() {
       expectLater(arbolesEntityBloc.state, emitsInOrder(expected));
       arbolesEntityBloc.add(ComprobarIdNfcEvent(tIdNFC));
     });
-  });
+  });*/
 }

@@ -15,11 +15,12 @@ dependencies:
     sdk: flutter
   # Icono para IOS
   cupertino_icons: ^0.1.3
-  # Service locator
+  # Service dependency injection
   get_it: ^5.0.1
+  injectable: ^1.0.5
   # Bloc for state management
   #flutter_bloc: ^0.21.0
-  flutter_bloc: ^3.0.0
+  flutter_bloc: ^3.2.0
   #bloc: ^6.1.0
   #flutter_bloc: ^6.1.1
   # Value equality NO CAMBIAR A VERSION NUEVA PORQUE DESTRUYE GEOLOCATOR
@@ -55,6 +56,13 @@ dependencies:
   google_fonts: ^1.1.1
   # Para uniones
   freezed_annotation: ^0.12.0
+  firebase_core: ^0.5.2
+  firebase_auth: ^0.18.3
+  google_sign_in: ^4.5.6
+  #Para reemplazo de los snack bar
+  flushbar: ^1.10.4
+  #Para hacer rutas de navegacion
+  auto_route: ^0.6.9
 
 
 dev_dependencies:
@@ -64,6 +72,9 @@ dev_dependencies:
   mockito: ^4.1.0
   # Para uniones
   freezed: ^0.12.2
+  lint: ^1.1.1
+  injectable_generator: ^1.0.6
+  auto_route_generator: ^0.6.10
 
 flutter:
 
