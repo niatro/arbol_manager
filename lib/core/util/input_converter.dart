@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutterapparbol/core/error/failure.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:injectable/injectable.dart';
 
+@lazySingleton
 class InputConverterStrToLatLng {
   Either<Failure, LatLng> stringToLatLng(String str) {
     try {
@@ -16,6 +18,7 @@ class InputConverterStrToLatLng {
   }
 }
 
+@lazySingleton
 class InputConverterIdNFCToStr {
   Either<Failure, String> idNFCToStr(String str) {
     try {

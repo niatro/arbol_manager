@@ -9,15 +9,18 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+import '../pages/home_catastrador.dart';
 import '../pages/sign_in_page.dart';
 import '../splash/splash_page.dart';
 
 class Routes {
   static const String splashPage = '/';
   static const String signInPage = '/sign-in-page';
+  static const String homeCatastrador = '/home-catastrador';
   static const all = <String>{
     splashPage,
     signInPage,
+    homeCatastrador,
   };
 }
 
@@ -27,6 +30,7 @@ class Router extends RouterBase {
   final _routes = <RouteDef>[
     RouteDef(Routes.splashPage, page: SplashPage),
     RouteDef(Routes.signInPage, page: SignInPage),
+    RouteDef(Routes.homeCatastrador, page: HomeCatastrador),
   ];
   @override
   Map<Type, AutoRouteFactory> get pagesMap => _pagesMap;
@@ -43,6 +47,12 @@ class Router extends RouterBase {
         settings: data,
       );
     },
+    HomeCatastrador: (data) {
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => HomeCatastrador(),
+        settings: data,
+      );
+    },
   };
 }
 
@@ -54,4 +64,7 @@ extension RouterExtendedNavigatorStateX on ExtendedNavigatorState {
   Future<dynamic> pushSplashPage() => push<dynamic>(Routes.splashPage);
 
   Future<dynamic> pushSignInPage() => push<dynamic>(Routes.signInPage);
+
+  Future<dynamic> pushHomeCatastrador() =>
+      push<dynamic>(Routes.homeCatastrador);
 }

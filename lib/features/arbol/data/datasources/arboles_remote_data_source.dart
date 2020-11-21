@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutterapparbol/features/arbol/data/models/user_entity_modelo.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:injectable/injectable.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:io';
 
@@ -39,6 +40,7 @@ abstract class ArbolesRemoteDataSource {
   Future<UserEntity> loginRemoteData({String password, String rut});
 }
 
+@lazySingleton
 class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
   final http.Client client;
   final EsquemaDataDeSQL referencia;

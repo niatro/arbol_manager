@@ -7,6 +7,7 @@ import 'package:flutterapparbol/features/arbol/domain/entities/form_entity.dart'
 import 'package:flutterapparbol/features/arbol/domain/entities/idnfc_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
 
@@ -22,6 +23,7 @@ typedef Future<ArbolesEntity> _ArbolesEntityPorCoordOIdNFC();
 typedef Future<NfcEntity> _LecturaChip();
 typedef Future<FormEntity> _FormEntityPorActualizacion();
 
+@lazySingleton
 class ArbolesRepositorioImpl implements ArbolesRepositorio {
   final ArbolesRemoteDataSource remoteDataSource;
   final ArbolesLocalDataSource localDatasource;

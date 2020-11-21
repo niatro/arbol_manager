@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_nfc_reader/flutter_nfc_reader.dart';
 import 'package:flutterapparbol/core/error/exceptions.dart';
+import 'package:injectable/injectable.dart';
 
 import '../models/arboles_entity_modelo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,6 +23,7 @@ abstract class ArbolesLocalDataSource {
 const CACHED_ARBOLES_ENTITY_MODEL = 'CACHED_ARBOLES_ENTITY_MODEL';
 
 //OJO: Implementacion abajo 👀
+@lazySingleton
 class ArbolesLocalDataSourceImpl implements ArbolesLocalDataSource {
   final SharedPreferences sharedPreferences;
 

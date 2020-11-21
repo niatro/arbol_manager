@@ -1,5 +1,7 @@
 import 'package:flutterapparbol/features/arbol/data/models/form_entity_modelo.dart';
+import 'package:injectable/injectable.dart';
 
+@lazySingleton
 final EsquemaDataDeSQL esquema = EsquemaDataDeSQL();
 ClienteModelo cliente(Map<String, dynamic> ob) {
   return ClienteModelo.fromMapToObject(ob);

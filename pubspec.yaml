@@ -34,7 +34,7 @@ dependencies:
   # Local cache
   shared_preferences: ^0.5.3+4
   # Google Maps
-  google_maps_flutter: ^0.5.28+1
+  google_maps_flutter: ^1.0.6
   # NFC funcionalidades
   flutter_nfc_reader: ^0.1.0
   # NFC funcionalidades otro paquete
@@ -63,6 +63,8 @@ dependencies:
   flushbar: ^1.10.4
   #Para hacer rutas de navegacion
   auto_route: ^0.6.9
+  #Listas inmutables
+  kt_dart: ^0.8.0
 
 
 dev_dependencies:

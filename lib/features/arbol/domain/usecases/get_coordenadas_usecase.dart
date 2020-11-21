@@ -1,10 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:injectable/injectable.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../repositories/arboles_repositorio.dart';
 
+@lazySingleton
 class GetCoordUseCase implements UseCase<LatLng, NoParams> {
   final ArbolesRepositorio repositorio;
 //Aquí revisa en los dispositivos del teléfono y devuelve la coordenada

@@ -6,6 +6,7 @@ import 'package:flutterapparbol/features/arbol/domain/entities/form_entity.dart'
 import 'package:flutterapparbol/features/arbol/domain/entities/idnfc_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:injectable/injectable.dart';
 
 import '../../../../core/error/failure.dart';
 import '../entities/arboles_entity.dart';
