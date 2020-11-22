@@ -23,7 +23,7 @@ abstract class ArbolesLocalDataSource {
 const CACHED_ARBOLES_ENTITY_MODEL = 'CACHED_ARBOLES_ENTITY_MODEL';
 
 //OJO: Implementacion abajo 👀
-@lazySingleton
+@LazySingleton(as: ArbolesLocalDataSource)
 class ArbolesLocalDataSourceImpl implements ArbolesLocalDataSource {
   final SharedPreferences sharedPreferences;
 

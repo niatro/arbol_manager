@@ -19,16 +19,19 @@ import 'features/arbol/domain/repositories/arboles_repositorio.dart';
 import 'features/arbol/data/repositories/arboles_repositorio_impl.dart';
 import 'features/arbol/application/auth/auth_bloc.dart';
 import 'features/arbol/domain/usecases/comprobar_idnfc_usecase.dart';
+import 'features/arbol/data/core/dataconectioncheker_injectable_module.dart';
 import 'features/arbol/data/datasources/local_data_estructuras.dart';
 import 'features/arbol/data/auth/firebase_auth_facade.dart';
 import 'features/arbol/data/core/firebase_injectable_module.dart';
 import 'features/arbol/data/datasources/form_local_source_sql.dart';
 import 'features/arbol/domain/usecases/get_arboles_cercanos_usecase.dart';
 import 'features/arbol/domain/usecases/get_coordenadas_usecase.dart';
+import 'features/arbol/data/core/http_injectable_module.dart';
 import 'features/arbol/domain/auth/i_auth_facade.dart';
 import 'core/util/input_converter.dart';
 import 'features/arbol/domain/usecases/leer_idnfc_usecase.dart';
 import 'core/network/network_info.dart';
+import 'features/arbol/data/core/sharedpreferences_injectable_module.dart';
 import 'features/arbol/application/auth/sign_in_form/sign_in_form_bloc.dart';
 
 /// adds generated dependencies
@@ -40,37 +43,45 @@ GetIt $initGetIt(
   EnvironmentFilter environmentFilter,
 }) {
   final gh = GetItHelper(get, environment, environmentFilter);
+  final httpModule = _$HttpModule();
+  final dataConnectionCheckerModule = _$DataConnectionCheckerModule();
   final firebaseInjectableModule = _$FirebaseInjectableModule();
-  gh.lazySingleton<ArbolesLocalDataSourceImpl>(() =>
-      ArbolesLocalDataSourceImpl(sharedPreferences: get<SharedPreferences>()));
-  gh.lazySingleton<ArbolesRemoteDataSourceImpl>(() =>
-      ArbolesRemoteDataSourceImpl(
-          client: get<Client>(), referencia: get<EsquemaDataDeSQL>()));
-  gh.lazySingleton<ArbolesRepositorioImpl>(() => ArbolesRepositorioImpl(
-        remoteDataSource: get<ArbolesRemoteDataSource>(),
-        localDatasource: get<ArbolesLocalDataSource>(),
-        netWorkInfo: get<NetworkInfo>(),
-        sqlDataSource: get<FormLocalSourceSql>(),
-      ));
-  gh.lazySingleton<ComprobarIdNFCUseCase>(
-      () => ComprobarIdNFCUseCase(get<ArbolesRepositorio>()));
+  final sharedPreferencesModule = _$SharedPreferencesModule();
+  gh.lazySingleton<Client>(() => httpModule.httpClient);
+  gh.lazySingleton<DataConnectionChecker>(
+      () => dataConnectionCheckerModule.dataConectionChecker);
   gh.lazySingleton<FirebaseAuth>(() => firebaseInjectableModule.firebaseAuth);
-  gh.lazySingleton<FormLocalSourceSqlImpl>(() => FormLocalSourceSqlImpl());
-  gh.lazySingleton<GetArbolesCercanosUseCase>(
-      () => GetArbolesCercanosUseCase(get<ArbolesRepositorio>()));
-  gh.lazySingleton<GetCoordUseCase>(
-      () => GetCoordUseCase(get<ArbolesRepositorio>()));
+  gh.lazySingleton<FormLocalSourceSql>(() => FormLocalSourceSqlImpl());
   gh.lazySingleton<GoogleSignIn>(() => firebaseInjectableModule.googleSignIn);
   gh.lazySingleton<IAuthFacade>(
       () => FirebaseAuthFacade(get<FirebaseAuth>(), get<GoogleSignIn>()));
   gh.lazySingleton<InputConverterIdNFCToStr>(() => InputConverterIdNFCToStr());
   gh.lazySingleton<InputConverterStrToLatLng>(
       () => InputConverterStrToLatLng());
+  gh.lazySingleton<NetworkInfo>(
+      () => NetworkInfoImpl(get<DataConnectionChecker>()));
+  gh.lazySingletonAsync<SharedPreferences>(
+      () => sharedPreferencesModule.sharedPreferences);
+  gh.factory<SignInFormBloc>(() => SignInFormBloc(get<IAuthFacade>()));
+  gh.lazySingleton<ArbolesLocalDataSource>(() =>
+      ArbolesLocalDataSourceImpl(sharedPreferences: get<SharedPreferences>()));
+  gh.lazySingleton<ArbolesRemoteDataSource>(() => ArbolesRemoteDataSourceImpl(
+      client: get<Client>(), referencia: get<EsquemaDataDeSQL>()));
+  gh.lazySingleton<ArbolesRepositorio>(() => ArbolesRepositorioImpl(
+        remoteDataSource: get<ArbolesRemoteDataSource>(),
+        localDatasource: get<ArbolesLocalDataSource>(),
+        netWorkInfo: get<NetworkInfo>(),
+        sqlDataSource: get<FormLocalSourceSql>(),
+      ));
+  gh.factory<AuthBloc>(() => AuthBloc(get<IAuthFacade>()));
+  gh.lazySingleton<ComprobarIdNFCUseCase>(
+      () => ComprobarIdNFCUseCase(get<ArbolesRepositorio>()));
+  gh.lazySingleton<GetArbolesCercanosUseCase>(
+      () => GetArbolesCercanosUseCase(get<ArbolesRepositorio>()));
+  gh.lazySingleton<GetCoordUseCase>(
+      () => GetCoordUseCase(get<ArbolesRepositorio>()));
   gh.lazySingleton<LeerIdNfcUseCase>(
       () => LeerIdNfcUseCase(get<ArbolesRepositorio>()));
-  gh.lazySingleton<NetworkInfoImpl>(
-      () => NetworkInfoImpl(get<DataConnectionChecker>()));
-  gh.factory<SignInFormBloc>(() => SignInFormBloc(get<IAuthFacade>()));
   gh.factory<ArbolMapaBloc>(() => ArbolMapaBloc(
         arbolesCercanosUseCase: get<GetArbolesCercanosUseCase>(),
         comprobarIdNFCUseCase: get<ComprobarIdNFCUseCase>(),
@@ -79,8 +90,16 @@ GetIt $initGetIt(
         inputConverter: get<InputConverterStrToLatLng>(),
         inputConverterFromIdNFCToStr: get<InputConverterIdNFCToStr>(),
       ));
-  gh.factory<AuthBloc>(() => AuthBloc(get<IAuthFacade>()));
+
+  // Eager singletons must be registered in the right order
+  gh.singleton<EsquemaDataDeSQL>(EsquemaDataDeSQL());
   return get;
 }
 
+class _$HttpModule extends HttpModule {}
+
+class _$DataConnectionCheckerModule extends DataConnectionCheckerModule {}
+
 class _$FirebaseInjectableModule extends FirebaseInjectableModule {}
+
+class _$SharedPreferencesModule extends SharedPreferencesModule {}

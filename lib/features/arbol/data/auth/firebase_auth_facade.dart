@@ -2,11 +2,9 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutterapparbol/core/error/errors.dart';
 import 'package:flutterapparbol/features/arbol/domain/auth/auth_failure.dart';
 import 'package:flutterapparbol/features/arbol/domain/auth/i_auth_facade.dart';
 import 'package:flutterapparbol/features/arbol/domain/auth/value_objects.dart';
-import 'package:flutterapparbol/features/arbol/domain/core/value_objects.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/user_entity_ddd.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
@@ -16,6 +14,7 @@ import './firebase_user_mapper.dart';
 class FirebaseAuthFacade implements IAuthFacade {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
+
   FirebaseAuthFacade(
     this._firebaseAuth,
     this._googleSignIn,
@@ -33,7 +32,7 @@ class FirebaseAuthFacade implements IAuthFacade {
           email: emailAddressStr, password: passwordStr);
       return right(unit);
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
+      if (e.code == 'email-already-in-use') {
         return left(const AuthFailure.emailAlreadyInUse());
       } else {
         return left(const AuthFailure.serverError());
@@ -50,11 +49,13 @@ class FirebaseAuthFacade implements IAuthFacade {
     final passwordStr = password.getOrCrash();
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
-          email: emailAddressStr, password: passwordStr);
+        email: emailAddressStr,
+        password: passwordStr,
+      );
       return right(unit);
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'ERROR_USER_NOT_FOUND' ||
-          e.code == 'ERROR_WRONG_PASSWORD') {
+      print(e.code);
+      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
         return left(const AuthFailure.invalidEmailAndPasswordCombination());
       } else {
         return left(const AuthFailure.serverError());

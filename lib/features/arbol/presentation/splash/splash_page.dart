@@ -12,7 +12,7 @@ class SplashPage extends StatelessWidget {
         state.map(
           initial: (_) {},
           authenticated: (_) {
-            print(' estoy autentificado');
+            print('estoy autentificado: esto se imprime de splash_page.dart');
             ExtendedNavigator.of(context).replace(Routes.homeCatastrador);
           },
 //              ExtendedNavigator.of(context).replace(Routes.notesOverviewPage),

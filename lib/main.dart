@@ -9,7 +9,7 @@ import 'injection_container.dart' as di;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  configureInjection(Environment.prod);
+  await configureInjection(Environment.prod);
   runApp(AppWidget());
   //Lo de abajo es la injeccion de todo el proyecto original
 //  await di.init();

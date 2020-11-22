@@ -40,7 +40,7 @@ abstract class ArbolesRemoteDataSource {
   Future<UserEntity> loginRemoteData({String password, String rut});
 }
 
-@lazySingleton
+@LazySingleton(as: ArbolesRemoteDataSource)
 class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
   final http.Client client;
   final EsquemaDataDeSQL referencia;

@@ -1,5 +1,4 @@
 import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
-import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 
 class UserEntityModel extends UserEntity {

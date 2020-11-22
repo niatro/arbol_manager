@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutterapparbol/core/success/success.dart';
 import 'package:flutterapparbol/core/usecases/usecase.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/form_local_source_sql.dart';
-import 'package:flutterapparbol/features/arbol/data/models/form_entity_modelo.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/form_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/idnfc_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
@@ -20,10 +19,10 @@ import '../datasources/arboles_local_data_source.dart';
 import '../datasources/arboles_remote_data_source.dart';
 
 typedef Future<ArbolesEntity> _ArbolesEntityPorCoordOIdNFC();
-typedef Future<NfcEntity> _LecturaChip();
-typedef Future<FormEntity> _FormEntityPorActualizacion();
+//typedef Future<NfcEntity> _LecturaChip();
+//typedef Future<FormEntity> _FormEntityPorActualizacion();
 
-@lazySingleton
+@LazySingleton(as: ArbolesRepositorio)
 class ArbolesRepositorioImpl implements ArbolesRepositorio {
   final ArbolesRemoteDataSource remoteDataSource;
   final ArbolesLocalDataSource localDatasource;

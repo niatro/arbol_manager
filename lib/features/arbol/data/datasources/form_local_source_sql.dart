@@ -1,12 +1,8 @@
 import 'dart:io';
 
-import 'package:flutterapparbol/core/constants/form_entity_test.dart';
 import 'package:flutterapparbol/core/error/exceptions.dart';
-import 'package:flutterapparbol/core/success/success.dart';
 import 'package:flutterapparbol/features/arbol/data/models/form_entity_modelo.dart';
-import 'package:flutterapparbol/features/arbol/domain/entities/form_entity.dart';
 import 'package:injectable/injectable.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:meta/meta.dart';
@@ -26,7 +22,7 @@ abstract class FormLocalSourceSql {
 }
 
 //OJO: Implementacion version 3 abajo 👀
-@lazySingleton
+@LazySingleton(as: FormLocalSourceSql)
 class FormLocalSourceSqlImpl extends FormLocalSourceSql {
   static FormLocalSourceSqlImpl _databaseHelper; // Singleton por eso es static
   static Database _database;
