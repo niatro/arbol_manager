@@ -28,25 +28,25 @@ import 'features/arbol/domain/usecases/get_arboles_cercanos_usecase.dart';
 import 'features/arbol/domain/usecases/get_coordenadas_usecase.dart';
 import 'features/arbol/data/core/http_injectable_module.dart';
 import 'features/arbol/domain/auth/i_auth_facade.dart';
+import 'features/arbol/data/core/sharedpreferences_injectable_module.dart';
 import 'core/util/input_converter.dart';
 import 'features/arbol/domain/usecases/leer_idnfc_usecase.dart';
 import 'core/network/network_info.dart';
-import 'features/arbol/data/core/sharedpreferences_injectable_module.dart';
 import 'features/arbol/application/auth/sign_in_form/sign_in_form_bloc.dart';
 
 /// adds generated dependencies
 /// to the provided [GetIt] instance
 
-GetIt $initGetIt(
+Future<GetIt> $initGetIt(
   GetIt get, {
   String environment,
   EnvironmentFilter environmentFilter,
-}) {
+}) async {
   final gh = GetItHelper(get, environment, environmentFilter);
   final httpModule = _$HttpModule();
   final dataConnectionCheckerModule = _$DataConnectionCheckerModule();
   final firebaseInjectableModule = _$FirebaseInjectableModule();
-  final sharedPreferencesModule = _$SharedPreferencesModule();
+  final injectableModule = _$InjectableModule();
   gh.lazySingleton<Client>(() => httpModule.httpClient);
   gh.lazySingleton<DataConnectionChecker>(
       () => dataConnectionCheckerModule.dataConectionChecker);
@@ -60,8 +60,8 @@ GetIt $initGetIt(
       () => InputConverterStrToLatLng());
   gh.lazySingleton<NetworkInfo>(
       () => NetworkInfoImpl(get<DataConnectionChecker>()));
-  gh.lazySingletonAsync<SharedPreferences>(
-      () => sharedPreferencesModule.sharedPreferences);
+  final sharedPreferences = await injectableModule.prefs;
+  gh.factory<SharedPreferences>(() => sharedPreferences);
   gh.factory<SignInFormBloc>(() => SignInFormBloc(get<IAuthFacade>()));
   gh.lazySingleton<ArbolesLocalDataSource>(() =>
       ArbolesLocalDataSourceImpl(sharedPreferences: get<SharedPreferences>()));
@@ -102,4 +102,4 @@ class _$DataConnectionCheckerModule extends DataConnectionCheckerModule {}
 
 class _$FirebaseInjectableModule extends FirebaseInjectableModule {}
 
-class _$SharedPreferencesModule extends SharedPreferencesModule {}
+class _$InjectableModule extends InjectableModule {}

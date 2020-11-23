@@ -108,7 +108,8 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
                 message: _mapFailureToMessage(failure));
           },
           (latLng) async* {
-            yield ArbolMapaState.coordenadasObtenidas(latLng: latLng);
+//            yield ArbolMapaState.coordenadasObtenidas(latLng: latLng);
+            yield ArbolMapaState.mapaDesplegado(latLong: latLng);
           },
         );
       },
@@ -126,7 +127,9 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
           },
         );
       },
+      agregarPinEvent: (e) async* {},
     );
+
   }
 
   String _mapFailureToMessage(Failure failure) {

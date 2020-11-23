@@ -4,7 +4,9 @@ import 'package:injectable/injectable.dart';
 
 final GetIt getIt = GetIt.instance;
 
+// Se transformo a futuro porque tiene la clase
+// Shared preferences que necesita inicializarce
 @injectableInit
-void configureInjection(String env) {
-  $initGetIt(getIt, environment: env);
+Future<void> configureInjection(String env) async {
+  await $initGetIt(getIt, environment: env);
 }

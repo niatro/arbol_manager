@@ -69,10 +69,10 @@ class ArbolesLocalDataSourceImpl implements ArbolesLocalDataSource {
 
   @override
   Future<Position> getCoordenadasLocalData() async {
-    bool locationEnable = await isLocationServiceEnabled();
+    bool locationEnable = await Geolocator.isLocationServiceEnabled();
     if (locationEnable == true) {
-      Position position =
-          await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
       return position;
     } else {
       throw LocationException();

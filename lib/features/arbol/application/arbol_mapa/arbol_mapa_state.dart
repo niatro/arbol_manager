@@ -19,4 +19,7 @@ abstract class ArbolMapaState with _$ArbolMapaState {
     @required String message,
   }) = FailureMapaState;
   const factory ArbolMapaState.loading() = LoadingMapaState;
+  const factory ArbolMapaState.marcadorColocado() = MarcadorColocadoState;
+  const factory ArbolMapaState.mapaDesplegado({@required LatLng latLong}) =
+      MapaDesplegadoState;
 }

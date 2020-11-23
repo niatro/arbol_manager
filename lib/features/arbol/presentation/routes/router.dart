@@ -7,7 +7,7 @@ import 'package:flutterapparbol/features/arbol/presentation/splash/splash_page.d
   routes: <AutoRoute>[
     MaterialRoute(page: SplashPage, initial: true),
     MaterialRoute(page: SignInPage),
-    MaterialRoute(page: HomeCatastrador)
+    MaterialRoute(page: HomeCatastrador),
   ],
   generateNavigationHelperExtension: true,
 )

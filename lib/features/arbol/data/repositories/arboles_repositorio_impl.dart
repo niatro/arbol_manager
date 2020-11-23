@@ -133,7 +133,6 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
 
   @override
   Future<Either<Failure, LatLng>> getCoordenadas({NoParams params}) async {
-    // TODO: implement getCoordenadas
     try {
       Position posicion = await localDatasource.getCoordenadasLocalData();
       LatLng latlong = LatLng(posicion.latitude, posicion.longitude);
