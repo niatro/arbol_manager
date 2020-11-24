@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapparbol/features/arbol/presentation/pages/arbol_modulos_prueba.dart';
 import 'package:flutterapparbol/injection_auto.dart';
 import 'package:injectable/injectable.dart';
 import 'features/arbol/presentation/pages/arboles_entity_page.dart';
@@ -29,8 +30,8 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.green.shade600,
       ),
 //      home: SignInPage(),
-      home: ArbolesEntityPage(),
-//      home: ArbolModuloSQLDosPrueba(),
+//      home: ArbolesEntityPage(),
+      home: ArbolModuloSQLDosPrueba(),
     );
   }
 }

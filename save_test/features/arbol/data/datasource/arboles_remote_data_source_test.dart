@@ -74,6 +74,7 @@ void main() {
       // arrange
       setUpMockHttpSuccess200('arboles.json');
       // act
+
       remoteDataSource.getArbolesCercanosRemoteData(
           coordenadas: coordenadasTest);
 
@@ -85,6 +86,20 @@ void main() {
           "longitud": coordenadasTest.longitude.toString(),
         },
       ));
+    });
+    test('DEBERIA retornar un ArbolEntity CUANDO recibe um JSON plano',
+        () async {
+      // arrange
+      when(mockHttpClient.post(any,
+              headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer((_) async => http.Response(fixture('arboles.json'), 200));
+      // act
+      final List<Map> jsonMaped =
+          List<Map<String, dynamic>>.from(json.decode(fixture('arboles.json')));
+      final ArbolesEntityModelo arbolesEntityModelo =
+          ArbolesEntityModelo.fromJson(parsedListMapFromJson: jsonMaped);
+      // assert
+      expect(arbolesEntityModelo, tArbolesTestModelo);
     });
     test(
         'DEBERIA retornar ArbolEntityModelo cuando el codigo de respuesta es 200',

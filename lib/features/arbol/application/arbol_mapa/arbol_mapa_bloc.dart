@@ -88,11 +88,15 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
                 await getArbolesCercanosUseCase(Params(coordenada: coordenada));
             yield* failureOrArboles.fold(
               (failure) async* {
-                yield ArbolMapaState.failure(
-                    message: _mapFailureToMessage(failure));
+                print('En Arbol_bloc getArbolesCercanosEvent se produjo un failure, temporalmente /n '
+                    ' hice que en vez de la falla se despliegue el mapa la falla registrada es: $_mapFailureToMessage(failure)');
+//                yield ArbolMapaState.failure(
+//                    message: _mapFailureToMessage(failure));
+                yield ArbolMapaState.mapaDesplegado(latLong: coordenada);
               },
               (arboles) async* {
-                yield ArbolMapaState.arbolesCercanosObtenidos(arboles: arboles);
+                yield ArbolMapaState.desplegandoArbolesCercanos(
+                    arboles: arboles);
               },
             );
           },
@@ -129,7 +133,6 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
       },
       agregarPinEvent: (e) async* {},
     );
-
   }
 
   String _mapFailureToMessage(Failure failure) {

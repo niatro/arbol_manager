@@ -3,7 +3,7 @@ part of 'arbol_mapa_bloc.dart';
 @freezed
 abstract class ArbolMapaState with _$ArbolMapaState {
   const factory ArbolMapaState.initial() = InitialMapaState;
-  const factory ArbolMapaState.arbolesCercanosObtenidos({
+  const factory ArbolMapaState.desplegandoArbolesCercanos({
     @required ArbolesEntity arboles,
   }) = ArbolesCercanosObtenidosMapaState;
   const factory ArbolMapaState.coordenadasObtenidas({

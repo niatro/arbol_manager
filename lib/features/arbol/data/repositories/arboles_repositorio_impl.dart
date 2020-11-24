@@ -45,10 +45,15 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
   @override
   Future<Either<Failure, ArbolesEntity>> getArbolesCercanos(
       LatLng coordenadas) async {
-    return await _getArbolesEntity(() {
-      return remoteDataSource.getArbolesCercanosRemoteData(
-          coordenadas: coordenadas);
-    });
+    if (await netWorkInfo.isConnected) {
+      try {
+        final arbolesCercanos = await remoteDataSource
+            .getArbolesCercanosRemoteData(coordenadas: coordenadas);
+        return Right(arbolesCercanos);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    }
   }
 
   @override

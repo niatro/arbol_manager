@@ -75,8 +75,28 @@ class CatastradorMapaIntegrado extends StatelessWidget {
                     myLocationButtonEnabled: true,
                   );
                 }, orElse: () {
-                  return Text('Algo salio mal');
-                }));
+                  return Text(
+                      'Algo salio mal intentando mostrar el mapa $state');
+                }),
+                floatingActionButton: FloatingActionButton.extended(
+                  onPressed: () async {
+                    print(
+                        'En floatingActionButton el estado que entra es $state');
+                    await context.bloc<ArbolMapaBloc>().add(
+                          ArbolMapaEvent.getArbolesCercanosEvent(
+                            state.maybeWhen(mapaDesplegado: (s) {
+                              return s.latitude.toString() +
+                                  ',' +
+                                  s.longitude.toString();
+                            }, orElse: () {
+                              return "-33.398827188275405,-70.59860965002224";
+                            }),
+                          ),
+                        );
+                  },
+                  label: Text('Cerca'),
+                  icon: Icon(Icons.architecture_rounded),
+                ));
           },
         ),
       ),

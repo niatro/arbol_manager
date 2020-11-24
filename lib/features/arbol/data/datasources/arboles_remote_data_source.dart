@@ -56,6 +56,9 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
   @override
   Future<ArbolesEntityModelo> getArbolesCercanosRemoteData(
       {LatLng coordenadas}) async {
+    print(
+        'en Remote_server evento getArbolesCercano entro coordenada: $coordenadas ');
+
     final response = await client.post(
       _url + "/bd/getArbolPorCoordenadas.php",
       body: {
@@ -63,7 +66,9 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
         "longitud": coordenadas.longitude.toString(),
       },
     );
-
+    //TODO: Trabajar en php para obtener un listado de arboles que pueda meter abajo
+    print(response.statusCode);
+//    throw ServerException();
     if (response.statusCode == 200) {
       final List<Map> jsonMaped =
           List<Map<String, dynamic>>.from(json.decode(response.body));
