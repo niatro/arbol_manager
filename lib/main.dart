@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutterapparbol/features/arbol/presentation/pages/arbol_modulos_prueba.dart';
 import 'package:flutterapparbol/injection_auto.dart';
 import 'package:injectable/injectable.dart';
-import 'features/arbol/presentation/pages/arboles_entity_page.dart';
 import 'features/arbol/presentation/widgets/app_widget.dart';
 import 'injection_container.dart' as di;
 
@@ -29,7 +28,6 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.green.shade800,
         accentColor: Colors.green.shade600,
       ),
-//      home: SignInPage(),
 //      home: ArbolesEntityPage(),
       home: ArbolModuloSQLDosPrueba(),
     );

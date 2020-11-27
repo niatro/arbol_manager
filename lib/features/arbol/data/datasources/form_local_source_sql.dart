@@ -266,6 +266,7 @@ class FormLocalSourceSqlImpl extends FormLocalSourceSql {
 
   @override
   Future<void> borrarBasedatos() async {
+    print('local_source_sql en borrarBaseDatos() : accedido');
     String directory = await getDatabasesPath();
     String path = directory + 'form.db';
     deleteDatabase(path);

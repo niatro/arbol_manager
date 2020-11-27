@@ -13,7 +13,8 @@ import '../entities/arboles_entity.dart';
 
 abstract class ArbolesRepositorio {
   //LISTO: implementado
-  Future<Either<Failure, ArbolesEntity>> getArbolesCercanos(LatLng coordenadas);
+  Future<Either<Failure, ArbolesEntity>> getArbolesCercanos(
+      LatLng coordenadas, int distancia);
   //LISTO: implementado
   Future<Either<Failure, ArbolesEntity>> getArbolPorIdNFC(String idNFC);
   //LISTO: implementado

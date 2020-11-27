@@ -79,6 +79,7 @@ void main() {
     final ArbolesEntityModelo tArbolesEntityModel =
         ArbolesEntityModelo(listaArbolesEntity: [arbolUno, arbolDos]);
     final ArbolesEntity tArbolesEntity = tArbolesEntityModel;
+    final int distancia = 30;
 
     test(
         '''DEBERÍA revisar que el repositorio pueda obtener datos de arboles'''
@@ -86,7 +87,8 @@ void main() {
       // arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       // act
-      final Future result = repositorio.getArbolesCercanos(tCoordenadas);
+      final Future result =
+          repositorio.getArbolesCercanos(tCoordenadas, distancia);
       // assert
       verify(mockNetworkInfo.isConnected);
       expect(result, isA<Future<Either>>());
@@ -96,14 +98,16 @@ void main() {
            CUANDO el RemoteDataSource obtiene datos''', () async {
         // arrange, se activa de donde viene la data y se dice lo que produce
         when(mockRemoteDataSource.getArbolesCercanosRemoteData(
-                coordenadas: anyNamed("coordenadas")))
+                coordenadas: anyNamed("coordenadas"),
+                distancia: anyNamed("distancia")))
             .thenAnswer((_) async => tArbolesEntityModel);
         // act, se representa el objeto recibiendo la data
-        final result = await repositorio.getArbolesCercanos(tCoordenadas);
+        final result =
+            await repositorio.getArbolesCercanos(tCoordenadas, distancia);
         // assert, se verifica que que lo que sale del objeto recibiendo data
         // sea lo que se espera "expect(result, equals(Right(tArbolesEntity)));"
         verify(mockRemoteDataSource.getArbolesCercanosRemoteData(
-            coordenadas: tCoordenadas));
+            coordenadas: tCoordenadas, distancia: distancia));
         expect(result, equals(Right(tArbolesEntity)));
       });
       test(
@@ -111,13 +115,15 @@ void main() {
           () async {
         // arrange
         when(mockRemoteDataSource.getArbolesCercanosRemoteData(
-                coordenadas: anyNamed("coordenadas")))
+                coordenadas: anyNamed("coordenadas"),
+                distancia: anyNamed("distancia")))
             .thenThrow(ServerException());
         // act
-        final result = await repositorio.getArbolesCercanos(tCoordenadas);
+        final result =
+            await repositorio.getArbolesCercanos(tCoordenadas, distancia);
         // assert
         verify(mockRemoteDataSource.getArbolesCercanosRemoteData(
-            coordenadas: tCoordenadas));
+            coordenadas: tCoordenadas, distancia: distancia));
         verifyZeroInteractions(mockLocalDataSource);
         //como no llegan Arboles porque fallo la comunicación con el servidor se
         // no debería haber interacciones en lado del LocalDataSource (nada que guardar)

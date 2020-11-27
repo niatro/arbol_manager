@@ -67,8 +67,13 @@ void main() {
 
     final List<Map> jsonMaped =
         List<Map<String, dynamic>>.from(json.decode(fixture('arboles.json')));
+    final List<Map> jsonMapedServer = List<Map<String, dynamic>>.from(
+        json.decode(fixture('arboles_server.json')));
     final tArbolesTestModelo =
         ArbolesEntityModelo.fromJson(parsedListMapFromJson: jsonMaped);
+    final tArbolesTestModeloServer = ArbolesEntityModelo.fromJsonImportServer(
+        parsedListMapFromJson: jsonMapedServer);
+    final int distancia = 30;
     test('''DEBERIA hacer un request al URL con las coordenadas y
     recibir arboles cercanos  en un radio por definir''', () async {
       // arrange
@@ -76,7 +81,7 @@ void main() {
       // act
 
       remoteDataSource.getArbolesCercanosRemoteData(
-          coordenadas: coordenadasTest);
+          coordenadas: coordenadasTest, distancia: distancia);
 
       // assert
       verify(mockHttpClient.post(
@@ -84,6 +89,7 @@ void main() {
         body: {
           "latitud": coordenadasTest.latitude.toString(),
           "longitud": coordenadasTest.longitude.toString(),
+          "distancia": distancia.toString(),
         },
       ));
     });
@@ -98,19 +104,20 @@ void main() {
           List<Map<String, dynamic>>.from(json.decode(fixture('arboles.json')));
       final ArbolesEntityModelo arbolesEntityModelo =
           ArbolesEntityModelo.fromJson(parsedListMapFromJson: jsonMaped);
-      // assert
       expect(arbolesEntityModelo, tArbolesTestModelo);
     });
     test(
         'DEBERIA retornar ArbolEntityModelo cuando el codigo de respuesta es 200',
         () async {
       // arrange
-      setUpMockHttpSuccess200('arboles.json');
+      setUpMockHttpSuccess200('arboles_server.json');
       // act
-      final ArbolesEntityModelo result = await remoteDataSource
-          .getArbolesCercanosRemoteData(coordenadas: coordenadasTest);
+      final ArbolesEntityModelo result =
+          await remoteDataSource.getArbolesCercanosRemoteData(
+              coordenadas: coordenadasTest, distancia: distancia);
       // assert
-      expect(result, equals(tArbolesTestModelo));
+      print(tArbolesTestModeloServer.listaArbolEntity[0].esquinaCalleArbol);
+      expect(result, equals(tArbolesTestModeloServer));
     });
     test('DEBERIA retornar un error si el codigo de respuesta es 404 u otro',
         () async {
@@ -119,7 +126,7 @@ void main() {
       // act
       final call = remoteDataSource.getArbolesCercanosRemoteData;
       // assert
-      expect(() => call(coordenadas: coordenadasTest),
+      expect(() => call(coordenadas: coordenadasTest, distancia: distancia),
           throwsA(TypeMatcher<ServerException>()));
     });
   });

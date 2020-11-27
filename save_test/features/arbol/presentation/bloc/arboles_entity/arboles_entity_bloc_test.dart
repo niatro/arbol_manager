@@ -103,7 +103,7 @@ void main() {
     expect(arbolesEntityBloc.initialState, Empty());
   });
   // Testea la funcionalidad de árboles cercanos a una coordenada
-  group('GetArbolesCercanos Event es lo primero que probamos', () {
+/*  group('GetArbolesCercanos Event es lo primero que probamos', () {
     final String tCoordenadasStr = "-33.398827188275405,-70.59860965002224";
     final LatLng tCoordenadasParseada =
         LatLng(-33.398827188275405, -70.59860965002224);
@@ -209,7 +209,7 @@ void main() {
       //
       arbolesEntityBloc.add(GetArbolesEntityCercanosEvent(tCoordenadasStr));
     });
-  });
+  });*/
   // Testea la funcionalidad de arboles por idNFC
   /*group('GetArbolesPorIdNFC Event es lo primero que probamos', () {
     final ArbolesEntity tArbolesEntity =

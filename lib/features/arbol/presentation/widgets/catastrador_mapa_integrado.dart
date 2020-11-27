@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/arbol_mapa/arbol_mapa_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/auth/auth_bloc.dart';
+import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
 import 'package:flutterapparbol/features/arbol/presentation/routes/router.gr.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../injection_auto.dart';
 
@@ -34,7 +36,9 @@ class CatastradorMapaIntegrado extends StatelessWidget {
           listener: (context, state) {
             state.maybeMap(
               coordenadasObtenidas: (_) {},
-              arbolesCercanosObtenidos: (_) {},
+              desplegandoArbolesCercanos: (s) {
+                return s;
+              },
               idNfcChequeado: (_) {},
               idNfcObtenido: (_) {},
               marcadorColocado: (_) {},
@@ -58,6 +62,7 @@ class CatastradorMapaIntegrado extends StatelessWidget {
                 body: state.maybeMap(initial: (_) {
                   return CircularProgressIndicator();
                 }, mapaDesplegado: (s) {
+                  //ojo: aqui comienza google Maps
                   return GoogleMap(
                     initialCameraPosition: CameraPosition(
                       target: state.maybeMap(
@@ -70,6 +75,8 @@ class CatastradorMapaIntegrado extends StatelessWidget {
                       ),
                       zoom: 18.00,
                     ),
+                    markers: Set.of(_markersDeLosArboles(
+                        s.arboles ?? new ArbolesEntity(listaArbolEntity: []))),
                     mapType: MapType.normal,
                     myLocationEnabled: true,
                     myLocationButtonEnabled: true,
@@ -84,14 +91,14 @@ class CatastradorMapaIntegrado extends StatelessWidget {
                         'En floatingActionButton el estado que entra es $state');
                     await context.bloc<ArbolMapaBloc>().add(
                           ArbolMapaEvent.getArbolesCercanosEvent(
-                            state.maybeWhen(mapaDesplegado: (s) {
-                              return s.latitude.toString() +
-                                  ',' +
-                                  s.longitude.toString();
-                            }, orElse: () {
-                              return "-33.398827188275405,-70.59860965002224";
-                            }),
-                          ),
+                              state.maybeWhen(mapaDesplegado: (l, a) {
+                                return l.latitude.toString() +
+                                    ',' +
+                                    l.longitude.toString();
+                              }, orElse: () {
+                                return "-33.398827188275405,-70.59860965002224";
+                              }),
+                              30),
                         );
                   },
                   label: Text('Cerca'),
@@ -101,5 +108,26 @@ class CatastradorMapaIntegrado extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<Marker> _markersDeLosArboles(ArbolesEntity arboles) {
+    final List<Marker> result = [];
+    Uuid uuid = Uuid();
+    if (arboles.listaArbolEntity != []) {
+      arboles.listaArbolEntity.forEach((arbol) {
+        result.add(Marker(
+          markerId: MarkerId(uuid.v4()),
+          position: arbol.geoReferenciaCapturaArbol,
+        ));
+      });
+      return result;
+    } else {
+      return [
+        Marker(
+          markerId: MarkerId("1"),
+          position: LatLng(-33.45605108011955, -70.60064847178477),
+        ),
+      ];
+    }
   }
 }

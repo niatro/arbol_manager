@@ -5,6 +5,7 @@ abstract class ArbolMapaState with _$ArbolMapaState {
   const factory ArbolMapaState.initial() = InitialMapaState;
   const factory ArbolMapaState.desplegandoArbolesCercanos({
     @required ArbolesEntity arboles,
+    @required LatLng coordenada,
   }) = ArbolesCercanosObtenidosMapaState;
   const factory ArbolMapaState.coordenadasObtenidas({
     @required LatLng latLng,
@@ -20,6 +21,6 @@ abstract class ArbolMapaState with _$ArbolMapaState {
   }) = FailureMapaState;
   const factory ArbolMapaState.loading() = LoadingMapaState;
   const factory ArbolMapaState.marcadorColocado() = MarcadorColocadoState;
-  const factory ArbolMapaState.mapaDesplegado({@required LatLng latLong}) =
-      MapaDesplegadoState;
+  const factory ArbolMapaState.mapaDesplegado(
+      {@required LatLng latLong, ArbolesEntity arboles}) = MapaDesplegadoState;
 }

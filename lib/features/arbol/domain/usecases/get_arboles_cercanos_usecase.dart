@@ -19,6 +19,7 @@ class GetArbolesCercanosUseCase implements UseCase<ArbolesEntity, Params> {
   Future<Either<Failure, ArbolesEntity>> call(
     Params params,
   ) async {
-    return await repositorio.getArbolesCercanos(params.coordenada);
+    return await repositorio.getArbolesCercanos(
+        params.coordenada, params.distancia);
   }
 }

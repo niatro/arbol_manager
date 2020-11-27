@@ -25,7 +25,7 @@ abstract class ArbolesRemoteDataSource {
   ///  Finalmente en implementación debería ir a  http://35.225.91.186
   //OJO: no terminado
   Future<ArbolesEntityModelo> getArbolesCercanosRemoteData(
-      {LatLng coordenadas});
+      {LatLng coordenadas, int distancia});
 
   // Solo necesito que la operación se haya realizado correctamente
   //OJO: no terminado
@@ -52,28 +52,27 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
 //  final EsquemaDataDeSQL referencia = EsquemaDataDeSQL();
   final String _url = urlPruebas;
 //  FormLocalSourceSqlImpl _databaseHelper = FormLocalSourceSqlImpl();
-  FormLocalSourceSqlImpl databaseHelper;
+  // debo instanciar esta databaseHelper, de lo contrario no me funciona abajo
+  FormLocalSourceSqlImpl databaseHelper = FormLocalSourceSqlImpl();
   @override
   Future<ArbolesEntityModelo> getArbolesCercanosRemoteData(
-      {LatLng coordenadas}) async {
-    print(
-        'en Remote_server evento getArbolesCercano entro coordenada: $coordenadas ');
-
-    final response = await client.post(
+      {LatLng coordenadas, int distancia}) async {
+    final response = await http.post(
       _url + "/bd/getArbolPorCoordenadas.php",
       body: {
         "latitud": coordenadas.latitude.toString(),
         "longitud": coordenadas.longitude.toString(),
+        "distancia": distancia.toString(),
       },
     );
     //TODO: Trabajar en php para obtener un listado de arboles que pueda meter abajo
-    print(response.statusCode);
-//    throw ServerException();
+//    print('el body de esto es ${response.body}');
     if (response.statusCode == 200) {
       final List<Map> jsonMaped =
           List<Map<String, dynamic>>.from(json.decode(response.body));
       final ArbolesEntityModelo arbolesEntityModelo =
-          ArbolesEntityModelo.fromJson(parsedListMapFromJson: jsonMaped);
+          ArbolesEntityModelo.fromJsonImportServer(
+              parsedListMapFromJson: jsonMaped);
       return arbolesEntityModelo;
     } else {
       throw ServerException();
@@ -89,12 +88,18 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
         "password_usuario": password,
       },
     );
+//    print('el body de esto es ${response.body}');
     if (response.statusCode == 200) {
-      final List<Map> jsonMaped =
-          List<Map<String, dynamic>>.from(json.decode(response.body));
-      if (jsonMaped.toString() != '[]') {
-        final UserEntityModel usuario = UserEntityModel.fromJson(jsonMaped[0]);
-        return usuario;
+      if (response.body != '[]') {
+        final List<Map> jsonMaped =
+            List<Map<String, dynamic>>.from(json.decode(response.body));
+        if (jsonMaped.toString() != '[]') {
+          final UserEntityModel usuario =
+              UserEntityModel.fromJson(jsonMaped[0]);
+          return usuario;
+        } else {
+          throw PassException();
+        }
       } else {
         throw PassException();
       }
@@ -234,7 +239,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
 
   @override
   Future<bool> grabarArboleRemoteData({ArbolEntity arbol}) async {
-    print('apretado el boton');
+    print('remote data source GrabarArbolesRemoteData:  apretado el boton');
 
     //TODO: implementar en base de datos interna una tabla con todas las obs de los arboles
 
@@ -314,12 +319,13 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
       print(
           'fotografia_arbol_sanitario_${arbol.fotosEnfermedad.indexOf(pathFoto) + 1}');
     }
-    print('asignadas variables a insert');
-
+    print(
+        'remote data source GrabarArbolesRemoteData: asignadas variables a insert');
+    print(request.fields);
     try {
       var response = await request.send();
+
       if (response.statusCode == 200) {
-        print('Arbol Enviado con Exito a Servidor');
         return true;
       } else {
         throw ServerException();
@@ -365,12 +371,11 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
     try {
       await databaseHelper.borrarBasedatos();
       await databaseHelper.inicializarDatabase();
+
       nombreTablasFormBD.forEach((nombreTabla) async {
-//        print(nombreTabla);
         await this
             .llenarObjetoListaDesdeHttp(tabla: nombreTabla['nombre'])
             .then((_objetoLista) {
-//          print(nombreTabla['nombre']);
           _objetoLista.elementos.forEach((fila) async {
             await databaseHelper.insertFila(
               objetoFila: fila,

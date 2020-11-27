@@ -4,7 +4,10 @@ import 'package:flutterapparbol/core/constants/lista_de_arboles_test.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/arboles_remote_data_source.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/form_local_source_sql.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/local_data_estructuras.dart';
+import 'package:flutterapparbol/features/arbol/data/models/arboles_entity_modelo.dart';
 import 'package:flutterapparbol/features/arbol/data/models/form_entity_modelo.dart';
+import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -70,6 +73,7 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
   List<String> imagenesEnfermedad = [];
   final EsquemaDataDeSQL referencia = EsquemaDataDeSQL();
   final picker = ImagePicker();
+
   @override
   void initState() {
     super.initState();
@@ -99,7 +103,6 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
       client: client,
       referencia: referencia,
     );
-
     return MaterialApp(
       title: 'Modulo BD Test',
       home: Scaffold(
@@ -270,6 +273,26 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
                   },
                   color: Colors.purple,
                   child: Text('Grabar Arboles'),
+                ),
+                FlatButton(
+                  onPressed: () async {
+                    ArbolesEntityModelo arboles =
+                        await remoteDataSource.getArbolesCercanosRemoteData(
+                            coordenadas: LatLng(-33.398197, -70.600708),
+                            distancia: 100);
+                    print(arboles.listaArbolEntity.length);
+                  },
+                  color: Colors.amber,
+                  child: Text('Arboles Cercanos'),
+                ),
+                FlatButton(
+                  onPressed: () async {
+                    UserEntity usuario = await remoteDataSource.loginRemoteData(
+                        rut: "106473420", password: "marina11");
+                    print(usuario.apellidoUsuario);
+                  },
+                  color: Colors.black12,
+                  child: Text('Usuario'),
                 ),
               ],
             ),

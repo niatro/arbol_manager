@@ -2,6 +2,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../domain/entities/arboles_entity.dart';
 import 'package:meta/meta.dart';
+import 'dart:convert' as js;
 
 class ArbolesEntityModelo extends ArbolesEntity {
   ArbolesEntityModelo({
@@ -12,6 +13,15 @@ class ArbolesEntityModelo extends ArbolesEntity {
     List<ArbolEntityModelo> _listaDeArbol = List<ArbolEntityModelo>();
     _listaDeArbol = parsedListMapFromJson
         .map((i) => ArbolEntityModelo.fromJson(i))
+        .toList();
+    return ArbolesEntityModelo(listaArbolesEntity: _listaDeArbol);
+  }
+
+  factory ArbolesEntityModelo.fromJsonImportServer(
+      {List<Map<String, dynamic>> parsedListMapFromJson}) {
+    List<ArbolEntityModelo> _listaDeArbol = List<ArbolEntityModelo>();
+    _listaDeArbol = parsedListMapFromJson
+        .map((i) => ArbolEntityModelo.fromJsonImportServer(i))
         .toList();
     return ArbolesEntityModelo(listaArbolesEntity: _listaDeArbol);
   }
@@ -185,6 +195,78 @@ class ArbolEntityModelo extends ArbolEntity {
       revisionArbol: json["revisionArbol"],
       fotosArbol: json["fotosArbol"], // Tabla: arbol_master
       fotosEnfermedad: json["fotosEnfermedad"],
+    );
+  }
+
+  factory ArbolEntityModelo.fromJsonImportServer(Map<String, dynamic> json) {
+    return ArbolEntityModelo(
+      guiArbol: json["guiArbol"],
+      idArbol: int.parse(json["idArbol"]),
+      idNfcHistoria: json["idNfcHistoria"]
+          .toString()
+          .replaceAll(RegExp(r'\[|\]'), "")
+          .split(',')
+          .map((e) => '"$e"')
+          .toList(),
+      clienteArbol: json["clienteArbol"],
+      zonaArbol: json["zonaArbol"],
+      calleArbol: json["calleArbol"],
+      nCalleArbol: int.parse(json["nCalleArbol"]) != null
+          ? int.parse(json["nCalleArbol"])
+          : 0,
+      esquinaCalleArbol: json["esquinaCalleArbol"] != null
+          ? json["esquinaCalleArbol"]
+          : 'No es arbol esquina contraria',
+      especieArbol: json["especieArbol"],
+      diametroTroncoArbolCm: int.parse(json["diametroTroncoArbolCm"]),
+      diametroCopaNsArbolMt: double.parse(json["diametroCopaNsArbolMt"]),
+      diametroCopaEoArbolMt: double.parse(json["diametroCopaEoArbolMt"]),
+      alturaArbolArbolMt: double.parse(json["alturaArbolArbolMt"]),
+      alturaCopaArbolMt: double.parse(json["alturaCopaArbolMt"]),
+      estadoGeneralArbol: json["estadoGeneralArbol"],
+      estadoSanitarioArbol: json["estadoSanitarioArbol"],
+      enfermedad: Enfermedad(
+        sintoma: json['sintoma'],
+        lugarPlaga: json['lugarPlaga'],
+        agentePatogeno: json['agentePatogeno'],
+      ),
+
+      inclinacionTroncoArbol: json["inclinacionTroncoArbol"],
+      orientacionInclinacionArbol: json["orientacionInclinacionArbol"],
+      obsArbolHistoria: json["obsArbolHistoria"]
+          .toString()
+          .replaceAll(RegExp(r'\[|\]'), "")
+          .split(',')
+          .map((e) => '"$e"')
+          .toList(), // tabla: observaciones_arbol
+      accionObsArbol: json["accionObsArbol"],
+      segundaAccionObsArbol: json["segundaAccionObsArbol"],
+      terceraAccionObsArbol: json["terceraAccionObsArbol"],
+      geoReferenciaCapturaArbol: json["geoReferenciaCapturaArbol"] != null
+          ? LatLng(
+              double.parse(json["geoReferenciaCapturaArbol"].split(',')[0]),
+              double.parse(json["geoReferenciaCapturaArbol"].split(',')[1]))
+          : LatLng(0, 0),
+      nombreUsuarioCreacionArbol: json["nombreUsuarioCreacionArbol"],
+      usuarioModificaArbol: json["usuarioModificaArbol"], // Tabla: usuario
+      fechaCreacionArbol:
+          DateTime.parse(json["fechaCreacionArbol"]), // Tabla: arbol_master
+      fechaUltimaModArbol:
+          DateTime.parse(json["fechaUltimaModArbol"]), // Tabla: arbol_master
+      alertaArbol: json["alertaArbol"], // Tabla: arbol_master
+      revisionArbol: json["revisionArbol"],
+      fotosArbol: json["fotosArbol"]
+          .toString()
+          .replaceAll(RegExp(r'\[|\]'), "")
+          .split(',')
+          .map((e) => '"$e"')
+          .toList(), // Tabla: arbol_master
+      fotosEnfermedad: json["fotosEnfermedad"]
+          .toString()
+          .replaceAll(RegExp(r'\[|\]'), "")
+          .split(',')
+          .map((e) => '"$e"')
+          .toList(),
     );
   }
 //En el proseso de serialización estamos creando un mapa <String, dinamico>

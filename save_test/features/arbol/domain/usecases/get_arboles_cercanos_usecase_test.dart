@@ -24,6 +24,7 @@ void main() {
     usecase = GetArbolesCercanosUseCase(mockListaArbolRepositorio);
   });
   final coordenadasTest = LatLng(-33.40022111646666, -70.59898554630922);
+  final int distancia = 30;
   final ArbolesEntity tListaDeArbolesEntity = arbolesEntityTest;
   ServerFailure falloServidor = ServerFailure();
 
@@ -31,13 +32,15 @@ void main() {
     'debería traer un listado de arboles basado en una reference geográfica del repositario',
     () async {
       // arrange
-      when(mockListaArbolRepositorio.getArbolesCercanos(any))
+      when(mockListaArbolRepositorio.getArbolesCercanos(any, any))
           .thenAnswer((_) async => Right(tListaDeArbolesEntity));
       // act
-      final result = await usecase.call(Params(coordenada: coordenadasTest));
+      final result = await usecase
+          .call(Params(coordenada: coordenadasTest, distancia: distancia));
       // assert
       expect(result, Right(tListaDeArbolesEntity));
-      verify(mockListaArbolRepositorio.getArbolesCercanos(coordenadasTest));
+      verify(mockListaArbolRepositorio.getArbolesCercanos(
+          coordenadasTest, distancia));
       verifyNoMoreInteractions(mockListaArbolRepositorio);
     },
   );
@@ -45,13 +48,15 @@ void main() {
     'debería traer un Failure cuando no pudo conseguir los arboles',
     () async {
       // arrange
-      when(mockListaArbolRepositorio.getArbolesCercanos(any))
+      when(mockListaArbolRepositorio.getArbolesCercanos(any, any))
           .thenAnswer((_) async => Left(falloServidor));
       // act
-      final result = await usecase.call(Params(coordenada: coordenadasTest));
+      final result = await usecase
+          .call(Params(coordenada: coordenadasTest, distancia: distancia));
       // assert
       expect(result, Left(falloServidor));
-      verify(mockListaArbolRepositorio.getArbolesCercanos(coordenadasTest));
+      verify(mockListaArbolRepositorio.getArbolesCercanos(
+          coordenadasTest, distancia));
       verifyNoMoreInteractions(mockListaArbolRepositorio);
     },
   );

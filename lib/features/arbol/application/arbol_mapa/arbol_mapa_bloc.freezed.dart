@@ -21,9 +21,11 @@ class _$ArbolMapaEventTearOff {
   }
 
 // ignore: unused_element
-  GetArbolesCercanosEvent getArbolesCercanosEvent(String coordenadas) {
+  GetArbolesCercanosEvent getArbolesCercanosEvent(
+      String coordenadas, int distancia) {
     return GetArbolesCercanosEvent(
       coordenadas,
+      distancia,
     );
   }
 
@@ -54,7 +56,7 @@ mixin _$ArbolMapaEvent {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result comprobarIdNfcEvent(String idNfc),
-    @required Result getArbolesCercanosEvent(String coordenadas),
+    @required Result getArbolesCercanosEvent(String coordenadas, int distancia),
     @required Result getCoordenadasEvent(),
     @required Result leerIdNfConTelefonoEvent(UserEntity usuario),
     @required Result agregarPinEvent(),
@@ -62,7 +64,7 @@ mixin _$ArbolMapaEvent {
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result comprobarIdNfcEvent(String idNfc),
-    Result getArbolesCercanosEvent(String coordenadas),
+    Result getArbolesCercanosEvent(String coordenadas, int distancia),
     Result getCoordenadasEvent(),
     Result leerIdNfConTelefonoEvent(UserEntity usuario),
     Result agregarPinEvent(),
@@ -166,7 +168,7 @@ class _$ComprobarIdNfacEvent implements ComprobarIdNfacEvent {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result comprobarIdNfcEvent(String idNfc),
-    @required Result getArbolesCercanosEvent(String coordenadas),
+    @required Result getArbolesCercanosEvent(String coordenadas, int distancia),
     @required Result getCoordenadasEvent(),
     @required Result leerIdNfConTelefonoEvent(UserEntity usuario),
     @required Result agregarPinEvent(),
@@ -183,7 +185,7 @@ class _$ComprobarIdNfacEvent implements ComprobarIdNfacEvent {
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result comprobarIdNfcEvent(String idNfc),
-    Result getArbolesCercanosEvent(String coordenadas),
+    Result getArbolesCercanosEvent(String coordenadas, int distancia),
     Result getCoordenadasEvent(),
     Result leerIdNfConTelefonoEvent(UserEntity usuario),
     Result agregarPinEvent(),
@@ -243,7 +245,7 @@ abstract class $GetArbolesCercanosEventCopyWith<$Res> {
   factory $GetArbolesCercanosEventCopyWith(GetArbolesCercanosEvent value,
           $Res Function(GetArbolesCercanosEvent) then) =
       _$GetArbolesCercanosEventCopyWithImpl<$Res>;
-  $Res call({String coordenadas});
+  $Res call({String coordenadas, int distancia});
 }
 
 /// @nodoc
@@ -260,24 +262,29 @@ class _$GetArbolesCercanosEventCopyWithImpl<$Res>
   @override
   $Res call({
     Object coordenadas = freezed,
+    Object distancia = freezed,
   }) {
     return _then(GetArbolesCercanosEvent(
       coordenadas == freezed ? _value.coordenadas : coordenadas as String,
+      distancia == freezed ? _value.distancia : distancia as int,
     ));
   }
 }
 
 /// @nodoc
 class _$GetArbolesCercanosEvent implements GetArbolesCercanosEvent {
-  const _$GetArbolesCercanosEvent(this.coordenadas)
-      : assert(coordenadas != null);
+  const _$GetArbolesCercanosEvent(this.coordenadas, this.distancia)
+      : assert(coordenadas != null),
+        assert(distancia != null);
 
   @override
   final String coordenadas;
+  @override
+  final int distancia;
 
   @override
   String toString() {
-    return 'ArbolMapaEvent.getArbolesCercanosEvent(coordenadas: $coordenadas)';
+    return 'ArbolMapaEvent.getArbolesCercanosEvent(coordenadas: $coordenadas, distancia: $distancia)';
   }
 
   @override
@@ -286,12 +293,17 @@ class _$GetArbolesCercanosEvent implements GetArbolesCercanosEvent {
         (other is GetArbolesCercanosEvent &&
             (identical(other.coordenadas, coordenadas) ||
                 const DeepCollectionEquality()
-                    .equals(other.coordenadas, coordenadas)));
+                    .equals(other.coordenadas, coordenadas)) &&
+            (identical(other.distancia, distancia) ||
+                const DeepCollectionEquality()
+                    .equals(other.distancia, distancia)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(coordenadas);
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(coordenadas) ^
+      const DeepCollectionEquality().hash(distancia);
 
   @override
   $GetArbolesCercanosEventCopyWith<GetArbolesCercanosEvent> get copyWith =>
@@ -302,7 +314,7 @@ class _$GetArbolesCercanosEvent implements GetArbolesCercanosEvent {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result comprobarIdNfcEvent(String idNfc),
-    @required Result getArbolesCercanosEvent(String coordenadas),
+    @required Result getArbolesCercanosEvent(String coordenadas, int distancia),
     @required Result getCoordenadasEvent(),
     @required Result leerIdNfConTelefonoEvent(UserEntity usuario),
     @required Result agregarPinEvent(),
@@ -312,14 +324,14 @@ class _$GetArbolesCercanosEvent implements GetArbolesCercanosEvent {
     assert(getCoordenadasEvent != null);
     assert(leerIdNfConTelefonoEvent != null);
     assert(agregarPinEvent != null);
-    return getArbolesCercanosEvent(coordenadas);
+    return getArbolesCercanosEvent(coordenadas, distancia);
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result comprobarIdNfcEvent(String idNfc),
-    Result getArbolesCercanosEvent(String coordenadas),
+    Result getArbolesCercanosEvent(String coordenadas, int distancia),
     Result getCoordenadasEvent(),
     Result leerIdNfConTelefonoEvent(UserEntity usuario),
     Result agregarPinEvent(),
@@ -327,7 +339,7 @@ class _$GetArbolesCercanosEvent implements GetArbolesCercanosEvent {
   }) {
     assert(orElse != null);
     if (getArbolesCercanosEvent != null) {
-      return getArbolesCercanosEvent(coordenadas);
+      return getArbolesCercanosEvent(coordenadas, distancia);
     }
     return orElse();
   }
@@ -368,10 +380,11 @@ class _$GetArbolesCercanosEvent implements GetArbolesCercanosEvent {
 }
 
 abstract class GetArbolesCercanosEvent implements ArbolMapaEvent {
-  const factory GetArbolesCercanosEvent(String coordenadas) =
+  const factory GetArbolesCercanosEvent(String coordenadas, int distancia) =
       _$GetArbolesCercanosEvent;
 
   String get coordenadas;
+  int get distancia;
   $GetArbolesCercanosEventCopyWith<GetArbolesCercanosEvent> get copyWith;
 }
 
@@ -415,7 +428,7 @@ class _$GetCoordenadasEvent implements GetCoordenadasEvent {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result comprobarIdNfcEvent(String idNfc),
-    @required Result getArbolesCercanosEvent(String coordenadas),
+    @required Result getArbolesCercanosEvent(String coordenadas, int distancia),
     @required Result getCoordenadasEvent(),
     @required Result leerIdNfConTelefonoEvent(UserEntity usuario),
     @required Result agregarPinEvent(),
@@ -432,7 +445,7 @@ class _$GetCoordenadasEvent implements GetCoordenadasEvent {
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result comprobarIdNfcEvent(String idNfc),
-    Result getArbolesCercanosEvent(String coordenadas),
+    Result getArbolesCercanosEvent(String coordenadas, int distancia),
     Result getCoordenadasEvent(),
     Result leerIdNfConTelefonoEvent(UserEntity usuario),
     Result agregarPinEvent(),
@@ -547,7 +560,7 @@ class _$LeerIdNfConTelefonoEvent implements LeerIdNfConTelefonoEvent {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result comprobarIdNfcEvent(String idNfc),
-    @required Result getArbolesCercanosEvent(String coordenadas),
+    @required Result getArbolesCercanosEvent(String coordenadas, int distancia),
     @required Result getCoordenadasEvent(),
     @required Result leerIdNfConTelefonoEvent(UserEntity usuario),
     @required Result agregarPinEvent(),
@@ -564,7 +577,7 @@ class _$LeerIdNfConTelefonoEvent implements LeerIdNfConTelefonoEvent {
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result comprobarIdNfcEvent(String idNfc),
-    Result getArbolesCercanosEvent(String coordenadas),
+    Result getArbolesCercanosEvent(String coordenadas, int distancia),
     Result getCoordenadasEvent(),
     Result leerIdNfConTelefonoEvent(UserEntity usuario),
     Result agregarPinEvent(),
@@ -660,7 +673,7 @@ class _$AgregarMarkerEvent implements AgregarMarkerEvent {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result comprobarIdNfcEvent(String idNfc),
-    @required Result getArbolesCercanosEvent(String coordenadas),
+    @required Result getArbolesCercanosEvent(String coordenadas, int distancia),
     @required Result getCoordenadasEvent(),
     @required Result leerIdNfConTelefonoEvent(UserEntity usuario),
     @required Result agregarPinEvent(),
@@ -677,7 +690,7 @@ class _$AgregarMarkerEvent implements AgregarMarkerEvent {
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result comprobarIdNfcEvent(String idNfc),
-    Result getArbolesCercanosEvent(String coordenadas),
+    Result getArbolesCercanosEvent(String coordenadas, int distancia),
     Result getCoordenadasEvent(),
     Result leerIdNfConTelefonoEvent(UserEntity usuario),
     Result agregarPinEvent(),
@@ -739,10 +752,11 @@ class _$ArbolMapaStateTearOff {
   }
 
 // ignore: unused_element
-  ArbolesCercanosObtenidosMapaState arbolesCercanosObtenidos(
-      {@required ArbolesEntity arboles}) {
+  ArbolesCercanosObtenidosMapaState desplegandoArbolesCercanos(
+      {@required ArbolesEntity arboles, @required LatLng coordenada}) {
     return ArbolesCercanosObtenidosMapaState(
       arboles: arboles,
+      coordenada: coordenada,
     );
   }
 
@@ -786,9 +800,11 @@ class _$ArbolMapaStateTearOff {
   }
 
 // ignore: unused_element
-  MapaDesplegadoState mapaDesplegado({@required LatLng latLong}) {
+  MapaDesplegadoState mapaDesplegado(
+      {@required LatLng latLong, ArbolesEntity arboles}) {
     return MapaDesplegadoState(
       latLong: latLong,
+      arboles: arboles,
     );
   }
 }
@@ -802,33 +818,35 @@ mixin _$ArbolMapaState {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result initial(),
-    @required Result arbolesCercanosObtenidos(ArbolesEntity arboles),
+    @required
+        Result desplegandoArbolesCercanos(
+            ArbolesEntity arboles, LatLng coordenada),
     @required Result coordenadasObtenidas(LatLng latLng),
     @required Result idNfcObtenido(NfcEntity nfcEntity),
     @required Result idNfcChequeado(bool existe),
     @required Result failure(String message),
     @required Result loading(),
     @required Result marcadorColocado(),
-    @required Result mapaDesplegado(LatLng latLong),
+    @required Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles),
   });
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result initial(),
-    Result arbolesCercanosObtenidos(ArbolesEntity arboles),
+    Result desplegandoArbolesCercanos(ArbolesEntity arboles, LatLng coordenada),
     Result coordenadasObtenidas(LatLng latLng),
     Result idNfcObtenido(NfcEntity nfcEntity),
     Result idNfcChequeado(bool existe),
     Result failure(String message),
     Result loading(),
     Result marcadorColocado(),
-    Result mapaDesplegado(LatLng latLong),
+    Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles),
     @required Result orElse(),
   });
   @optionalTypeArgs
   Result map<Result extends Object>({
     @required Result initial(InitialMapaState value),
     @required
-        Result arbolesCercanosObtenidos(
+        Result desplegandoArbolesCercanos(
             ArbolesCercanosObtenidosMapaState value),
     @required Result coordenadasObtenidas(CoordenadasObtenidasMapaState value),
     @required Result idNfcObtenido(IdNfcObtenidoMapaState value),
@@ -841,7 +859,7 @@ mixin _$ArbolMapaState {
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
     Result initial(InitialMapaState value),
-    Result arbolesCercanosObtenidos(ArbolesCercanosObtenidosMapaState value),
+    Result desplegandoArbolesCercanos(ArbolesCercanosObtenidosMapaState value),
     Result coordenadasObtenidas(CoordenadasObtenidasMapaState value),
     Result idNfcObtenido(IdNfcObtenidoMapaState value),
     Result idNfcChequeado(IdNfcChequeadoMapaState value),
@@ -910,17 +928,19 @@ class _$InitialMapaState implements InitialMapaState {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result initial(),
-    @required Result arbolesCercanosObtenidos(ArbolesEntity arboles),
+    @required
+        Result desplegandoArbolesCercanos(
+            ArbolesEntity arboles, LatLng coordenada),
     @required Result coordenadasObtenidas(LatLng latLng),
     @required Result idNfcObtenido(NfcEntity nfcEntity),
     @required Result idNfcChequeado(bool existe),
     @required Result failure(String message),
     @required Result loading(),
     @required Result marcadorColocado(),
-    @required Result mapaDesplegado(LatLng latLong),
+    @required Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles),
   }) {
     assert(initial != null);
-    assert(arbolesCercanosObtenidos != null);
+    assert(desplegandoArbolesCercanos != null);
     assert(coordenadasObtenidas != null);
     assert(idNfcObtenido != null);
     assert(idNfcChequeado != null);
@@ -935,14 +955,14 @@ class _$InitialMapaState implements InitialMapaState {
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result initial(),
-    Result arbolesCercanosObtenidos(ArbolesEntity arboles),
+    Result desplegandoArbolesCercanos(ArbolesEntity arboles, LatLng coordenada),
     Result coordenadasObtenidas(LatLng latLng),
     Result idNfcObtenido(NfcEntity nfcEntity),
     Result idNfcChequeado(bool existe),
     Result failure(String message),
     Result loading(),
     Result marcadorColocado(),
-    Result mapaDesplegado(LatLng latLong),
+    Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -957,7 +977,7 @@ class _$InitialMapaState implements InitialMapaState {
   Result map<Result extends Object>({
     @required Result initial(InitialMapaState value),
     @required
-        Result arbolesCercanosObtenidos(
+        Result desplegandoArbolesCercanos(
             ArbolesCercanosObtenidosMapaState value),
     @required Result coordenadasObtenidas(CoordenadasObtenidasMapaState value),
     @required Result idNfcObtenido(IdNfcObtenidoMapaState value),
@@ -968,7 +988,7 @@ class _$InitialMapaState implements InitialMapaState {
     @required Result mapaDesplegado(MapaDesplegadoState value),
   }) {
     assert(initial != null);
-    assert(arbolesCercanosObtenidos != null);
+    assert(desplegandoArbolesCercanos != null);
     assert(coordenadasObtenidas != null);
     assert(idNfcObtenido != null);
     assert(idNfcChequeado != null);
@@ -983,7 +1003,7 @@ class _$InitialMapaState implements InitialMapaState {
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
     Result initial(InitialMapaState value),
-    Result arbolesCercanosObtenidos(ArbolesCercanosObtenidosMapaState value),
+    Result desplegandoArbolesCercanos(ArbolesCercanosObtenidosMapaState value),
     Result coordenadasObtenidas(CoordenadasObtenidasMapaState value),
     Result idNfcObtenido(IdNfcObtenidoMapaState value),
     Result idNfcChequeado(IdNfcChequeadoMapaState value),
@@ -1011,7 +1031,7 @@ abstract class $ArbolesCercanosObtenidosMapaStateCopyWith<$Res> {
           ArbolesCercanosObtenidosMapaState value,
           $Res Function(ArbolesCercanosObtenidosMapaState) then) =
       _$ArbolesCercanosObtenidosMapaStateCopyWithImpl<$Res>;
-  $Res call({ArbolesEntity arboles});
+  $Res call({ArbolesEntity arboles, LatLng coordenada});
 }
 
 /// @nodoc
@@ -1030,9 +1050,12 @@ class _$ArbolesCercanosObtenidosMapaStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object arboles = freezed,
+    Object coordenada = freezed,
   }) {
     return _then(ArbolesCercanosObtenidosMapaState(
       arboles: arboles == freezed ? _value.arboles : arboles as ArbolesEntity,
+      coordenada:
+          coordenada == freezed ? _value.coordenada : coordenada as LatLng,
     ));
   }
 }
@@ -1040,15 +1063,19 @@ class _$ArbolesCercanosObtenidosMapaStateCopyWithImpl<$Res>
 /// @nodoc
 class _$ArbolesCercanosObtenidosMapaState
     implements ArbolesCercanosObtenidosMapaState {
-  const _$ArbolesCercanosObtenidosMapaState({@required this.arboles})
-      : assert(arboles != null);
+  const _$ArbolesCercanosObtenidosMapaState(
+      {@required this.arboles, @required this.coordenada})
+      : assert(arboles != null),
+        assert(coordenada != null);
 
   @override
   final ArbolesEntity arboles;
+  @override
+  final LatLng coordenada;
 
   @override
   String toString() {
-    return 'ArbolMapaState.arbolesCercanosObtenidos(arboles: $arboles)';
+    return 'ArbolMapaState.desplegandoArbolesCercanos(arboles: $arboles, coordenada: $coordenada)';
   }
 
   @override
@@ -1056,12 +1083,18 @@ class _$ArbolesCercanosObtenidosMapaState
     return identical(this, other) ||
         (other is ArbolesCercanosObtenidosMapaState &&
             (identical(other.arboles, arboles) ||
-                const DeepCollectionEquality().equals(other.arboles, arboles)));
+                const DeepCollectionEquality()
+                    .equals(other.arboles, arboles)) &&
+            (identical(other.coordenada, coordenada) ||
+                const DeepCollectionEquality()
+                    .equals(other.coordenada, coordenada)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(arboles);
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(arboles) ^
+      const DeepCollectionEquality().hash(coordenada);
 
   @override
   $ArbolesCercanosObtenidosMapaStateCopyWith<ArbolesCercanosObtenidosMapaState>
@@ -1072,17 +1105,19 @@ class _$ArbolesCercanosObtenidosMapaState
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result initial(),
-    @required Result arbolesCercanosObtenidos(ArbolesEntity arboles),
+    @required
+        Result desplegandoArbolesCercanos(
+            ArbolesEntity arboles, LatLng coordenada),
     @required Result coordenadasObtenidas(LatLng latLng),
     @required Result idNfcObtenido(NfcEntity nfcEntity),
     @required Result idNfcChequeado(bool existe),
     @required Result failure(String message),
     @required Result loading(),
     @required Result marcadorColocado(),
-    @required Result mapaDesplegado(LatLng latLong),
+    @required Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles),
   }) {
     assert(initial != null);
-    assert(arbolesCercanosObtenidos != null);
+    assert(desplegandoArbolesCercanos != null);
     assert(coordenadasObtenidas != null);
     assert(idNfcObtenido != null);
     assert(idNfcChequeado != null);
@@ -1090,26 +1125,26 @@ class _$ArbolesCercanosObtenidosMapaState
     assert(loading != null);
     assert(marcadorColocado != null);
     assert(mapaDesplegado != null);
-    return arbolesCercanosObtenidos(arboles);
+    return desplegandoArbolesCercanos(arboles, coordenada);
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result initial(),
-    Result arbolesCercanosObtenidos(ArbolesEntity arboles),
+    Result desplegandoArbolesCercanos(ArbolesEntity arboles, LatLng coordenada),
     Result coordenadasObtenidas(LatLng latLng),
     Result idNfcObtenido(NfcEntity nfcEntity),
     Result idNfcChequeado(bool existe),
     Result failure(String message),
     Result loading(),
     Result marcadorColocado(),
-    Result mapaDesplegado(LatLng latLong),
+    Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles),
     @required Result orElse(),
   }) {
     assert(orElse != null);
-    if (arbolesCercanosObtenidos != null) {
-      return arbolesCercanosObtenidos(arboles);
+    if (desplegandoArbolesCercanos != null) {
+      return desplegandoArbolesCercanos(arboles, coordenada);
     }
     return orElse();
   }
@@ -1119,7 +1154,7 @@ class _$ArbolesCercanosObtenidosMapaState
   Result map<Result extends Object>({
     @required Result initial(InitialMapaState value),
     @required
-        Result arbolesCercanosObtenidos(
+        Result desplegandoArbolesCercanos(
             ArbolesCercanosObtenidosMapaState value),
     @required Result coordenadasObtenidas(CoordenadasObtenidasMapaState value),
     @required Result idNfcObtenido(IdNfcObtenidoMapaState value),
@@ -1130,7 +1165,7 @@ class _$ArbolesCercanosObtenidosMapaState
     @required Result mapaDesplegado(MapaDesplegadoState value),
   }) {
     assert(initial != null);
-    assert(arbolesCercanosObtenidos != null);
+    assert(desplegandoArbolesCercanos != null);
     assert(coordenadasObtenidas != null);
     assert(idNfcObtenido != null);
     assert(idNfcChequeado != null);
@@ -1138,14 +1173,14 @@ class _$ArbolesCercanosObtenidosMapaState
     assert(loading != null);
     assert(marcadorColocado != null);
     assert(mapaDesplegado != null);
-    return arbolesCercanosObtenidos(this);
+    return desplegandoArbolesCercanos(this);
   }
 
   @override
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
     Result initial(InitialMapaState value),
-    Result arbolesCercanosObtenidos(ArbolesCercanosObtenidosMapaState value),
+    Result desplegandoArbolesCercanos(ArbolesCercanosObtenidosMapaState value),
     Result coordenadasObtenidas(CoordenadasObtenidasMapaState value),
     Result idNfcObtenido(IdNfcObtenidoMapaState value),
     Result idNfcChequeado(IdNfcChequeadoMapaState value),
@@ -1156,8 +1191,8 @@ class _$ArbolesCercanosObtenidosMapaState
     @required Result orElse(),
   }) {
     assert(orElse != null);
-    if (arbolesCercanosObtenidos != null) {
-      return arbolesCercanosObtenidos(this);
+    if (desplegandoArbolesCercanos != null) {
+      return desplegandoArbolesCercanos(this);
     }
     return orElse();
   }
@@ -1165,9 +1200,11 @@ class _$ArbolesCercanosObtenidosMapaState
 
 abstract class ArbolesCercanosObtenidosMapaState implements ArbolMapaState {
   const factory ArbolesCercanosObtenidosMapaState(
-      {@required ArbolesEntity arboles}) = _$ArbolesCercanosObtenidosMapaState;
+      {@required ArbolesEntity arboles,
+      @required LatLng coordenada}) = _$ArbolesCercanosObtenidosMapaState;
 
   ArbolesEntity get arboles;
+  LatLng get coordenada;
   $ArbolesCercanosObtenidosMapaStateCopyWith<ArbolesCercanosObtenidosMapaState>
       get copyWith;
 }
@@ -1238,17 +1275,19 @@ class _$CoordenadasObtenidasMapaState implements CoordenadasObtenidasMapaState {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result initial(),
-    @required Result arbolesCercanosObtenidos(ArbolesEntity arboles),
+    @required
+        Result desplegandoArbolesCercanos(
+            ArbolesEntity arboles, LatLng coordenada),
     @required Result coordenadasObtenidas(LatLng latLng),
     @required Result idNfcObtenido(NfcEntity nfcEntity),
     @required Result idNfcChequeado(bool existe),
     @required Result failure(String message),
     @required Result loading(),
     @required Result marcadorColocado(),
-    @required Result mapaDesplegado(LatLng latLong),
+    @required Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles),
   }) {
     assert(initial != null);
-    assert(arbolesCercanosObtenidos != null);
+    assert(desplegandoArbolesCercanos != null);
     assert(coordenadasObtenidas != null);
     assert(idNfcObtenido != null);
     assert(idNfcChequeado != null);
@@ -1263,14 +1302,14 @@ class _$CoordenadasObtenidasMapaState implements CoordenadasObtenidasMapaState {
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result initial(),
-    Result arbolesCercanosObtenidos(ArbolesEntity arboles),
+    Result desplegandoArbolesCercanos(ArbolesEntity arboles, LatLng coordenada),
     Result coordenadasObtenidas(LatLng latLng),
     Result idNfcObtenido(NfcEntity nfcEntity),
     Result idNfcChequeado(bool existe),
     Result failure(String message),
     Result loading(),
     Result marcadorColocado(),
-    Result mapaDesplegado(LatLng latLong),
+    Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -1285,7 +1324,7 @@ class _$CoordenadasObtenidasMapaState implements CoordenadasObtenidasMapaState {
   Result map<Result extends Object>({
     @required Result initial(InitialMapaState value),
     @required
-        Result arbolesCercanosObtenidos(
+        Result desplegandoArbolesCercanos(
             ArbolesCercanosObtenidosMapaState value),
     @required Result coordenadasObtenidas(CoordenadasObtenidasMapaState value),
     @required Result idNfcObtenido(IdNfcObtenidoMapaState value),
@@ -1296,7 +1335,7 @@ class _$CoordenadasObtenidasMapaState implements CoordenadasObtenidasMapaState {
     @required Result mapaDesplegado(MapaDesplegadoState value),
   }) {
     assert(initial != null);
-    assert(arbolesCercanosObtenidos != null);
+    assert(desplegandoArbolesCercanos != null);
     assert(coordenadasObtenidas != null);
     assert(idNfcObtenido != null);
     assert(idNfcChequeado != null);
@@ -1311,7 +1350,7 @@ class _$CoordenadasObtenidasMapaState implements CoordenadasObtenidasMapaState {
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
     Result initial(InitialMapaState value),
-    Result arbolesCercanosObtenidos(ArbolesCercanosObtenidosMapaState value),
+    Result desplegandoArbolesCercanos(ArbolesCercanosObtenidosMapaState value),
     Result coordenadasObtenidas(CoordenadasObtenidasMapaState value),
     Result idNfcObtenido(IdNfcObtenidoMapaState value),
     Result idNfcChequeado(IdNfcChequeadoMapaState value),
@@ -1403,17 +1442,19 @@ class _$IdNfcObtenidoMapaState implements IdNfcObtenidoMapaState {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result initial(),
-    @required Result arbolesCercanosObtenidos(ArbolesEntity arboles),
+    @required
+        Result desplegandoArbolesCercanos(
+            ArbolesEntity arboles, LatLng coordenada),
     @required Result coordenadasObtenidas(LatLng latLng),
     @required Result idNfcObtenido(NfcEntity nfcEntity),
     @required Result idNfcChequeado(bool existe),
     @required Result failure(String message),
     @required Result loading(),
     @required Result marcadorColocado(),
-    @required Result mapaDesplegado(LatLng latLong),
+    @required Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles),
   }) {
     assert(initial != null);
-    assert(arbolesCercanosObtenidos != null);
+    assert(desplegandoArbolesCercanos != null);
     assert(coordenadasObtenidas != null);
     assert(idNfcObtenido != null);
     assert(idNfcChequeado != null);
@@ -1428,14 +1469,14 @@ class _$IdNfcObtenidoMapaState implements IdNfcObtenidoMapaState {
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result initial(),
-    Result arbolesCercanosObtenidos(ArbolesEntity arboles),
+    Result desplegandoArbolesCercanos(ArbolesEntity arboles, LatLng coordenada),
     Result coordenadasObtenidas(LatLng latLng),
     Result idNfcObtenido(NfcEntity nfcEntity),
     Result idNfcChequeado(bool existe),
     Result failure(String message),
     Result loading(),
     Result marcadorColocado(),
-    Result mapaDesplegado(LatLng latLong),
+    Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -1450,7 +1491,7 @@ class _$IdNfcObtenidoMapaState implements IdNfcObtenidoMapaState {
   Result map<Result extends Object>({
     @required Result initial(InitialMapaState value),
     @required
-        Result arbolesCercanosObtenidos(
+        Result desplegandoArbolesCercanos(
             ArbolesCercanosObtenidosMapaState value),
     @required Result coordenadasObtenidas(CoordenadasObtenidasMapaState value),
     @required Result idNfcObtenido(IdNfcObtenidoMapaState value),
@@ -1461,7 +1502,7 @@ class _$IdNfcObtenidoMapaState implements IdNfcObtenidoMapaState {
     @required Result mapaDesplegado(MapaDesplegadoState value),
   }) {
     assert(initial != null);
-    assert(arbolesCercanosObtenidos != null);
+    assert(desplegandoArbolesCercanos != null);
     assert(coordenadasObtenidas != null);
     assert(idNfcObtenido != null);
     assert(idNfcChequeado != null);
@@ -1476,7 +1517,7 @@ class _$IdNfcObtenidoMapaState implements IdNfcObtenidoMapaState {
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
     Result initial(InitialMapaState value),
-    Result arbolesCercanosObtenidos(ArbolesCercanosObtenidosMapaState value),
+    Result desplegandoArbolesCercanos(ArbolesCercanosObtenidosMapaState value),
     Result coordenadasObtenidas(CoordenadasObtenidasMapaState value),
     Result idNfcObtenido(IdNfcObtenidoMapaState value),
     Result idNfcChequeado(IdNfcChequeadoMapaState value),
@@ -1565,17 +1606,19 @@ class _$IdNfcChequeadoMapaState implements IdNfcChequeadoMapaState {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result initial(),
-    @required Result arbolesCercanosObtenidos(ArbolesEntity arboles),
+    @required
+        Result desplegandoArbolesCercanos(
+            ArbolesEntity arboles, LatLng coordenada),
     @required Result coordenadasObtenidas(LatLng latLng),
     @required Result idNfcObtenido(NfcEntity nfcEntity),
     @required Result idNfcChequeado(bool existe),
     @required Result failure(String message),
     @required Result loading(),
     @required Result marcadorColocado(),
-    @required Result mapaDesplegado(LatLng latLong),
+    @required Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles),
   }) {
     assert(initial != null);
-    assert(arbolesCercanosObtenidos != null);
+    assert(desplegandoArbolesCercanos != null);
     assert(coordenadasObtenidas != null);
     assert(idNfcObtenido != null);
     assert(idNfcChequeado != null);
@@ -1590,14 +1633,14 @@ class _$IdNfcChequeadoMapaState implements IdNfcChequeadoMapaState {
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result initial(),
-    Result arbolesCercanosObtenidos(ArbolesEntity arboles),
+    Result desplegandoArbolesCercanos(ArbolesEntity arboles, LatLng coordenada),
     Result coordenadasObtenidas(LatLng latLng),
     Result idNfcObtenido(NfcEntity nfcEntity),
     Result idNfcChequeado(bool existe),
     Result failure(String message),
     Result loading(),
     Result marcadorColocado(),
-    Result mapaDesplegado(LatLng latLong),
+    Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -1612,7 +1655,7 @@ class _$IdNfcChequeadoMapaState implements IdNfcChequeadoMapaState {
   Result map<Result extends Object>({
     @required Result initial(InitialMapaState value),
     @required
-        Result arbolesCercanosObtenidos(
+        Result desplegandoArbolesCercanos(
             ArbolesCercanosObtenidosMapaState value),
     @required Result coordenadasObtenidas(CoordenadasObtenidasMapaState value),
     @required Result idNfcObtenido(IdNfcObtenidoMapaState value),
@@ -1623,7 +1666,7 @@ class _$IdNfcChequeadoMapaState implements IdNfcChequeadoMapaState {
     @required Result mapaDesplegado(MapaDesplegadoState value),
   }) {
     assert(initial != null);
-    assert(arbolesCercanosObtenidos != null);
+    assert(desplegandoArbolesCercanos != null);
     assert(coordenadasObtenidas != null);
     assert(idNfcObtenido != null);
     assert(idNfcChequeado != null);
@@ -1638,7 +1681,7 @@ class _$IdNfcChequeadoMapaState implements IdNfcChequeadoMapaState {
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
     Result initial(InitialMapaState value),
-    Result arbolesCercanosObtenidos(ArbolesCercanosObtenidosMapaState value),
+    Result desplegandoArbolesCercanos(ArbolesCercanosObtenidosMapaState value),
     Result coordenadasObtenidas(CoordenadasObtenidasMapaState value),
     Result idNfcObtenido(IdNfcObtenidoMapaState value),
     Result idNfcChequeado(IdNfcChequeadoMapaState value),
@@ -1725,17 +1768,19 @@ class _$FailureMapaState implements FailureMapaState {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result initial(),
-    @required Result arbolesCercanosObtenidos(ArbolesEntity arboles),
+    @required
+        Result desplegandoArbolesCercanos(
+            ArbolesEntity arboles, LatLng coordenada),
     @required Result coordenadasObtenidas(LatLng latLng),
     @required Result idNfcObtenido(NfcEntity nfcEntity),
     @required Result idNfcChequeado(bool existe),
     @required Result failure(String message),
     @required Result loading(),
     @required Result marcadorColocado(),
-    @required Result mapaDesplegado(LatLng latLong),
+    @required Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles),
   }) {
     assert(initial != null);
-    assert(arbolesCercanosObtenidos != null);
+    assert(desplegandoArbolesCercanos != null);
     assert(coordenadasObtenidas != null);
     assert(idNfcObtenido != null);
     assert(idNfcChequeado != null);
@@ -1750,14 +1795,14 @@ class _$FailureMapaState implements FailureMapaState {
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result initial(),
-    Result arbolesCercanosObtenidos(ArbolesEntity arboles),
+    Result desplegandoArbolesCercanos(ArbolesEntity arboles, LatLng coordenada),
     Result coordenadasObtenidas(LatLng latLng),
     Result idNfcObtenido(NfcEntity nfcEntity),
     Result idNfcChequeado(bool existe),
     Result failure(String message),
     Result loading(),
     Result marcadorColocado(),
-    Result mapaDesplegado(LatLng latLong),
+    Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -1772,7 +1817,7 @@ class _$FailureMapaState implements FailureMapaState {
   Result map<Result extends Object>({
     @required Result initial(InitialMapaState value),
     @required
-        Result arbolesCercanosObtenidos(
+        Result desplegandoArbolesCercanos(
             ArbolesCercanosObtenidosMapaState value),
     @required Result coordenadasObtenidas(CoordenadasObtenidasMapaState value),
     @required Result idNfcObtenido(IdNfcObtenidoMapaState value),
@@ -1783,7 +1828,7 @@ class _$FailureMapaState implements FailureMapaState {
     @required Result mapaDesplegado(MapaDesplegadoState value),
   }) {
     assert(initial != null);
-    assert(arbolesCercanosObtenidos != null);
+    assert(desplegandoArbolesCercanos != null);
     assert(coordenadasObtenidas != null);
     assert(idNfcObtenido != null);
     assert(idNfcChequeado != null);
@@ -1798,7 +1843,7 @@ class _$FailureMapaState implements FailureMapaState {
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
     Result initial(InitialMapaState value),
-    Result arbolesCercanosObtenidos(ArbolesCercanosObtenidosMapaState value),
+    Result desplegandoArbolesCercanos(ArbolesCercanosObtenidosMapaState value),
     Result coordenadasObtenidas(CoordenadasObtenidasMapaState value),
     Result idNfcObtenido(IdNfcObtenidoMapaState value),
     Result idNfcChequeado(IdNfcChequeadoMapaState value),
@@ -1864,17 +1909,19 @@ class _$LoadingMapaState implements LoadingMapaState {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result initial(),
-    @required Result arbolesCercanosObtenidos(ArbolesEntity arboles),
+    @required
+        Result desplegandoArbolesCercanos(
+            ArbolesEntity arboles, LatLng coordenada),
     @required Result coordenadasObtenidas(LatLng latLng),
     @required Result idNfcObtenido(NfcEntity nfcEntity),
     @required Result idNfcChequeado(bool existe),
     @required Result failure(String message),
     @required Result loading(),
     @required Result marcadorColocado(),
-    @required Result mapaDesplegado(LatLng latLong),
+    @required Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles),
   }) {
     assert(initial != null);
-    assert(arbolesCercanosObtenidos != null);
+    assert(desplegandoArbolesCercanos != null);
     assert(coordenadasObtenidas != null);
     assert(idNfcObtenido != null);
     assert(idNfcChequeado != null);
@@ -1889,14 +1936,14 @@ class _$LoadingMapaState implements LoadingMapaState {
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result initial(),
-    Result arbolesCercanosObtenidos(ArbolesEntity arboles),
+    Result desplegandoArbolesCercanos(ArbolesEntity arboles, LatLng coordenada),
     Result coordenadasObtenidas(LatLng latLng),
     Result idNfcObtenido(NfcEntity nfcEntity),
     Result idNfcChequeado(bool existe),
     Result failure(String message),
     Result loading(),
     Result marcadorColocado(),
-    Result mapaDesplegado(LatLng latLong),
+    Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -1911,7 +1958,7 @@ class _$LoadingMapaState implements LoadingMapaState {
   Result map<Result extends Object>({
     @required Result initial(InitialMapaState value),
     @required
-        Result arbolesCercanosObtenidos(
+        Result desplegandoArbolesCercanos(
             ArbolesCercanosObtenidosMapaState value),
     @required Result coordenadasObtenidas(CoordenadasObtenidasMapaState value),
     @required Result idNfcObtenido(IdNfcObtenidoMapaState value),
@@ -1922,7 +1969,7 @@ class _$LoadingMapaState implements LoadingMapaState {
     @required Result mapaDesplegado(MapaDesplegadoState value),
   }) {
     assert(initial != null);
-    assert(arbolesCercanosObtenidos != null);
+    assert(desplegandoArbolesCercanos != null);
     assert(coordenadasObtenidas != null);
     assert(idNfcObtenido != null);
     assert(idNfcChequeado != null);
@@ -1937,7 +1984,7 @@ class _$LoadingMapaState implements LoadingMapaState {
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
     Result initial(InitialMapaState value),
-    Result arbolesCercanosObtenidos(ArbolesCercanosObtenidosMapaState value),
+    Result desplegandoArbolesCercanos(ArbolesCercanosObtenidosMapaState value),
     Result coordenadasObtenidas(CoordenadasObtenidasMapaState value),
     Result idNfcObtenido(IdNfcObtenidoMapaState value),
     Result idNfcChequeado(IdNfcChequeadoMapaState value),
@@ -1999,17 +2046,19 @@ class _$MarcadorColocadoState implements MarcadorColocadoState {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result initial(),
-    @required Result arbolesCercanosObtenidos(ArbolesEntity arboles),
+    @required
+        Result desplegandoArbolesCercanos(
+            ArbolesEntity arboles, LatLng coordenada),
     @required Result coordenadasObtenidas(LatLng latLng),
     @required Result idNfcObtenido(NfcEntity nfcEntity),
     @required Result idNfcChequeado(bool existe),
     @required Result failure(String message),
     @required Result loading(),
     @required Result marcadorColocado(),
-    @required Result mapaDesplegado(LatLng latLong),
+    @required Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles),
   }) {
     assert(initial != null);
-    assert(arbolesCercanosObtenidos != null);
+    assert(desplegandoArbolesCercanos != null);
     assert(coordenadasObtenidas != null);
     assert(idNfcObtenido != null);
     assert(idNfcChequeado != null);
@@ -2024,14 +2073,14 @@ class _$MarcadorColocadoState implements MarcadorColocadoState {
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result initial(),
-    Result arbolesCercanosObtenidos(ArbolesEntity arboles),
+    Result desplegandoArbolesCercanos(ArbolesEntity arboles, LatLng coordenada),
     Result coordenadasObtenidas(LatLng latLng),
     Result idNfcObtenido(NfcEntity nfcEntity),
     Result idNfcChequeado(bool existe),
     Result failure(String message),
     Result loading(),
     Result marcadorColocado(),
-    Result mapaDesplegado(LatLng latLong),
+    Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -2046,7 +2095,7 @@ class _$MarcadorColocadoState implements MarcadorColocadoState {
   Result map<Result extends Object>({
     @required Result initial(InitialMapaState value),
     @required
-        Result arbolesCercanosObtenidos(
+        Result desplegandoArbolesCercanos(
             ArbolesCercanosObtenidosMapaState value),
     @required Result coordenadasObtenidas(CoordenadasObtenidasMapaState value),
     @required Result idNfcObtenido(IdNfcObtenidoMapaState value),
@@ -2057,7 +2106,7 @@ class _$MarcadorColocadoState implements MarcadorColocadoState {
     @required Result mapaDesplegado(MapaDesplegadoState value),
   }) {
     assert(initial != null);
-    assert(arbolesCercanosObtenidos != null);
+    assert(desplegandoArbolesCercanos != null);
     assert(coordenadasObtenidas != null);
     assert(idNfcObtenido != null);
     assert(idNfcChequeado != null);
@@ -2072,7 +2121,7 @@ class _$MarcadorColocadoState implements MarcadorColocadoState {
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
     Result initial(InitialMapaState value),
-    Result arbolesCercanosObtenidos(ArbolesCercanosObtenidosMapaState value),
+    Result desplegandoArbolesCercanos(ArbolesCercanosObtenidosMapaState value),
     Result coordenadasObtenidas(CoordenadasObtenidasMapaState value),
     Result idNfcObtenido(IdNfcObtenidoMapaState value),
     Result idNfcChequeado(IdNfcChequeadoMapaState value),
@@ -2099,7 +2148,7 @@ abstract class $MapaDesplegadoStateCopyWith<$Res> {
   factory $MapaDesplegadoStateCopyWith(
           MapaDesplegadoState value, $Res Function(MapaDesplegadoState) then) =
       _$MapaDesplegadoStateCopyWithImpl<$Res>;
-  $Res call({LatLng latLong});
+  $Res call({LatLng latLong, ArbolesEntity arboles});
 }
 
 /// @nodoc
@@ -2116,24 +2165,28 @@ class _$MapaDesplegadoStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object latLong = freezed,
+    Object arboles = freezed,
   }) {
     return _then(MapaDesplegadoState(
       latLong: latLong == freezed ? _value.latLong : latLong as LatLng,
+      arboles: arboles == freezed ? _value.arboles : arboles as ArbolesEntity,
     ));
   }
 }
 
 /// @nodoc
 class _$MapaDesplegadoState implements MapaDesplegadoState {
-  const _$MapaDesplegadoState({@required this.latLong})
+  const _$MapaDesplegadoState({@required this.latLong, this.arboles})
       : assert(latLong != null);
 
   @override
   final LatLng latLong;
+  @override
+  final ArbolesEntity arboles;
 
   @override
   String toString() {
-    return 'ArbolMapaState.mapaDesplegado(latLong: $latLong)';
+    return 'ArbolMapaState.mapaDesplegado(latLong: $latLong, arboles: $arboles)';
   }
 
   @override
@@ -2141,12 +2194,17 @@ class _$MapaDesplegadoState implements MapaDesplegadoState {
     return identical(this, other) ||
         (other is MapaDesplegadoState &&
             (identical(other.latLong, latLong) ||
-                const DeepCollectionEquality().equals(other.latLong, latLong)));
+                const DeepCollectionEquality()
+                    .equals(other.latLong, latLong)) &&
+            (identical(other.arboles, arboles) ||
+                const DeepCollectionEquality().equals(other.arboles, arboles)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(latLong);
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(latLong) ^
+      const DeepCollectionEquality().hash(arboles);
 
   @override
   $MapaDesplegadoStateCopyWith<MapaDesplegadoState> get copyWith =>
@@ -2156,17 +2214,19 @@ class _$MapaDesplegadoState implements MapaDesplegadoState {
   @optionalTypeArgs
   Result when<Result extends Object>({
     @required Result initial(),
-    @required Result arbolesCercanosObtenidos(ArbolesEntity arboles),
+    @required
+        Result desplegandoArbolesCercanos(
+            ArbolesEntity arboles, LatLng coordenada),
     @required Result coordenadasObtenidas(LatLng latLng),
     @required Result idNfcObtenido(NfcEntity nfcEntity),
     @required Result idNfcChequeado(bool existe),
     @required Result failure(String message),
     @required Result loading(),
     @required Result marcadorColocado(),
-    @required Result mapaDesplegado(LatLng latLong),
+    @required Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles),
   }) {
     assert(initial != null);
-    assert(arbolesCercanosObtenidos != null);
+    assert(desplegandoArbolesCercanos != null);
     assert(coordenadasObtenidas != null);
     assert(idNfcObtenido != null);
     assert(idNfcChequeado != null);
@@ -2174,26 +2234,26 @@ class _$MapaDesplegadoState implements MapaDesplegadoState {
     assert(loading != null);
     assert(marcadorColocado != null);
     assert(mapaDesplegado != null);
-    return mapaDesplegado(latLong);
+    return mapaDesplegado(latLong, arboles);
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result initial(),
-    Result arbolesCercanosObtenidos(ArbolesEntity arboles),
+    Result desplegandoArbolesCercanos(ArbolesEntity arboles, LatLng coordenada),
     Result coordenadasObtenidas(LatLng latLng),
     Result idNfcObtenido(NfcEntity nfcEntity),
     Result idNfcChequeado(bool existe),
     Result failure(String message),
     Result loading(),
     Result marcadorColocado(),
-    Result mapaDesplegado(LatLng latLong),
+    Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles),
     @required Result orElse(),
   }) {
     assert(orElse != null);
     if (mapaDesplegado != null) {
-      return mapaDesplegado(latLong);
+      return mapaDesplegado(latLong, arboles);
     }
     return orElse();
   }
@@ -2203,7 +2263,7 @@ class _$MapaDesplegadoState implements MapaDesplegadoState {
   Result map<Result extends Object>({
     @required Result initial(InitialMapaState value),
     @required
-        Result arbolesCercanosObtenidos(
+        Result desplegandoArbolesCercanos(
             ArbolesCercanosObtenidosMapaState value),
     @required Result coordenadasObtenidas(CoordenadasObtenidasMapaState value),
     @required Result idNfcObtenido(IdNfcObtenidoMapaState value),
@@ -2214,7 +2274,7 @@ class _$MapaDesplegadoState implements MapaDesplegadoState {
     @required Result mapaDesplegado(MapaDesplegadoState value),
   }) {
     assert(initial != null);
-    assert(arbolesCercanosObtenidos != null);
+    assert(desplegandoArbolesCercanos != null);
     assert(coordenadasObtenidas != null);
     assert(idNfcObtenido != null);
     assert(idNfcChequeado != null);
@@ -2229,7 +2289,7 @@ class _$MapaDesplegadoState implements MapaDesplegadoState {
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
     Result initial(InitialMapaState value),
-    Result arbolesCercanosObtenidos(ArbolesCercanosObtenidosMapaState value),
+    Result desplegandoArbolesCercanos(ArbolesCercanosObtenidosMapaState value),
     Result coordenadasObtenidas(CoordenadasObtenidasMapaState value),
     Result idNfcObtenido(IdNfcObtenidoMapaState value),
     Result idNfcChequeado(IdNfcChequeadoMapaState value),
@@ -2248,9 +2308,11 @@ class _$MapaDesplegadoState implements MapaDesplegadoState {
 }
 
 abstract class MapaDesplegadoState implements ArbolMapaState {
-  const factory MapaDesplegadoState({@required LatLng latLong}) =
-      _$MapaDesplegadoState;
+  const factory MapaDesplegadoState(
+      {@required LatLng latLong,
+      ArbolesEntity arboles}) = _$MapaDesplegadoState;
 
   LatLng get latLong;
+  ArbolesEntity get arboles;
   $MapaDesplegadoStateCopyWith<MapaDesplegadoState> get copyWith;
 }
