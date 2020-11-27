@@ -22,5 +22,7 @@ abstract class ArbolMapaState with _$ArbolMapaState {
   const factory ArbolMapaState.loading() = LoadingMapaState;
   const factory ArbolMapaState.marcadorColocado() = MarcadorColocadoState;
   const factory ArbolMapaState.mapaDesplegado(
-      {@required LatLng latLong, ArbolesEntity arboles}) = MapaDesplegadoState;
+      {@required LatLng latLong,
+      ArbolesEntity arboles,
+      LatLng tapPosition}) = MapaDesplegadoState;
 }

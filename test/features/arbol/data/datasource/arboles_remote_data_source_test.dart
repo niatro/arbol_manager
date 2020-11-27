@@ -31,7 +31,6 @@ void main() {
   MockHttpClient mockHttpClient;
   MockEsquema esquemaDatos;
   MockDataBaseHelper dataBaseHelper;
-  TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() {
     mockHttpClient = MockHttpClient();
@@ -39,6 +38,7 @@ void main() {
     dataBaseHelper = MockDataBaseHelper();
     remoteDataSource = ArbolesRemoteDataSourceImpl(
         client: mockHttpClient, referencia: esquemaDatos);
+    TestWidgetsFlutterBinding.ensureInitialized();
   });
   final EsquemaDataDeSQL referencia = EsquemaDataDeSQL();
   final String _url = urlPruebas;
@@ -77,9 +77,9 @@ void main() {
     test('''DEBERIA hacer un request al URL con las coordenadas y
     recibir arboles cercanos  en un radio por definir''', () async {
       // arrange
-      setUpMockHttpSuccess200('arboles.json');
-      // act
+      setUpMockHttpSuccess200('arboles_server.json');
 
+      // act
       remoteDataSource.getArbolesCercanosRemoteData(
           coordenadas: coordenadasTest, distancia: distancia);
 
@@ -102,12 +102,13 @@ void main() {
       // act
       final List<Map> jsonMaped =
           List<Map<String, dynamic>>.from(json.decode(fixture('arboles.json')));
+
       final ArbolesEntityModelo arbolesEntityModelo =
           ArbolesEntityModelo.fromJson(parsedListMapFromJson: jsonMaped);
       expect(arbolesEntityModelo, tArbolesTestModelo);
     });
     test(
-        'DEBERIA retornar ArbolEntityModelo cuando el codigo de respuesta es 200',
+        '''DEBERIA retornar ArbolEntityModelo cuando el codigo de respuesta es 200''',
         () async {
       // arrange
       setUpMockHttpSuccess200('arboles_server.json');
@@ -137,8 +138,9 @@ void main() {
         List<Map<String, dynamic>>.from(json.decode(fixture('arbol.json')));
     final tArbolesTestModelo =
         ArbolesEntityModelo.fromJson(parsedListMapFromJson: jsonMaped);
-    test('''DEBERIA hacer un request POST con el idNFC y retornar 
-    el ArbolEntityModel con un solo arbol''', () async {
+    test(
+        '''DEBERIA retornar un ArbolEntityModel CUANDO el code del request es 200 l''',
+        () async {
       // arrange
       setUpMockHttpSuccess200('arbol.json');
       // act

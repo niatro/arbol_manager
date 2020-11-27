@@ -73,9 +73,18 @@ class CatastradorMapaIntegrado extends StatelessWidget {
                           return LatLng(-33.39795292537557, -70.60091244581768);
                         },
                       ),
-                      zoom: 18.00,
+                      zoom: 19.00,
                     ),
-                    markers: Set.of(_markersDeLosArboles(
+                    onTap: (LatLng pos) {
+                      context
+                          .bloc<ArbolMapaBloc>()
+                          .add(ArbolMapaEvent.onTapPantalla(
+                            tapPosicion: pos,
+                            arboles: s.arboles,
+                            localizacion: s.latLong,
+                          ));
+                    },
+                    markers: Set.of(_listaMarcadoresDeLosArboles(
                         s.arboles ?? new ArbolesEntity(listaArbolEntity: []))),
                     mapType: MapType.normal,
                     myLocationEnabled: true,
@@ -91,14 +100,16 @@ class CatastradorMapaIntegrado extends StatelessWidget {
                         'En floatingActionButton el estado que entra es $state');
                     await context.bloc<ArbolMapaBloc>().add(
                           ArbolMapaEvent.getArbolesCercanosEvent(
-                              state.maybeWhen(mapaDesplegado: (l, a) {
-                                return l.latitude.toString() +
-                                    ',' +
-                                    l.longitude.toString();
+                              state.maybeWhen(mapaDesplegado: (l, a, p) {
+                                return "-33.39848065129757,-70.59791651315805";
+
+//                                return l.latitude.toString() +
+//                                    ',' +
+//                                    l.longitude.toString();
                               }, orElse: () {
-                                return "-33.398827188275405,-70.59860965002224";
+                                return "-33.37679954804514,-70.56944723226297";
                               }),
-                              30),
+                              50),
                         );
                   },
                   label: Text('Cerca'),
@@ -110,7 +121,7 @@ class CatastradorMapaIntegrado extends StatelessWidget {
     );
   }
 
-  List<Marker> _markersDeLosArboles(ArbolesEntity arboles) {
+  List<Marker> _listaMarcadoresDeLosArboles(ArbolesEntity arboles) {
     final List<Marker> result = [];
     Uuid uuid = Uuid();
     if (arboles.listaArbolEntity != []) {

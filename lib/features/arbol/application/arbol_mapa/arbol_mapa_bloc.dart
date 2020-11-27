@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutterapparbol/core/constants/arbol_vacio.dart';
 import 'package:flutterapparbol/core/error/failure.dart';
 import 'package:flutterapparbol/core/usecases/usecase.dart';
 import 'package:flutterapparbol/core/util/input_converter.dart';
@@ -135,7 +136,55 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
           },
         );
       },
-      agregarPinEvent: (e) async* {},
+      onTapPantalla: (e) async* {
+        final ArbolEntity arbolVacioPosicion = ArbolEntity(
+          guiArbol: "No asignado",
+          idArbol: 0,
+          idNfcHistoria: [],
+          clienteArbol: "No asignado",
+          zonaArbol: "No Asignada",
+          calleArbol: "No Asignada",
+          nCalleArbol: null,
+          esquinaCalleArbol: "No Asignada",
+          especieArbol: "No Asignada",
+          diametroTroncoArbolCm: null,
+          diametroCopaNsArbolMt: null,
+          diametroCopaEoArbolMt: null,
+          alturaArbolArbolMt: null,
+          alturaCopaArbolMt: null,
+          estadoGeneralArbol: "No determinado",
+          estadoSanitarioArbol: "No determinado",
+          enfermedad: Enfermedad(),
+          inclinacionTroncoArbol: "No determinado",
+          orientacionInclinacionArbol: "No determinado",
+          obsArbolHistoria: [],
+          accionObsArbol: "No Asignada",
+          segundaAccionObsArbol: "No Asignada",
+          terceraAccionObsArbol: "No Asignada",
+          geoReferenciaCapturaArbol: e.tapPosicion,
+          nombreUsuarioCreacionArbol: "No Asignada",
+          usuarioModificaArbol: "No Asignada",
+          fechaCreacionArbol: null,
+          fechaUltimaModArbol: null,
+          alertaArbol: "No Asignada",
+          revisionArbol: "No Asignada",
+          fotosArbol: [],
+          fotosEnfermedad: [],
+        );
+        print(e.tapPosicion);
+        print('aqui');
+        print(arbolVacioPosicion);
+
+        final ArbolesEntity arbolesNuevos = ArbolesEntity(listaArbolEntity: [
+          ...e.arboles.listaArbolEntity,
+          arbolVacioPosicion
+        ]);
+
+        yield ArbolMapaState.mapaDesplegado(
+            arboles: arbolesNuevos,
+            latLong: e.localizacion,
+            tapPosition: e.tapPosicion);
+      },
     );
   }
 

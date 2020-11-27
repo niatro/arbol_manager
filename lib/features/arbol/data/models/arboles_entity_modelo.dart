@@ -211,9 +211,8 @@ class ArbolEntityModelo extends ArbolEntity {
       clienteArbol: json["clienteArbol"],
       zonaArbol: json["zonaArbol"],
       calleArbol: json["calleArbol"],
-      nCalleArbol: int.parse(json["nCalleArbol"]) != null
-          ? int.parse(json["nCalleArbol"])
-          : 0,
+      nCalleArbol:
+          json["nCalleArbol"] != null ? int.parse(json["nCalleArbol"]) : 0,
       esquinaCalleArbol: json["esquinaCalleArbol"] != null
           ? json["esquinaCalleArbol"]
           : 'No es arbol esquina contraria',

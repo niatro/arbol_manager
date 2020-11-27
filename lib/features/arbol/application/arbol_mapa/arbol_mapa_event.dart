@@ -9,5 +9,8 @@ abstract class ArbolMapaEvent with _$ArbolMapaEvent {
   const factory ArbolMapaEvent.getCoordenadasEvent() = GetCoordenadasEvent;
   const factory ArbolMapaEvent.leerIdNfConTelefonoEvent(UserEntity usuario) =
       LeerIdNfConTelefonoEvent;
-  const factory ArbolMapaEvent.agregarPinEvent() = AgregarMarkerEvent;
+  const factory ArbolMapaEvent.onTapPantalla(
+      {LatLng tapPosicion,
+      ArbolesEntity arboles,
+      LatLng localizacion}) = OnTapPantallaEvent;
 }
