@@ -137,53 +137,26 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
         );
       },
       onTapPantalla: (e) async* {
-        final ArbolEntity arbolVacioPosicion = ArbolEntity(
-          guiArbol: "No asignado",
-          idArbol: 0,
-          idNfcHistoria: [],
-          clienteArbol: "No asignado",
-          zonaArbol: "No Asignada",
-          calleArbol: "No Asignada",
-          nCalleArbol: null,
-          esquinaCalleArbol: "No Asignada",
-          especieArbol: "No Asignada",
-          diametroTroncoArbolCm: null,
-          diametroCopaNsArbolMt: null,
-          diametroCopaEoArbolMt: null,
-          alturaArbolArbolMt: null,
-          alturaCopaArbolMt: null,
-          estadoGeneralArbol: "No determinado",
-          estadoSanitarioArbol: "No determinado",
-          enfermedad: Enfermedad(),
-          inclinacionTroncoArbol: "No determinado",
-          orientacionInclinacionArbol: "No determinado",
-          obsArbolHistoria: [],
-          accionObsArbol: "No Asignada",
-          segundaAccionObsArbol: "No Asignada",
-          terceraAccionObsArbol: "No Asignada",
-          geoReferenciaCapturaArbol: e.tapPosicion,
-          nombreUsuarioCreacionArbol: "No Asignada",
-          usuarioModificaArbol: "No Asignada",
-          fechaCreacionArbol: null,
-          fechaUltimaModArbol: null,
-          alertaArbol: "No Asignada",
-          revisionArbol: "No Asignada",
-          fotosArbol: [],
-          fotosEnfermedad: [],
-        );
-        print(e.tapPosicion);
-        print('aqui');
-        print(arbolVacioPosicion);
-
-        final ArbolesEntity arbolesNuevos = ArbolesEntity(listaArbolEntity: [
-          ...e.arboles.listaArbolEntity,
-          arbolVacioPosicion
-        ]);
-
-        yield ArbolMapaState.mapaDesplegado(
-            arboles: arbolesNuevos,
-            latLong: e.localizacion,
-            tapPosition: e.tapPosicion);
+        if (e.arboles == null) {
+          ArbolEntity arbolDePosicion = _generarArbolMarcador(e.tapPosicion);
+          print(arbolDePosicion);
+          final ArbolesEntity arbolesNuevos =
+              ArbolesEntity(listaArbolEntity: [arbolDePosicion]);
+          yield ArbolMapaState.mapaDesplegado(
+              arboles: arbolesNuevos,
+              latLong: e.localizacion,
+              tapPosition: e.tapPosicion);
+        } else {
+          ArbolEntity arbolVacioPosicion = _generarArbolMarcador(e.tapPosicion);
+          final ArbolesEntity arbolesNuevos = ArbolesEntity(listaArbolEntity: [
+            ...e.arboles.listaArbolEntity,
+            arbolVacioPosicion
+          ]);
+          yield ArbolMapaState.mapaDesplegado(
+              arboles: arbolesNuevos,
+              latLong: e.localizacion,
+              tapPosition: e.tapPosicion);
+        }
       },
     );
   }
@@ -217,5 +190,43 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
       default:
         return 'Unexpected error';
     }
+  }
+
+  ArbolEntity _generarArbolMarcador(LatLng tapPosicion) {
+    final ArbolEntity arbolVacioPosicion = ArbolEntity(
+      guiArbol: "No asignado",
+      idArbol: 0,
+      idNfcHistoria: [],
+      clienteArbol: "No asignado",
+      zonaArbol: "No Asignada",
+      calleArbol: "No Asignada",
+      nCalleArbol: null,
+      esquinaCalleArbol: "No Asignada",
+      especieArbol: "No Asignada",
+      diametroTroncoArbolCm: null,
+      diametroCopaNsArbolMt: null,
+      diametroCopaEoArbolMt: null,
+      alturaArbolArbolMt: null,
+      alturaCopaArbolMt: null,
+      estadoGeneralArbol: "No determinado",
+      estadoSanitarioArbol: "No determinado",
+      enfermedad: Enfermedad(),
+      inclinacionTroncoArbol: "No determinado",
+      orientacionInclinacionArbol: "No determinado",
+      obsArbolHistoria: [],
+      accionObsArbol: "No Asignada",
+      segundaAccionObsArbol: "No Asignada",
+      terceraAccionObsArbol: "No Asignada",
+      geoReferenciaCapturaArbol: tapPosicion,
+      nombreUsuarioCreacionArbol: "No Asignada",
+      usuarioModificaArbol: "No Asignada",
+      fechaCreacionArbol: null,
+      fechaUltimaModArbol: null,
+      alertaArbol: "No Asignada",
+      revisionArbol: "No Asignada",
+      fotosArbol: [],
+      fotosEnfermedad: [],
+    );
+    return arbolVacioPosicion;
   }
 }

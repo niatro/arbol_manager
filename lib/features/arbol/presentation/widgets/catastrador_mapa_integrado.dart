@@ -42,8 +42,8 @@ class CatastradorMapaIntegrado extends StatelessWidget {
               idNfcChequeado: (_) {},
               idNfcObtenido: (_) {},
               marcadorColocado: (_) {},
-              mapaDesplegado: (s) {
-                return s;
+              mapaDesplegado: (x) {
+                return x;
               },
               orElse: () {},
             );
@@ -76,6 +76,7 @@ class CatastradorMapaIntegrado extends StatelessWidget {
                       zoom: 19.00,
                     ),
                     onTap: (LatLng pos) {
+                      print('los arboles pasados onTap ${s.arboles}');
                       context
                           .bloc<ArbolMapaBloc>()
                           .add(ArbolMapaEvent.onTapPantalla(
@@ -103,13 +104,13 @@ class CatastradorMapaIntegrado extends StatelessWidget {
                               state.maybeWhen(mapaDesplegado: (l, a, p) {
                                 return "-33.39848065129757,-70.59791651315805";
 
-//                                return l.latitude.toString() +
-//                                    ',' +
-//                                    l.longitude.toString();
+                                // return l.latitude.toString() +
+                                //     ',' +
+                                //     l.longitude.toString();
                               }, orElse: () {
                                 return "-33.37679954804514,-70.56944723226297";
                               }),
-                              50),
+                              20),
                         );
                   },
                   label: Text('Cerca'),

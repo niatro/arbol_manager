@@ -22,7 +22,7 @@ dependencies:
   #flutter_bloc: ^0.21.0
   flutter_bloc: ^3.2.0
   #bloc: ^6.1.0
-  #flutter_bloc: ^6.1.1
+#  flutter_bloc: ^6.1.1
   # Value equality NO CAMBIAR A VERSION NUEVA PORQUE DESTRUYE GEOLOCATOR
   equatable: ^0.4.0
 #  equatable: ^1.2.3
