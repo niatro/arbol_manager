@@ -1,16 +1,23 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterapparbol/core/constants/usuario_test.dart';
 import 'package:flutterapparbol/features/arbol/application/arbol_mapa/arbol_mapa_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/auth/auth_bloc.dart';
+import 'package:flutterapparbol/features/arbol/data/datasources/local_data_estructuras.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
 import 'package:flutterapparbol/features/arbol/presentation/routes/router.gr.dart';
+import 'package:flutterapparbol/features/arbol/presentation/widgets/info_accion_arbol_pie.dart';
+import 'package:flutterapparbol/features/arbol/presentation/widgets/lista_marcadores_de_arboles_creacion.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:path/path.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../injection_auto.dart';
 
 class CatastradorMapaIntegrado extends StatelessWidget {
+  BitmapDescriptor customIcon;
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -76,7 +83,9 @@ class CatastradorMapaIntegrado extends StatelessWidget {
                       zoom: 19.00,
                     ),
                     onTap: (LatLng pos) {
-                      print('los arboles pasados onTap ${s.arboles}');
+                      print('onTap el estado que enta es $s');
+                      print('onTap el contexto que enta es $context');
+                      print('onTap: $pos');
                       context
                           .bloc<ArbolMapaBloc>()
                           .add(ArbolMapaEvent.onTapPantalla(
@@ -85,8 +94,17 @@ class CatastradorMapaIntegrado extends StatelessWidget {
                             localizacion: s.latLong,
                           ));
                     },
-                    markers: Set.of(_listaMarcadoresDeLosArboles(
-                        s.arboles ?? new ArbolesEntity(listaArbolEntity: []))),
+                    markers: Set.of(
+                      ListaMarcadoresDeArbolesCreacion.desarrollo(
+                        arboles: s.arboles ??
+                            new ArbolesEntity(listaArbolEntity: []),
+                        icono: customIcon,
+                        context: context,
+                        state: s,
+                        tapPos: s.tapPosition,
+                        localizacion: s.latLong,
+                      ).listaMarcadores,
+                    ),
                     mapType: MapType.normal,
                     myLocationEnabled: true,
                     myLocationButtonEnabled: true,
@@ -95,13 +113,13 @@ class CatastradorMapaIntegrado extends StatelessWidget {
                   return Text(
                       'Algo salio mal intentando mostrar el mapa $state');
                 }),
-                floatingActionButton: FloatingActionButton.extended(
+                floatingActionButton: FloatingActionButton(
                   onPressed: () async {
                     print(
                         'En floatingActionButton el estado que entra es $state');
                     await context.bloc<ArbolMapaBloc>().add(
                           ArbolMapaEvent.getArbolesCercanosEvent(
-                              state.maybeWhen(mapaDesplegado: (l, a, p) {
+                              state.maybeWhen(mapaDesplegado: (l, a, p, u) {
                                 return "-33.39848065129757,-70.59791651315805";
 
                                 // return l.latitude.toString() +
@@ -110,11 +128,10 @@ class CatastradorMapaIntegrado extends StatelessWidget {
                               }, orElse: () {
                                 return "-33.37679954804514,-70.56944723226297";
                               }),
-                              20),
+                              50),
                         );
                   },
-                  label: Text('Cerca'),
-                  icon: Icon(Icons.architecture_rounded),
+                  child: Icon(Icons.add),
                 ));
           },
         ),
@@ -122,24 +139,16 @@ class CatastradorMapaIntegrado extends StatelessWidget {
     );
   }
 
-  List<Marker> _listaMarcadoresDeLosArboles(ArbolesEntity arboles) {
-    final List<Marker> result = [];
-    Uuid uuid = Uuid();
-    if (arboles.listaArbolEntity != []) {
-      arboles.listaArbolEntity.forEach((arbol) {
-        result.add(Marker(
-          markerId: MarkerId(uuid.v4()),
-          position: arbol.geoReferenciaCapturaArbol,
-        ));
+  _createMarker(BuildContext context) {
+    print('aqui ok');
+
+    if (customIcon == null) {
+      ImageConfiguration configuration = createLocalImageConfiguration(context);
+      BitmapDescriptor.fromAssetImage(configuration, 'assets/tree_256.png')
+          .then((icon) {
+        customIcon = icon;
       });
-      return result;
-    } else {
-      return [
-        Marker(
-          markerId: MarkerId("1"),
-          position: LatLng(-33.45605108011955, -70.60064847178477),
-        ),
-      ];
+      print(customIcon);
     }
   }
 }

@@ -24,5 +24,7 @@ abstract class ArbolMapaState with _$ArbolMapaState {
   const factory ArbolMapaState.mapaDesplegado(
       {@required LatLng latLong,
       ArbolesEntity arboles,
-      LatLng tapPosition}) = MapaDesplegadoState;
+      LatLng tapPosition,
+      UserEntity usuario,
+      }) = MapaDesplegadoState;
 }

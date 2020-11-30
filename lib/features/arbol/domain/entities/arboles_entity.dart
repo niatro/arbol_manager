@@ -106,7 +106,7 @@ class ArbolEntity extends Equatable {
 }
 
 class ArbolesEntity extends Equatable {
-  final List<ArbolEntity> listaArbolEntity;
+  List<ArbolEntity> listaArbolEntity;
   ArbolesEntity({
     @required this.listaArbolEntity,
   }) : super([listaArbolEntity]);

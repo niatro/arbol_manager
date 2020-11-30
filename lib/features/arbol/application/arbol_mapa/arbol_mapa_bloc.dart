@@ -137,7 +137,7 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
         );
       },
       onTapPantalla: (e) async* {
-        if (e.arboles == null) {
+        if (e.arboles == null || e.arboles.listaArbolEntity.length == 1) {
           ArbolEntity arbolDePosicion = _generarArbolMarcador(e.tapPosicion);
           print(arbolDePosicion);
           final ArbolesEntity arbolesNuevos =

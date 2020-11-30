@@ -18,7 +18,7 @@ void main() {
     mockArbolesRepositorio = MockArbolesRepositorio();
     usecase = LoginUseCase(mockArbolesRepositorio);
   });
-  final UserEntity usuarioTest = usuarioUno;
+  final UserEntity usuarioTestParaTest = usuarioTest;
   final String password = '12345';
 
   test(
@@ -27,14 +27,14 @@ void main() {
     // arrange
     when(mockArbolesRepositorio.login(
             password: anyNamed("password"), rut: anyNamed("rut")))
-        .thenAnswer((_) async => Right(usuarioTest));
+        .thenAnswer((_) async => Right(usuarioTestParaTest));
     // act
     final result = await usecase
-        .call(Params(password: password, rut: usuarioTest.rutUsuario));
+        .call(Params(password: password, rut: usuarioTestParaTest.rutUsuario));
     // assert
-    expect(result, Right(usuarioTest));
+    expect(result, Right(usuarioTestParaTest));
     verify(mockArbolesRepositorio.login(
-        password: password, rut: usuarioTest.rutUsuario));
+        password: password, rut: usuarioTestParaTest.rutUsuario));
     verifyNoMoreInteractions(mockArbolesRepositorio);
   });
   test(
@@ -46,11 +46,11 @@ void main() {
         .thenAnswer((_) async => Left(PassNoExisteFailure()));
     // act
     final result = await usecase
-        .call(Params(password: password, rut: usuarioTest.rutUsuario));
+        .call(Params(password: password, rut: usuarioTestParaTest.rutUsuario));
     // assert
     expect(result, Left(PassNoExisteFailure()));
     verify(mockArbolesRepositorio.login(
-        password: password, rut: usuarioTest.rutUsuario));
+        password: password, rut: usuarioTestParaTest.rutUsuario));
     verifyNoMoreInteractions(mockArbolesRepositorio);
   });
 
@@ -63,11 +63,11 @@ void main() {
         .thenAnswer((_) async => Left(ConexionFailure()));
     // act
     final result = await usecase
-        .call(Params(password: password, rut: usuarioTest.rutUsuario));
+        .call(Params(password: password, rut: usuarioTestParaTest.rutUsuario));
     // assert
     expect(result, Left(ConexionFailure()));
     verify(mockArbolesRepositorio.login(
-        password: password, rut: usuarioTest.rutUsuario));
+        password: password, rut: usuarioTestParaTest.rutUsuario));
     verifyNoMoreInteractions(mockArbolesRepositorio);
   });
 
@@ -80,11 +80,11 @@ void main() {
         .thenAnswer((_) async => Left(ServerFailure()));
     // act
     final result = await usecase
-        .call(Params(password: password, rut: usuarioTest.rutUsuario));
+        .call(Params(password: password, rut: usuarioTestParaTest.rutUsuario));
     // assert
     expect(result, Left(ServerFailure()));
     verify(mockArbolesRepositorio.login(
-        password: password, rut: usuarioTest.rutUsuario));
+        password: password, rut: usuarioTestParaTest.rutUsuario));
     verifyNoMoreInteractions(mockArbolesRepositorio);
   });
 }

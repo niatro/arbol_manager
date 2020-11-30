@@ -1,7 +1,7 @@
 import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-UserEntity usuarioUno = UserEntity(
+UserEntity usuarioTest = UserEntity(
   idUsuario: '6',
   nombreUsuario: 'Nicolas',
   rutUsuario: '10647342',

@@ -819,7 +819,7 @@ void main() {
 
   //OJO: repositorio login Test
   group('login', () {
-    final UserEntity usuarioTest = usuarioUno;
+    final UserEntity usuarioTestParaTest = usuarioTest;
     final String password = 'mypass';
     final String rut = '10647342';
 
@@ -840,13 +840,13 @@ void main() {
         // arrange
         when(mockRemoteDataSource.loginRemoteData(
                 password: anyNamed("password"), rut: anyNamed("rut")))
-            .thenAnswer((_) async => usuarioTest);
+            .thenAnswer((_) async => usuarioTestParaTest);
         // act
         final result = await repositorio.login(password: password, rut: rut);
         // assert
         verify(mockRemoteDataSource.loginRemoteData(
-            password: password, rut: usuarioTest.rutUsuario));
-        expect(result, equals(Right(usuarioTest)));
+            password: password, rut: usuarioTestParaTest.rutUsuario));
+        expect(result, equals(Right(usuarioTestParaTest)));
       });
       test('''DEBERIA retornar un ServerFailure CUANDO hay problemas en el 
           servidor y no se puede conectar''', () async {
@@ -871,10 +871,10 @@ void main() {
             .thenThrow(PassException());
         // act
         final result = await repositorio.login(
-            password: password, rut: usuarioTest.rutUsuario);
+            password: password, rut: usuarioTestParaTest.rutUsuario);
         // assert
         verify(mockRemoteDataSource.loginRemoteData(
-            password: password, rut: usuarioTest.rutUsuario));
+            password: password, rut: usuarioTestParaTest.rutUsuario));
         expect(result, equals(Left(PassNoExisteFailure())));
       });
     });
