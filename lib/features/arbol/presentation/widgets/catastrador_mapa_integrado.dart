@@ -1,17 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutterapparbol/core/constants/usuario_test.dart';
 import 'package:flutterapparbol/features/arbol/application/arbol_mapa/arbol_mapa_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/auth/auth_bloc.dart';
-import 'package:flutterapparbol/features/arbol/data/datasources/local_data_estructuras.dart';
-import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
 import 'package:flutterapparbol/features/arbol/presentation/routes/router.gr.dart';
-import 'package:flutterapparbol/features/arbol/presentation/widgets/info_accion_arbol_pie.dart';
-import 'package:flutterapparbol/features/arbol/presentation/widgets/lista_marcadores_de_arboles_creacion.dart';
+import 'package:flutterapparbol/features/arbol/presentation/widgets/google_map_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:path/path.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../../injection_auto.dart';
 
@@ -38,6 +32,11 @@ class CatastradorMapaIntegrado extends StatelessWidget {
               );
             },
           ),
+          BlocListener<ArbolMapaBloc, ArbolMapaState>(
+            listener: (context, state) {
+              state.maybeMap(orElse: null);
+            },
+          )
         ],
         child: BlocConsumer<ArbolMapaBloc, ArbolMapaState>(
           listener: (context, state) {
@@ -69,45 +68,11 @@ class CatastradorMapaIntegrado extends StatelessWidget {
                 body: state.maybeMap(initial: (_) {
                   return CircularProgressIndicator();
                 }, mapaDesplegado: (s) {
-                  //ojo: aqui comienza google Maps
-                  return GoogleMap(
-                    initialCameraPosition: CameraPosition(
-                      target: state.maybeMap(
-                        mapaDesplegado: (s) {
-                          return s.latLong;
-                        },
-                        orElse: () {
-                          return LatLng(-33.39795292537557, -70.60091244581768);
-                        },
-                      ),
-                      zoom: 19.00,
-                    ),
-                    onTap: (LatLng pos) {
-                      print('onTap el estado que enta es $s');
-                      print('onTap el contexto que enta es $context');
-                      print('onTap: $pos');
-                      context
-                          .bloc<ArbolMapaBloc>()
-                          .add(ArbolMapaEvent.onTapPantalla(
-                            tapPosicion: pos,
-                            arboles: s.arboles,
-                            localizacion: s.latLong,
-                          ));
-                    },
-                    markers: Set.of(
-                      ListaMarcadoresDeArbolesCreacion.desarrollo(
-                        arboles: s.arboles ??
-                            new ArbolesEntity(listaArbolEntity: []),
-                        icono: customIcon,
-                        context: context,
-                        state: s,
-                        tapPos: s.tapPosition,
-                        localizacion: s.latLong,
-                      ).listaMarcadores,
-                    ),
-                    mapType: MapType.normal,
-                    myLocationEnabled: true,
-                    myLocationButtonEnabled: true,
+                  return GoogleMapWidget(
+                    state: state,
+                    s: s,
+                    context: context,
+                    customIcon: customIcon,
                   );
                 }, orElse: () {
                   return Text(
@@ -115,8 +80,6 @@ class CatastradorMapaIntegrado extends StatelessWidget {
                 }),
                 floatingActionButton: FloatingActionButton(
                   onPressed: () async {
-                    print(
-                        'En floatingActionButton el estado que entra es $state');
                     await context.bloc<ArbolMapaBloc>().add(
                           ArbolMapaEvent.getArbolesCercanosEvent(
                               state.maybeWhen(mapaDesplegado: (l, a, p, u) {

@@ -8,12 +8,7 @@ import 'package:uuid/uuid.dart';
 class ListaMarcadoresDeArbolesCreacion {
   List<Marker> listaMarcadores;
   ListaMarcadoresDeArbolesCreacion({@required this.listaMarcadores});
-  // ArbolesEntity arboles;
-  // BuildContext context;
-  // ArbolMapaState state;
-  // LatLng tapPos;
-  // LatLng localizacion;
-  // ListaMarcadoresDeArbolesCreacion({@required this.arboles, @required this.context, @required this.state, this.tapPos, this.localizacion})
+
   factory ListaMarcadoresDeArbolesCreacion.desarrollo(
       {ArbolesEntity arboles,
       BitmapDescriptor icono,
@@ -28,8 +23,6 @@ class ListaMarcadoresDeArbolesCreacion {
     final _infoWindow = InfoWindow(
         title: "Acciones",
         onTap: () {
-          print('En el DIALOGO al presionar el CONTEXTO que entra es $context');
-          print('En el DIALOGO al presiona el ESTADO que entra es $state');
           new InfoAccionArbolPie(
                   context: context,
                   state: state,

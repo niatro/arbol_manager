@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterapparbol/core/constants/usuario_test.dart';
 import 'package:flutterapparbol/features/arbol/application/arbol_mapa/arbol_mapa_bloc.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
+import 'package:flutterapparbol/features/arbol/presentation/pages/nfc_page.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,18 +43,15 @@ class InfoAccionArbolPie {
                 Expanded(
                   child: RaisedButton(
                     onPressed: () {
-                      print(' En BOTON CERCA el CONTEXT que entra es $context');
-                      context.bloc<ArbolMapaBloc>().add(
-                            ArbolMapaEvent.leerIdNfConTelefonoEvent(
-                                latLng: state.maybeMap(
-                                    mapaDesplegado: (_) {
-                                      return localizacion;
-                                    },
-                                    orElse: null),
-                                arboles: arboles,
-                                tapPosition: tapPos,
-                                usuario: usuarioTest),
-                          );
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return LectorNfcPage();
+                      }));
+
+                      // context.bloc<ArbolMapaBloc>().add(
+                      //       ArbolMapaEvent.leerIdNfConTelefonoEvent(
+                      //           usuario: usuarioTest),
+                      //     );
 
                       //TODO: mostrar otro showModalBottom
                     },
