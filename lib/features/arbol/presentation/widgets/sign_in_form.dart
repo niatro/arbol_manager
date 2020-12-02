@@ -1,7 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterapparbol/features/arbol/application/auth/auth_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/auth/sign_in_form/sign_in_form_bloc.dart';
+import 'package:flutterapparbol/features/arbol/presentation/routes/router.gr.dart';
 
 class SignInForm extends StatelessWidget {
   @override
@@ -22,13 +25,21 @@ class SignInForm extends StatelessWidget {
                 ),
               ).show(context);
             },
-            (_) {},
+            (_) {
+              ExtendedNavigator.of(context).replace(Routes.homeCatastrador);
+              context
+                  .bloc<AuthBloc>()
+                  .add(const AuthEvent.authCheckRequested());
+            },
           ),
         );
       },
       builder: (context, state) {
         return Form(
-          autovalidate: state.showErrorMessages,
+          autovalidateMode: state.showErrorMessages
+              ? AutovalidateMode.always
+              : AutovalidateMode.disabled,
+          // autovalidate: state.showErrorMessages,
           child: ListView(
             padding: const EdgeInsets.all(8),
             children: [

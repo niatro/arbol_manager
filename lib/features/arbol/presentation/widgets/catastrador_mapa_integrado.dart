@@ -6,6 +6,7 @@ import 'package:flutterapparbol/features/arbol/application/auth/auth_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/nfc/nfc_bloc.dart';
 import 'package:flutterapparbol/features/arbol/presentation/routes/router.gr.dart';
 import 'package:flutterapparbol/features/arbol/presentation/widgets/google_map_widget.dart';
+import 'package:flutterapparbol/features/arbol/presentation/widgets/loading_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../injection_auto.dart';
@@ -67,7 +68,7 @@ class CatastradorMapaIntegrado extends StatelessWidget {
                   ),
                 ),
                 body: state.maybeMap(initial: (_) {
-                  return CircularProgressIndicator();
+                  return LoadingWhite();
                 }, mapaDesplegado: (s) {
                   return GoogleMapWidget(
                     state: state,
@@ -75,6 +76,8 @@ class CatastradorMapaIntegrado extends StatelessWidget {
                     context: context,
                     customIcon: customIcon,
                   );
+                }, loading: (_) {
+                  return LoadingWhite();
                 }, orElse: () {
                   return Text(
                       'Algo salio mal intentando mostrar el mapa $state');

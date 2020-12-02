@@ -10,17 +10,20 @@ class SplashPage extends StatelessWidget {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         state.map(
-          initial: (_) {},
-          authenticated: (_) {
-            // ExtendedNavigator.of(context).replace(Routes.signInPage);
+            initial: (_) {},
+            authenticated: (_) {
+              print('autentificado en splash');
+              // ExtendedNavigator.of(context).replace(Routes.signInPage);
 
-            // print('estoy autentificado: esto se imprime de splash_page.dart');
-            ExtendedNavigator.of(context).replace(Routes.homeCatastrador);
-          },
+              // print('estoy autentificado: esto se imprime de splash_page.dart');
+              ExtendedNavigator.of(context).replace(Routes.homeCatastrador);
+              // ExtendedNavigator.of(context).pushHomeCatastrador();
+            },
 //              ExtendedNavigator.of(context).replace(Routes.notesOverviewPage),
-          unauthenticated: (_) =>
-              ExtendedNavigator.of(context).replace(Routes.signInPage),
-        );
+            unauthenticated: (_) {
+              print('NO autentificado en splash');
+              ExtendedNavigator.of(context).replace(Routes.signInPage);
+            });
       },
       child: const Scaffold(
         body: Center(
