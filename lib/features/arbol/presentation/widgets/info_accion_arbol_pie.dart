@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutterapparbol/core/constants/usuario_test.dart';
 import 'package:flutterapparbol/features/arbol/application/arbol_mapa/arbol_mapa_bloc.dart';
+import 'package:flutterapparbol/features/arbol/application/nfc/nfc_bloc.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
-import 'package:flutterapparbol/features/arbol/presentation/pages/nfc_page.dart';
+import 'package:flutterapparbol/features/arbol/presentation/pages/nfc_info_page.dart';
+import 'package:flutterapparbol/features/arbol/presentation/widgets/loading_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../injection_auto.dart';
 
 class InfoAccionArbolPie {
   final BuildContext context;
@@ -27,6 +31,7 @@ class InfoAccionArbolPie {
       ArbolesEntity arboles]) {
     print(' En MOSTRARFICHAARBOL el CONTEXT que entra es $context');
     print(' En MOSTRARFICHAARBOL el ESTADO que entra es $state');
+
     showModalBottomSheet(
         context: context,
         builder: (_) {
@@ -40,30 +45,134 @@ class InfoAccionArbolPie {
             padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
             child: Row(
               children: [
-                Expanded(
-                  child: RaisedButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return LectorNfcPage();
-                      }));
+                BlocProvider<NfcBloc>(
+                  create: (context) => getIt<NfcBloc>(),
+                  child: Expanded(
+                    child: BlocConsumer<NfcBloc, NfcState>(
+                        listener: (context, state) {},
+                        builder: (context, state) {
+                          return state.maybeMap((value) {
+                            if (value.nfcEntity.idNfc != null) {
+                              if (value.estaRegistrado == false &&
+                                  value.showErrorMessages == false) {
+                                print(value.nfcEntity.idNfc);
+                                return RaisedButton(
+                                  onPressed: () {
+                                    return context.bloc<NfcBloc>().add(
+                                        NfcEvent.verificadoIdNfc(
+                                            value.nfcEntity.idNfc));
+                                    // Navigator.push(context,
+                                    //     MaterialPageRoute(builder: (context) {
+                                    //   return new NfcInfo(
+                                    //     nfcEntity: value.nfcEntity,
+                                    //     state: state,
+                                    //   );
+                                    // }));
 
-                      // context.bloc<ArbolMapaBloc>().add(
-                      //       ArbolMapaEvent.leerIdNfConTelefonoEvent(
-                      //           usuario: usuarioTest),
-                      //     );
+                                    //TODO: mostrar otro showModalBottom
+                                  },
+                                  child: Text(
+                                    'VERIFICA',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                  color: Colors.red[200],
+                                );
+                              } else if (value.estaRegistrado == false &&
+                                  value.showErrorMessages == true) {
+                                return RaisedButton(
+                                  onPressed: () {
+                                    // Navigator.push(context,
+                                    //     MaterialPageRoute(builder: (context) {
+                                    //   return new NfcInfo(
+                                    //     nfcEntity: value.nfcEntity,
+                                    //     state: state,
+                                    //   );
+                                    // }));
 
-                      //TODO: mostrar otro showModalBottom
-                    },
-                    child: const Text(
-                      'AGREGA CON NFC',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
-                      ),
-                    ),
-                    color: Colors.lightBlue,
+                                    //TODO: mostrar otro showModalBottom
+                                  },
+                                  child: Text(
+                                    'AGREGA CON CHIP',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 9,
+                                    ),
+                                  ),
+                                  color: Colors.red[200],
+                                );
+                              } else {
+                                return RaisedButton(
+                                  onPressed: () {
+                                    // Navigator.push(context,
+                                    //     MaterialPageRoute(builder: (context) {
+                                    //   return new NfcInfo(
+                                    //     nfcEntity: value.nfcEntity,
+                                    //     state: state,
+                                    //   );
+                                    // }));
+
+                                    //TODO: mostrar otro showModalBottom
+                                  },
+                                  child: Text(
+                                    'EXISTE',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 9,
+                                    ),
+                                  ),
+                                  color: Colors.red[200],
+                                );
+                              }
+                            } else {
+                              print(value.nfcEntity.idNfc);
+                              return RaisedButton(
+                                onPressed: () {
+                                  return context
+                                      .bloc<NfcBloc>()
+                                      .add(NfcEvent.leidoNfc());
+
+                                  //TODO: mostrar otro showModalBottom
+                                },
+                                child: Text(
+                                  'LEE NFC ',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 9,
+                                  ),
+                                ),
+                                color: Colors.lightBlue,
+                              );
+                            }
+                          }, loadingNfcState: (_) {
+                            return LoadingWhite();
+                          }, orElse: () {
+                            return RaisedButton(
+                              onPressed: () {
+                                return context
+                                    .bloc<NfcBloc>()
+                                    .add(NfcEvent.leidoNfc());
+
+                                //TODO: mostrar otro showModalBottom
+                              },
+                              child: Text(
+                                'LEE NFC',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 9,
+                                ),
+                              ),
+                              color: Colors.lightBlue,
+                            );
+                          });
+                        }),
                   ),
                 ),
                 const SizedBox(width: 8.0),
@@ -77,7 +186,7 @@ class InfoAccionArbolPie {
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 10,
+                        fontSize: 9,
                       ),
                     ),
                     color: Colors.lightBlue,
@@ -108,7 +217,7 @@ class InfoAccionArbolPie {
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 10,
+                        fontSize: 9,
                       ),
                     ),
                     color: Colors.lightBlue,

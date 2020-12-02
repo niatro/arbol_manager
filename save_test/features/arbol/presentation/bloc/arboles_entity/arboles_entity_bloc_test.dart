@@ -34,7 +34,7 @@ class MockGetArbolPorIdNFCUseCase extends Mock
 
 class MockGrabarArbolesUseCase extends Mock implements GrabarArbolUseCase {}
 
-class MockComprobarIdNFCUseCase extends Mock implements ComprobarIdNFCUseCase {}
+class MockComprobarIdNFCUseCase extends Mock implements ComprobarIdNfcUseCase {}
 
 class MockActualizarDatosFormUseCase extends Mock
     implements ActualizarDatosFormUseCase {}

@@ -7,11 +7,11 @@ import '../repositories/arboles_repositorio.dart';
 
 //
 @lazySingleton
-class ComprobarIdNFCUseCase implements UseCase<bool, Params> {
+class ComprobarIdNfcUseCase implements UseCase<bool, Params> {
   final ArbolesRepositorio repositorio;
 //api de mysql, se refiere a comprobar que un idNFC leído desde un chip
 // esta en la base de datos, por eso el UseCase devolvera un bool,
-  ComprobarIdNFCUseCase(this.repositorio);
+  ComprobarIdNfcUseCase(this.repositorio);
 
   @override
   Future<Either<Failure, bool>> call(

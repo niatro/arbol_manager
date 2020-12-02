@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/arbol_mapa/arbol_mapa_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/auth/auth_bloc.dart';
+import 'package:flutterapparbol/features/arbol/application/nfc/nfc_bloc.dart';
 import 'package:flutterapparbol/features/arbol/presentation/routes/router.gr.dart';
 import 'package:flutterapparbol/features/arbol/presentation/widgets/google_map_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -19,6 +20,9 @@ class CatastradorMapaIntegrado extends StatelessWidget {
         BlocProvider<ArbolMapaBloc>(
           create: (context) =>
               getIt<ArbolMapaBloc>()..add(ArbolMapaEvent.getCoordenadasEvent()),
+        ),
+        BlocProvider<NfcBloc>(
+          create: (context) => getIt<NfcBloc>(),
         )
       ],
       child: MultiBlocListener(
@@ -45,9 +49,6 @@ class CatastradorMapaIntegrado extends StatelessWidget {
               desplegandoArbolesCercanos: (s) {
                 return s;
               },
-              idNfcChequeado: (_) {},
-              idNfcObtenido: (_) {},
-              marcadorColocado: (_) {},
               mapaDesplegado: (x) {
                 return x;
               },

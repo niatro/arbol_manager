@@ -24,6 +24,7 @@ import 'features/arbol/data/datasources/local_data_estructuras.dart';
 import 'features/arbol/data/auth/firebase_auth_facade.dart';
 import 'features/arbol/data/core/firebase_injectable_module.dart';
 import 'features/arbol/data/datasources/form_local_source_sql.dart';
+import 'features/arbol/domain/usecases/get_arbol_por_idnfc_usecase.dart';
 import 'features/arbol/domain/usecases/get_arboles_cercanos_usecase.dart';
 import 'features/arbol/domain/usecases/get_coordenadas_usecase.dart';
 import 'features/arbol/data/core/http_injectable_module.dart';
@@ -32,6 +33,7 @@ import 'features/arbol/data/core/sharedpreferences_injectable_module.dart';
 import 'core/util/input_converter.dart';
 import 'features/arbol/domain/usecases/leer_idnfc_usecase.dart';
 import 'core/network/network_info.dart';
+import 'features/arbol/application/nfc/nfc_bloc.dart';
 import 'features/arbol/application/auth/sign_in_form/sign_in_form_bloc.dart';
 
 /// adds generated dependencies
@@ -74,17 +76,24 @@ Future<GetIt> $initGetIt(
         sqlDataSource: get<FormLocalSourceSql>(),
       ));
   gh.factory<AuthBloc>(() => AuthBloc(get<IAuthFacade>()));
-  gh.lazySingleton<ComprobarIdNFCUseCase>(
-      () => ComprobarIdNFCUseCase(get<ArbolesRepositorio>()));
+  gh.lazySingleton<ComprobarIdNfcUseCase>(
+      () => ComprobarIdNfcUseCase(get<ArbolesRepositorio>()));
+  gh.factory<GetArbolPorIdNFCUseCase>(
+      () => GetArbolPorIdNFCUseCase(get<ArbolesRepositorio>()));
   gh.lazySingleton<GetArbolesCercanosUseCase>(
       () => GetArbolesCercanosUseCase(get<ArbolesRepositorio>()));
   gh.lazySingleton<GetCoordUseCase>(
       () => GetCoordUseCase(get<ArbolesRepositorio>()));
   gh.lazySingleton<LeerIdNfcUseCase>(
       () => LeerIdNfcUseCase(get<ArbolesRepositorio>()));
+  gh.factory<NfcBloc>(() => NfcBloc(
+        getArbolPorIdNFCUseCase: get<GetArbolPorIdNFCUseCase>(),
+        leerIdNfcUseCase: get<LeerIdNfcUseCase>(),
+        comprobarIdNfcUseCase: get<ComprobarIdNfcUseCase>(),
+      ));
   gh.factory<ArbolMapaBloc>(() => ArbolMapaBloc(
         arbolesCercanosUseCase: get<GetArbolesCercanosUseCase>(),
-        comprobarIdNFCUseCase: get<ComprobarIdNFCUseCase>(),
+        comprobarIdNFCUseCase: get<ComprobarIdNfcUseCase>(),
         leerIdNfcUseCase: get<LeerIdNfcUseCase>(),
         getCoordUseCase: get<GetCoordUseCase>(),
         inputConverter: get<InputConverterStrToLatLng>(),

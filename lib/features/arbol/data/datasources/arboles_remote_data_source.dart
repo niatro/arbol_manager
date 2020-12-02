@@ -66,7 +66,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
       },
     );
     //TODO: Trabajar en php para obtener un listado de arboles que pueda meter abajo
-    print(response.statusCode);
+
     if (response.statusCode == 200) {
       final List<Map> jsonMaped =
           List<Map<String, dynamic>>.from(json.decode(response.body));
@@ -226,7 +226,6 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
     try {
       var response = await request.send();
       if (response.statusCode == 200) {
-        print('Arbol Enviado con Exito a Servidor');
         return true;
       } else {
         throw ServerException();
@@ -340,7 +339,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
 
   bool _respuestaIdNFC(http.Response response) {
     if (response.statusCode == 200) {
-      if (response.body != "") {
+      if (response.body != "[]") {
         return true;
       } else {
         return false;

@@ -51,7 +51,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetArbolPorIdNFCUseCase(sl()));
   sl.registerLazySingleton(() => GrabarArbolUseCase(sl()));
   sl.registerLazySingleton(() => UpdateArbolesUseCase(sl()));
-  sl.registerLazySingleton(() => ComprobarIdNFCUseCase(sl()));
+  sl.registerLazySingleton(() => ComprobarIdNfcUseCase(sl()));
   sl.registerLazySingleton(() => LeerIdNfcUseCase(sl()));
   sl.registerLazySingleton(() => ActualizarDatosFormUseCase(sl()));
   sl.registerLazySingleton(() => GetDatosFormUseCase(sl()));

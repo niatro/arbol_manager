@@ -49,7 +49,7 @@ const String COORD_FAILURE = 'Ocurrio algun error obteniendo las coordenadas';
 
 class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
   final GetArbolesCercanosUseCase getArbolesCercanosUseCase;
-  final ComprobarIdNFCUseCase comprobarIdNFCUseCase;
+  final ComprobarIdNfcUseCase comprobarIdNFCUseCase;
   final GetArbolPorIdNFCUseCase getArbolPorIdNFCUseCase;
   final GrabarArbolUseCase grabarArbolUseCase;
   final UpdateArbolesUseCase updateArbolUseCase;
@@ -63,7 +63,7 @@ class ArbolesEntityBloc extends Bloc<ArbolesEntityEvent, ArbolesEntityState> {
 
   ArbolesEntityBloc(
       {@required GetArbolesCercanosUseCase arbolesCercanosUseCase,
-      @required ComprobarIdNFCUseCase comprobarIdNFCUseCase,
+      @required ComprobarIdNfcUseCase comprobarIdNFCUseCase,
       @required GetArbolPorIdNFCUseCase arbolPorIdNFCUseCase,
       @required GrabarArbolUseCase grabarArbolUseCase,
       @required UpdateArbolesUseCase updateArbolesUseCase,

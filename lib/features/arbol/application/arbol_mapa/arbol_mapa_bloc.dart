@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
-import 'package:flutterapparbol/core/constants/arbol_vacio.dart';
 import 'package:flutterapparbol/core/error/failure.dart';
 import 'package:flutterapparbol/core/usecases/usecase.dart';
 import 'package:flutterapparbol/core/util/input_converter.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
-import 'package:flutterapparbol/features/arbol/domain/entities/idnfc_entity.dart';
+
 import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/usecases/comprobar_idnfc_usecase.dart';
 import 'package:flutterapparbol/features/arbol/domain/usecases/get_arboles_cercanos_usecase.dart';
@@ -26,7 +25,7 @@ part 'arbol_mapa_state.dart';
 @injectable
 class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
   final GetArbolesCercanosUseCase getArbolesCercanosUseCase;
-  final ComprobarIdNFCUseCase comprobarIdNFCUseCase;
+  final ComprobarIdNfcUseCase comprobarIdNFCUseCase;
   final LeerIdNfcUseCase leerIdNfcUseCase;
   final GetCoordUseCase getCoordUseCase;
   final InputConverterStrToLatLng inputConverterStrToLatLng;
@@ -34,7 +33,7 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
 
   ArbolMapaBloc(
       {@required GetArbolesCercanosUseCase arbolesCercanosUseCase,
-      @required ComprobarIdNFCUseCase comprobarIdNFCUseCase,
+      @required ComprobarIdNfcUseCase comprobarIdNFCUseCase,
       @required LeerIdNfcUseCase leerIdNfcUseCase,
       @required GetCoordUseCase getCoordUseCase,
       @required InputConverterStrToLatLng inputConverter,
@@ -60,22 +59,6 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
     ArbolMapaEvent event,
   ) async* {
     yield* event.map(
-      comprobarIdNfcEvent: (e) async* {
-        yield LoadingMapaState();
-        final Either<Failure, bool> failOrBool =
-            await comprobarIdNFCUseCase(Params(idNFC: e.idNfc));
-        yield* failOrBool.fold(
-          (Failure) async* {
-            if (Failure == ServerFailure()) {
-              yield ArbolMapaState.failure(
-                  message: _mapFailureToMessage(Failure));
-            }
-          },
-          (bool) async* {
-            yield ArbolMapaState.idNfcChequeado(existe: bool);
-          },
-        );
-      },
       getArbolesCercanosEvent: (e) async* {
         final inputEither =
             inputConverterStrToLatLng.stringToLatLng(e.coordenadas);
@@ -119,20 +102,6 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
           (latLng) async* {
 //            yield ArbolMapaState.coordenadasObtenidas(latLng: latLng);
             yield ArbolMapaState.mapaDesplegado(latLong: latLng);
-          },
-        );
-      },
-      leerIdNfConTelefonoEvent: (e) async* {
-        yield LoadingMapaState();
-        final Either<Failure, NfcEntity> failOrNfcEntity =
-            await leerIdNfcUseCase(Params(usuario: e.usuario));
-        yield* failOrNfcEntity.fold(
-          (failure) async* {
-            yield ArbolMapaState.failure(
-                message: _mapFailureToMessage(failure));
-          },
-          (NfcEntity) async* {
-            yield ArbolMapaState.idNfcObtenido(nfcEntity: NfcEntity);
           },
         );
       },

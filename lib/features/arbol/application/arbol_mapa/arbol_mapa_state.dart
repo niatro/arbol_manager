@@ -10,21 +10,15 @@ abstract class ArbolMapaState with _$ArbolMapaState {
   const factory ArbolMapaState.coordenadasObtenidas({
     @required LatLng latLng,
   }) = CoordenadasObtenidasMapaState;
-  const factory ArbolMapaState.idNfcObtenido({
-    @required NfcEntity nfcEntity,
-  }) = IdNfcObtenidoMapaState;
-  const factory ArbolMapaState.idNfcChequeado({
-    @required bool existe,
-  }) = IdNfcChequeadoMapaState;
   const factory ArbolMapaState.failure({
     @required String message,
   }) = FailureMapaState;
   const factory ArbolMapaState.loading() = LoadingMapaState;
-  const factory ArbolMapaState.marcadorColocado() = MarcadorColocadoState;
-  const factory ArbolMapaState.mapaDesplegado(
-      {@required LatLng latLong,
-      ArbolesEntity arboles,
-      LatLng tapPosition,
-      UserEntity usuario,
-      }) = MapaDesplegadoState;
+
+  const factory ArbolMapaState.mapaDesplegado({
+    @required LatLng latLong,
+    ArbolesEntity arboles,
+    LatLng tapPosition,
+    UserEntity usuario,
+  }) = MapaDesplegadoState;
 }

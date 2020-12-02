@@ -11,10 +11,10 @@ class MockListaArbolRepositorio extends Mock implements ArbolesRepositorio {}
 void main() {
   MockListaArbolRepositorio mockListaArbolRepositorio;
   //OJO: estamos testeando un UseCase, los parámetros entran del repositorio
-  ComprobarIdNFCUseCase usecase;
+  ComprobarIdNfcUseCase usecase;
   setUp(() {
     mockListaArbolRepositorio = MockListaArbolRepositorio();
-    usecase = ComprobarIdNFCUseCase(mockListaArbolRepositorio);
+    usecase = ComprobarIdNfcUseCase(mockListaArbolRepositorio);
   });
 
   final String idNFC = '54sue93G80HAT';

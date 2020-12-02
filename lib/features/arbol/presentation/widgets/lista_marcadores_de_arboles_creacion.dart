@@ -30,7 +30,6 @@ class ListaMarcadoresDeArbolesCreacion {
                   localizacion: localizacion,
                   arboles: arboles)
               .mostrarFichaArbol(context, state, tapPos, localizacion, arboles);
-          // _mostrarFichaArbol(context, state, tapPos, localizacion, arboles);
         });
 
     if (arboles.listaArbolEntity != []) {
