@@ -14,8 +14,8 @@ void main() async {
   await configureInjection(Environment.prod);
   runApp(AppWidget());
   //Lo de abajo es la injeccion de todo el proyecto original
-//  await di.init();
-//  runApp(MyApp());
+  // await di.init();
+  // runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

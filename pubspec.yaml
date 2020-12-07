@@ -75,6 +75,8 @@ dependencies:
   flutter_dotenv: ^2.1.0
   #Loaders
   flutter_spinkit: ^4.1.2
+  #iconos
+  font_awesome_flutter: ^8.10.0
 
 
 

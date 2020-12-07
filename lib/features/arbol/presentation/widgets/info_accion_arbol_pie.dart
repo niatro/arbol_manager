@@ -1,9 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapparbol/core/constants/usuario_test.dart';
 import 'package:flutterapparbol/features/arbol/application/arbol_mapa/arbol_mapa_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/nfc/nfc_bloc.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
 import 'package:flutterapparbol/features/arbol/presentation/pages/nfc_info_page.dart';
+import 'package:flutterapparbol/features/arbol/presentation/routes/router.gr.dart';
 import 'package:flutterapparbol/features/arbol/presentation/widgets/loading_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -29,16 +31,9 @@ class InfoAccionArbolPie {
       LatLng tapPos,
       LatLng localizacion,
       ArbolesEntity arboles]) {
-    print(' En MOSTRARFICHAARBOL el CONTEXT que entra es $context');
-    print(' En MOSTRARFICHAARBOL el ESTADO que entra es $state');
-
     showModalBottomSheet(
         context: context,
         builder: (_) {
-          print(
-              ' En MOSTRARFICHAARBOL DESPUES CONSTRUIR CONTEXTO el CONTEXT que entra es $context');
-          print(
-              ' En MOSTRARFICHAARBOL DESPUES CONSTRUIR CONTEXTO  el ESTADO que entra es $state');
           return Container(
             height: 100,
             color: Colors.transparent,
@@ -85,15 +80,10 @@ class InfoAccionArbolPie {
                                   value.showErrorMessages == true) {
                                 return RaisedButton(
                                   onPressed: () {
-                                    // Navigator.push(context,
-                                    //     MaterialPageRoute(builder: (context) {
-                                    //   return new NfcInfo(
-                                    //     nfcEntity: value.nfcEntity,
-                                    //     state: state,
-                                    //   );
-                                    // }));
-
-                                    //TODO: mostrar otro showModalBottom
+                                    ExtendedNavigator.of(context)
+                                        .pushIngresarGrabarArbolPage(
+                                            idNfc: value.nfcEntity.idNfc,
+                                            posArbol: tapPos);
                                   },
                                   child: Text(
                                     'AGREGA CON CHIP',
@@ -140,7 +130,7 @@ class InfoAccionArbolPie {
                                   //TODO: mostrar otro showModalBottom
                                 },
                                 child: Text(
-                                  'LEE NFC ',
+                                  'LEE CHIP ',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -162,7 +152,7 @@ class InfoAccionArbolPie {
                                 //TODO: mostrar otro showModalBottom
                               },
                               child: Text(
-                                'LEE NFC',
+                                'LEE CHIP',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -182,7 +172,7 @@ class InfoAccionArbolPie {
                       //TODO: ir a agregar arbol form
                     },
                     child: const Text(
-                      'AGREGA SIN NFC',
+                      'AGREGA SIN CHIP',
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

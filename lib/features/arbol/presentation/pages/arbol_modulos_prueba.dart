@@ -71,8 +71,8 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
   int count_enf = 0;
   List<String> imagenesArbol = [];
   List<String> imagenesEnfermedad = [];
-  final EsquemaDataDeSQL referencia = EsquemaDataDeSQL();
   final picker = ImagePicker();
+  final EsquemaDataDeSQL referencia = EsquemaDataDeSQL();
 
   @override
   void initState() {
@@ -97,7 +97,7 @@ class _ArbolModuloSQLDosPruebaState extends State<ArbolModuloSQLDosPrueba> {
   Widget build(BuildContext context) {
     http.Client client = http.Client();
     EsquemaDataDeSQL referencia = EsquemaDataDeSQL();
-    FormLocalSourceSql sqlDatabase = FormLocalSourceSqlImpl();
+    // FormLocalSourceSql sqlDatabase = FormLocalSourceSqlImpl();
 
     ArbolesRemoteDataSourceImpl remoteDataSource = ArbolesRemoteDataSourceImpl(
       client: client,
