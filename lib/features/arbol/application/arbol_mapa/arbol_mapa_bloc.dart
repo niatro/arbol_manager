@@ -82,7 +82,9 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
               (arboles) async* {
                 print(arboles);
                 yield ArbolMapaState.mapaDesplegado(
-                    latLong: coordenada, arboles: arboles);
+                    latLong: coordenada,
+                    arboles: arboles,
+                    markerIconResto: e.markerIconResto);
 //                yield ArbolMapaState.desplegandoArbolesCercanos(
 //                    arboles: arboles, coordenada: coordenada);
               },
@@ -112,9 +114,12 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
           final ArbolesEntity arbolesNuevos =
               ArbolesEntity(listaArbolEntity: [arbolDePosicion]);
           yield ArbolMapaState.mapaDesplegado(
-              arboles: arbolesNuevos,
-              latLong: e.localizacion,
-              tapPosition: e.tapPosicion);
+            arboles: arbolesNuevos,
+            latLong: e.localizacion,
+            tapPosition: e.tapPosicion,
+            markerIcon: e.markerIcon,
+            markerIconResto: e.markerIconResto,
+          );
         } else {
           ArbolEntity arbolVacioPosicion = _generarArbolMarcador(e.tapPosicion);
           final ArbolesEntity arbolesNuevos = ArbolesEntity(listaArbolEntity: [
@@ -122,9 +127,12 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
             arbolVacioPosicion
           ]);
           yield ArbolMapaState.mapaDesplegado(
-              arboles: arbolesNuevos,
-              latLong: e.localizacion,
-              tapPosition: e.tapPosicion);
+            arboles: arbolesNuevos,
+            latLong: e.localizacion,
+            tapPosition: e.tapPosicion,
+            markerIcon: e.markerIcon,
+            markerIconResto: e.markerIconResto,
+          );
         }
       },
     );

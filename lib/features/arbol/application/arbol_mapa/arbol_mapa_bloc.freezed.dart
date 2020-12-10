@@ -15,10 +15,11 @@ class _$ArbolMapaEventTearOff {
 
 // ignore: unused_element
   GetArbolesCercanosEvent getArbolesCercanosEvent(
-      String coordenadas, int distancia) {
+      String coordenadas, int distancia, BitmapDescriptor markerIconResto) {
     return GetArbolesCercanosEvent(
       coordenadas,
       distancia,
+      markerIconResto,
     );
   }
 
@@ -29,11 +30,17 @@ class _$ArbolMapaEventTearOff {
 
 // ignore: unused_element
   OnTapPantallaEvent onTapPantalla(
-      {LatLng tapPosicion, ArbolesEntity arboles, LatLng localizacion}) {
+      {LatLng tapPosicion,
+      ArbolesEntity arboles,
+      LatLng localizacion,
+      BitmapDescriptor markerIcon,
+      BitmapDescriptor markerIconResto}) {
     return OnTapPantallaEvent(
       tapPosicion: tapPosicion,
       arboles: arboles,
       localizacion: localizacion,
+      markerIcon: markerIcon,
+      markerIconResto: markerIconResto,
     );
   }
 }
@@ -46,18 +53,29 @@ const $ArbolMapaEvent = _$ArbolMapaEventTearOff();
 mixin _$ArbolMapaEvent {
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result getArbolesCercanosEvent(String coordenadas, int distancia),
+    @required
+        Result getArbolesCercanosEvent(String coordenadas, int distancia,
+            BitmapDescriptor markerIconResto),
     @required Result getCoordenadasEvent(),
     @required
         Result onTapPantalla(
-            LatLng tapPosicion, ArbolesEntity arboles, LatLng localizacion),
+            LatLng tapPosicion,
+            ArbolesEntity arboles,
+            LatLng localizacion,
+            BitmapDescriptor markerIcon,
+            BitmapDescriptor markerIconResto),
   });
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result getArbolesCercanosEvent(String coordenadas, int distancia),
+    Result getArbolesCercanosEvent(
+        String coordenadas, int distancia, BitmapDescriptor markerIconResto),
     Result getCoordenadasEvent(),
     Result onTapPantalla(
-        LatLng tapPosicion, ArbolesEntity arboles, LatLng localizacion),
+        LatLng tapPosicion,
+        ArbolesEntity arboles,
+        LatLng localizacion,
+        BitmapDescriptor markerIcon,
+        BitmapDescriptor markerIconResto),
     @required Result orElse(),
   });
   @optionalTypeArgs
@@ -97,7 +115,8 @@ abstract class $GetArbolesCercanosEventCopyWith<$Res> {
   factory $GetArbolesCercanosEventCopyWith(GetArbolesCercanosEvent value,
           $Res Function(GetArbolesCercanosEvent) then) =
       _$GetArbolesCercanosEventCopyWithImpl<$Res>;
-  $Res call({String coordenadas, int distancia});
+  $Res call(
+      {String coordenadas, int distancia, BitmapDescriptor markerIconResto});
 }
 
 /// @nodoc
@@ -115,28 +134,36 @@ class _$GetArbolesCercanosEventCopyWithImpl<$Res>
   $Res call({
     Object coordenadas = freezed,
     Object distancia = freezed,
+    Object markerIconResto = freezed,
   }) {
     return _then(GetArbolesCercanosEvent(
       coordenadas == freezed ? _value.coordenadas : coordenadas as String,
       distancia == freezed ? _value.distancia : distancia as int,
+      markerIconResto == freezed
+          ? _value.markerIconResto
+          : markerIconResto as BitmapDescriptor,
     ));
   }
 }
 
 /// @nodoc
 class _$GetArbolesCercanosEvent implements GetArbolesCercanosEvent {
-  const _$GetArbolesCercanosEvent(this.coordenadas, this.distancia)
+  const _$GetArbolesCercanosEvent(
+      this.coordenadas, this.distancia, this.markerIconResto)
       : assert(coordenadas != null),
-        assert(distancia != null);
+        assert(distancia != null),
+        assert(markerIconResto != null);
 
   @override
   final String coordenadas;
   @override
   final int distancia;
+  @override
+  final BitmapDescriptor markerIconResto;
 
   @override
   String toString() {
-    return 'ArbolMapaEvent.getArbolesCercanosEvent(coordenadas: $coordenadas, distancia: $distancia)';
+    return 'ArbolMapaEvent.getArbolesCercanosEvent(coordenadas: $coordenadas, distancia: $distancia, markerIconResto: $markerIconResto)';
   }
 
   @override
@@ -148,14 +175,18 @@ class _$GetArbolesCercanosEvent implements GetArbolesCercanosEvent {
                     .equals(other.coordenadas, coordenadas)) &&
             (identical(other.distancia, distancia) ||
                 const DeepCollectionEquality()
-                    .equals(other.distancia, distancia)));
+                    .equals(other.distancia, distancia)) &&
+            (identical(other.markerIconResto, markerIconResto) ||
+                const DeepCollectionEquality()
+                    .equals(other.markerIconResto, markerIconResto)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(coordenadas) ^
-      const DeepCollectionEquality().hash(distancia);
+      const DeepCollectionEquality().hash(distancia) ^
+      const DeepCollectionEquality().hash(markerIconResto);
 
   @override
   $GetArbolesCercanosEventCopyWith<GetArbolesCercanosEvent> get copyWith =>
@@ -165,30 +196,41 @@ class _$GetArbolesCercanosEvent implements GetArbolesCercanosEvent {
   @override
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result getArbolesCercanosEvent(String coordenadas, int distancia),
+    @required
+        Result getArbolesCercanosEvent(String coordenadas, int distancia,
+            BitmapDescriptor markerIconResto),
     @required Result getCoordenadasEvent(),
     @required
         Result onTapPantalla(
-            LatLng tapPosicion, ArbolesEntity arboles, LatLng localizacion),
+            LatLng tapPosicion,
+            ArbolesEntity arboles,
+            LatLng localizacion,
+            BitmapDescriptor markerIcon,
+            BitmapDescriptor markerIconResto),
   }) {
     assert(getArbolesCercanosEvent != null);
     assert(getCoordenadasEvent != null);
     assert(onTapPantalla != null);
-    return getArbolesCercanosEvent(coordenadas, distancia);
+    return getArbolesCercanosEvent(coordenadas, distancia, markerIconResto);
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result getArbolesCercanosEvent(String coordenadas, int distancia),
+    Result getArbolesCercanosEvent(
+        String coordenadas, int distancia, BitmapDescriptor markerIconResto),
     Result getCoordenadasEvent(),
     Result onTapPantalla(
-        LatLng tapPosicion, ArbolesEntity arboles, LatLng localizacion),
+        LatLng tapPosicion,
+        ArbolesEntity arboles,
+        LatLng localizacion,
+        BitmapDescriptor markerIcon,
+        BitmapDescriptor markerIconResto),
     @required Result orElse(),
   }) {
     assert(orElse != null);
     if (getArbolesCercanosEvent != null) {
-      return getArbolesCercanosEvent(coordenadas, distancia);
+      return getArbolesCercanosEvent(coordenadas, distancia, markerIconResto);
     }
     return orElse();
   }
@@ -223,11 +265,13 @@ class _$GetArbolesCercanosEvent implements GetArbolesCercanosEvent {
 }
 
 abstract class GetArbolesCercanosEvent implements ArbolMapaEvent {
-  const factory GetArbolesCercanosEvent(String coordenadas, int distancia) =
+  const factory GetArbolesCercanosEvent(
+          String coordenadas, int distancia, BitmapDescriptor markerIconResto) =
       _$GetArbolesCercanosEvent;
 
   String get coordenadas;
   int get distancia;
+  BitmapDescriptor get markerIconResto;
   $GetArbolesCercanosEventCopyWith<GetArbolesCercanosEvent> get copyWith;
 }
 
@@ -270,11 +314,17 @@ class _$GetCoordenadasEvent implements GetCoordenadasEvent {
   @override
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result getArbolesCercanosEvent(String coordenadas, int distancia),
+    @required
+        Result getArbolesCercanosEvent(String coordenadas, int distancia,
+            BitmapDescriptor markerIconResto),
     @required Result getCoordenadasEvent(),
     @required
         Result onTapPantalla(
-            LatLng tapPosicion, ArbolesEntity arboles, LatLng localizacion),
+            LatLng tapPosicion,
+            ArbolesEntity arboles,
+            LatLng localizacion,
+            BitmapDescriptor markerIcon,
+            BitmapDescriptor markerIconResto),
   }) {
     assert(getArbolesCercanosEvent != null);
     assert(getCoordenadasEvent != null);
@@ -285,10 +335,15 @@ class _$GetCoordenadasEvent implements GetCoordenadasEvent {
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result getArbolesCercanosEvent(String coordenadas, int distancia),
+    Result getArbolesCercanosEvent(
+        String coordenadas, int distancia, BitmapDescriptor markerIconResto),
     Result getCoordenadasEvent(),
     Result onTapPantalla(
-        LatLng tapPosicion, ArbolesEntity arboles, LatLng localizacion),
+        LatLng tapPosicion,
+        ArbolesEntity arboles,
+        LatLng localizacion,
+        BitmapDescriptor markerIcon,
+        BitmapDescriptor markerIconResto),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -336,7 +391,12 @@ abstract class $OnTapPantallaEventCopyWith<$Res> {
   factory $OnTapPantallaEventCopyWith(
           OnTapPantallaEvent value, $Res Function(OnTapPantallaEvent) then) =
       _$OnTapPantallaEventCopyWithImpl<$Res>;
-  $Res call({LatLng tapPosicion, ArbolesEntity arboles, LatLng localizacion});
+  $Res call(
+      {LatLng tapPosicion,
+      ArbolesEntity arboles,
+      LatLng localizacion,
+      BitmapDescriptor markerIcon,
+      BitmapDescriptor markerIconResto});
 }
 
 /// @nodoc
@@ -355,6 +415,8 @@ class _$OnTapPantallaEventCopyWithImpl<$Res>
     Object tapPosicion = freezed,
     Object arboles = freezed,
     Object localizacion = freezed,
+    Object markerIcon = freezed,
+    Object markerIconResto = freezed,
   }) {
     return _then(OnTapPantallaEvent(
       tapPosicion:
@@ -363,6 +425,12 @@ class _$OnTapPantallaEventCopyWithImpl<$Res>
       localizacion: localizacion == freezed
           ? _value.localizacion
           : localizacion as LatLng,
+      markerIcon: markerIcon == freezed
+          ? _value.markerIcon
+          : markerIcon as BitmapDescriptor,
+      markerIconResto: markerIconResto == freezed
+          ? _value.markerIconResto
+          : markerIconResto as BitmapDescriptor,
     ));
   }
 }
@@ -370,7 +438,11 @@ class _$OnTapPantallaEventCopyWithImpl<$Res>
 /// @nodoc
 class _$OnTapPantallaEvent implements OnTapPantallaEvent {
   const _$OnTapPantallaEvent(
-      {this.tapPosicion, this.arboles, this.localizacion});
+      {this.tapPosicion,
+      this.arboles,
+      this.localizacion,
+      this.markerIcon,
+      this.markerIconResto});
 
   @override
   final LatLng tapPosicion;
@@ -378,10 +450,14 @@ class _$OnTapPantallaEvent implements OnTapPantallaEvent {
   final ArbolesEntity arboles;
   @override
   final LatLng localizacion;
+  @override
+  final BitmapDescriptor markerIcon;
+  @override
+  final BitmapDescriptor markerIconResto;
 
   @override
   String toString() {
-    return 'ArbolMapaEvent.onTapPantalla(tapPosicion: $tapPosicion, arboles: $arboles, localizacion: $localizacion)';
+    return 'ArbolMapaEvent.onTapPantalla(tapPosicion: $tapPosicion, arboles: $arboles, localizacion: $localizacion, markerIcon: $markerIcon, markerIconResto: $markerIconResto)';
   }
 
   @override
@@ -396,7 +472,13 @@ class _$OnTapPantallaEvent implements OnTapPantallaEvent {
                     .equals(other.arboles, arboles)) &&
             (identical(other.localizacion, localizacion) ||
                 const DeepCollectionEquality()
-                    .equals(other.localizacion, localizacion)));
+                    .equals(other.localizacion, localizacion)) &&
+            (identical(other.markerIcon, markerIcon) ||
+                const DeepCollectionEquality()
+                    .equals(other.markerIcon, markerIcon)) &&
+            (identical(other.markerIconResto, markerIconResto) ||
+                const DeepCollectionEquality()
+                    .equals(other.markerIconResto, markerIconResto)));
   }
 
   @override
@@ -404,7 +486,9 @@ class _$OnTapPantallaEvent implements OnTapPantallaEvent {
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(tapPosicion) ^
       const DeepCollectionEquality().hash(arboles) ^
-      const DeepCollectionEquality().hash(localizacion);
+      const DeepCollectionEquality().hash(localizacion) ^
+      const DeepCollectionEquality().hash(markerIcon) ^
+      const DeepCollectionEquality().hash(markerIconResto);
 
   @override
   $OnTapPantallaEventCopyWith<OnTapPantallaEvent> get copyWith =>
@@ -413,30 +497,43 @@ class _$OnTapPantallaEvent implements OnTapPantallaEvent {
   @override
   @optionalTypeArgs
   Result when<Result extends Object>({
-    @required Result getArbolesCercanosEvent(String coordenadas, int distancia),
+    @required
+        Result getArbolesCercanosEvent(String coordenadas, int distancia,
+            BitmapDescriptor markerIconResto),
     @required Result getCoordenadasEvent(),
     @required
         Result onTapPantalla(
-            LatLng tapPosicion, ArbolesEntity arboles, LatLng localizacion),
+            LatLng tapPosicion,
+            ArbolesEntity arboles,
+            LatLng localizacion,
+            BitmapDescriptor markerIcon,
+            BitmapDescriptor markerIconResto),
   }) {
     assert(getArbolesCercanosEvent != null);
     assert(getCoordenadasEvent != null);
     assert(onTapPantalla != null);
-    return onTapPantalla(tapPosicion, arboles, localizacion);
+    return onTapPantalla(
+        tapPosicion, arboles, localizacion, markerIcon, markerIconResto);
   }
 
   @override
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
-    Result getArbolesCercanosEvent(String coordenadas, int distancia),
+    Result getArbolesCercanosEvent(
+        String coordenadas, int distancia, BitmapDescriptor markerIconResto),
     Result getCoordenadasEvent(),
     Result onTapPantalla(
-        LatLng tapPosicion, ArbolesEntity arboles, LatLng localizacion),
+        LatLng tapPosicion,
+        ArbolesEntity arboles,
+        LatLng localizacion,
+        BitmapDescriptor markerIcon,
+        BitmapDescriptor markerIconResto),
     @required Result orElse(),
   }) {
     assert(orElse != null);
     if (onTapPantalla != null) {
-      return onTapPantalla(tapPosicion, arboles, localizacion);
+      return onTapPantalla(
+          tapPosicion, arboles, localizacion, markerIcon, markerIconResto);
     }
     return orElse();
   }
@@ -474,11 +571,15 @@ abstract class OnTapPantallaEvent implements ArbolMapaEvent {
   const factory OnTapPantallaEvent(
       {LatLng tapPosicion,
       ArbolesEntity arboles,
-      LatLng localizacion}) = _$OnTapPantallaEvent;
+      LatLng localizacion,
+      BitmapDescriptor markerIcon,
+      BitmapDescriptor markerIconResto}) = _$OnTapPantallaEvent;
 
   LatLng get tapPosicion;
   ArbolesEntity get arboles;
   LatLng get localizacion;
+  BitmapDescriptor get markerIcon;
+  BitmapDescriptor get markerIconResto;
   $OnTapPantallaEventCopyWith<OnTapPantallaEvent> get copyWith;
 }
 
@@ -525,12 +626,16 @@ class _$ArbolMapaStateTearOff {
       {@required LatLng latLong,
       ArbolesEntity arboles,
       LatLng tapPosition,
-      UserEntity usuario}) {
+      UserEntity usuario,
+      BitmapDescriptor markerIcon,
+      BitmapDescriptor markerIconResto}) {
     return MapaDesplegadoState(
       latLong: latLong,
       arboles: arboles,
       tapPosition: tapPosition,
       usuario: usuario,
+      markerIcon: markerIcon,
+      markerIconResto: markerIconResto,
     );
   }
 }
@@ -551,8 +656,13 @@ mixin _$ArbolMapaState {
     @required Result failure(String message),
     @required Result loading(),
     @required
-        Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles,
-            LatLng tapPosition, UserEntity usuario),
+        Result mapaDesplegado(
+            LatLng latLong,
+            ArbolesEntity arboles,
+            LatLng tapPosition,
+            UserEntity usuario,
+            BitmapDescriptor markerIcon,
+            BitmapDescriptor markerIconResto),
   });
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
@@ -561,8 +671,13 @@ mixin _$ArbolMapaState {
     Result coordenadasObtenidas(LatLng latLng),
     Result failure(String message),
     Result loading(),
-    Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles,
-        LatLng tapPosition, UserEntity usuario),
+    Result mapaDesplegado(
+        LatLng latLong,
+        ArbolesEntity arboles,
+        LatLng tapPosition,
+        UserEntity usuario,
+        BitmapDescriptor markerIcon,
+        BitmapDescriptor markerIconResto),
     @required Result orElse(),
   });
   @optionalTypeArgs
@@ -652,8 +767,13 @@ class _$InitialMapaState implements InitialMapaState {
     @required Result failure(String message),
     @required Result loading(),
     @required
-        Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles,
-            LatLng tapPosition, UserEntity usuario),
+        Result mapaDesplegado(
+            LatLng latLong,
+            ArbolesEntity arboles,
+            LatLng tapPosition,
+            UserEntity usuario,
+            BitmapDescriptor markerIcon,
+            BitmapDescriptor markerIconResto),
   }) {
     assert(initial != null);
     assert(desplegandoArbolesCercanos != null);
@@ -672,8 +792,13 @@ class _$InitialMapaState implements InitialMapaState {
     Result coordenadasObtenidas(LatLng latLng),
     Result failure(String message),
     Result loading(),
-    Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles,
-        LatLng tapPosition, UserEntity usuario),
+    Result mapaDesplegado(
+        LatLng latLong,
+        ArbolesEntity arboles,
+        LatLng tapPosition,
+        UserEntity usuario,
+        BitmapDescriptor markerIcon,
+        BitmapDescriptor markerIconResto),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -814,8 +939,13 @@ class _$ArbolesCercanosObtenidosMapaState
     @required Result failure(String message),
     @required Result loading(),
     @required
-        Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles,
-            LatLng tapPosition, UserEntity usuario),
+        Result mapaDesplegado(
+            LatLng latLong,
+            ArbolesEntity arboles,
+            LatLng tapPosition,
+            UserEntity usuario,
+            BitmapDescriptor markerIcon,
+            BitmapDescriptor markerIconResto),
   }) {
     assert(initial != null);
     assert(desplegandoArbolesCercanos != null);
@@ -834,8 +964,13 @@ class _$ArbolesCercanosObtenidosMapaState
     Result coordenadasObtenidas(LatLng latLng),
     Result failure(String message),
     Result loading(),
-    Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles,
-        LatLng tapPosition, UserEntity usuario),
+    Result mapaDesplegado(
+        LatLng latLong,
+        ArbolesEntity arboles,
+        LatLng tapPosition,
+        UserEntity usuario,
+        BitmapDescriptor markerIcon,
+        BitmapDescriptor markerIconResto),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -969,8 +1104,13 @@ class _$CoordenadasObtenidasMapaState implements CoordenadasObtenidasMapaState {
     @required Result failure(String message),
     @required Result loading(),
     @required
-        Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles,
-            LatLng tapPosition, UserEntity usuario),
+        Result mapaDesplegado(
+            LatLng latLong,
+            ArbolesEntity arboles,
+            LatLng tapPosition,
+            UserEntity usuario,
+            BitmapDescriptor markerIcon,
+            BitmapDescriptor markerIconResto),
   }) {
     assert(initial != null);
     assert(desplegandoArbolesCercanos != null);
@@ -989,8 +1129,13 @@ class _$CoordenadasObtenidasMapaState implements CoordenadasObtenidasMapaState {
     Result coordenadasObtenidas(LatLng latLng),
     Result failure(String message),
     Result loading(),
-    Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles,
-        LatLng tapPosition, UserEntity usuario),
+    Result mapaDesplegado(
+        LatLng latLong,
+        ArbolesEntity arboles,
+        LatLng tapPosition,
+        UserEntity usuario,
+        BitmapDescriptor markerIcon,
+        BitmapDescriptor markerIconResto),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -1117,8 +1262,13 @@ class _$FailureMapaState implements FailureMapaState {
     @required Result failure(String message),
     @required Result loading(),
     @required
-        Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles,
-            LatLng tapPosition, UserEntity usuario),
+        Result mapaDesplegado(
+            LatLng latLong,
+            ArbolesEntity arboles,
+            LatLng tapPosition,
+            UserEntity usuario,
+            BitmapDescriptor markerIcon,
+            BitmapDescriptor markerIconResto),
   }) {
     assert(initial != null);
     assert(desplegandoArbolesCercanos != null);
@@ -1137,8 +1287,13 @@ class _$FailureMapaState implements FailureMapaState {
     Result coordenadasObtenidas(LatLng latLng),
     Result failure(String message),
     Result loading(),
-    Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles,
-        LatLng tapPosition, UserEntity usuario),
+    Result mapaDesplegado(
+        LatLng latLong,
+        ArbolesEntity arboles,
+        LatLng tapPosition,
+        UserEntity usuario,
+        BitmapDescriptor markerIcon,
+        BitmapDescriptor markerIconResto),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -1243,8 +1398,13 @@ class _$LoadingMapaState implements LoadingMapaState {
     @required Result failure(String message),
     @required Result loading(),
     @required
-        Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles,
-            LatLng tapPosition, UserEntity usuario),
+        Result mapaDesplegado(
+            LatLng latLong,
+            ArbolesEntity arboles,
+            LatLng tapPosition,
+            UserEntity usuario,
+            BitmapDescriptor markerIcon,
+            BitmapDescriptor markerIconResto),
   }) {
     assert(initial != null);
     assert(desplegandoArbolesCercanos != null);
@@ -1263,8 +1423,13 @@ class _$LoadingMapaState implements LoadingMapaState {
     Result coordenadasObtenidas(LatLng latLng),
     Result failure(String message),
     Result loading(),
-    Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles,
-        LatLng tapPosition, UserEntity usuario),
+    Result mapaDesplegado(
+        LatLng latLong,
+        ArbolesEntity arboles,
+        LatLng tapPosition,
+        UserEntity usuario,
+        BitmapDescriptor markerIcon,
+        BitmapDescriptor markerIconResto),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -1327,7 +1492,9 @@ abstract class $MapaDesplegadoStateCopyWith<$Res> {
       {LatLng latLong,
       ArbolesEntity arboles,
       LatLng tapPosition,
-      UserEntity usuario});
+      UserEntity usuario,
+      BitmapDescriptor markerIcon,
+      BitmapDescriptor markerIconResto});
 }
 
 /// @nodoc
@@ -1347,6 +1514,8 @@ class _$MapaDesplegadoStateCopyWithImpl<$Res>
     Object arboles = freezed,
     Object tapPosition = freezed,
     Object usuario = freezed,
+    Object markerIcon = freezed,
+    Object markerIconResto = freezed,
   }) {
     return _then(MapaDesplegadoState(
       latLong: latLong == freezed ? _value.latLong : latLong as LatLng,
@@ -1354,6 +1523,12 @@ class _$MapaDesplegadoStateCopyWithImpl<$Res>
       tapPosition:
           tapPosition == freezed ? _value.tapPosition : tapPosition as LatLng,
       usuario: usuario == freezed ? _value.usuario : usuario as UserEntity,
+      markerIcon: markerIcon == freezed
+          ? _value.markerIcon
+          : markerIcon as BitmapDescriptor,
+      markerIconResto: markerIconResto == freezed
+          ? _value.markerIconResto
+          : markerIconResto as BitmapDescriptor,
     ));
   }
 }
@@ -1361,7 +1536,12 @@ class _$MapaDesplegadoStateCopyWithImpl<$Res>
 /// @nodoc
 class _$MapaDesplegadoState implements MapaDesplegadoState {
   const _$MapaDesplegadoState(
-      {@required this.latLong, this.arboles, this.tapPosition, this.usuario})
+      {@required this.latLong,
+      this.arboles,
+      this.tapPosition,
+      this.usuario,
+      this.markerIcon,
+      this.markerIconResto})
       : assert(latLong != null);
 
   @override
@@ -1372,10 +1552,14 @@ class _$MapaDesplegadoState implements MapaDesplegadoState {
   final LatLng tapPosition;
   @override
   final UserEntity usuario;
+  @override
+  final BitmapDescriptor markerIcon;
+  @override
+  final BitmapDescriptor markerIconResto;
 
   @override
   String toString() {
-    return 'ArbolMapaState.mapaDesplegado(latLong: $latLong, arboles: $arboles, tapPosition: $tapPosition, usuario: $usuario)';
+    return 'ArbolMapaState.mapaDesplegado(latLong: $latLong, arboles: $arboles, tapPosition: $tapPosition, usuario: $usuario, markerIcon: $markerIcon, markerIconResto: $markerIconResto)';
   }
 
   @override
@@ -1392,7 +1576,14 @@ class _$MapaDesplegadoState implements MapaDesplegadoState {
                 const DeepCollectionEquality()
                     .equals(other.tapPosition, tapPosition)) &&
             (identical(other.usuario, usuario) ||
-                const DeepCollectionEquality().equals(other.usuario, usuario)));
+                const DeepCollectionEquality()
+                    .equals(other.usuario, usuario)) &&
+            (identical(other.markerIcon, markerIcon) ||
+                const DeepCollectionEquality()
+                    .equals(other.markerIcon, markerIcon)) &&
+            (identical(other.markerIconResto, markerIconResto) ||
+                const DeepCollectionEquality()
+                    .equals(other.markerIconResto, markerIconResto)));
   }
 
   @override
@@ -1401,7 +1592,9 @@ class _$MapaDesplegadoState implements MapaDesplegadoState {
       const DeepCollectionEquality().hash(latLong) ^
       const DeepCollectionEquality().hash(arboles) ^
       const DeepCollectionEquality().hash(tapPosition) ^
-      const DeepCollectionEquality().hash(usuario);
+      const DeepCollectionEquality().hash(usuario) ^
+      const DeepCollectionEquality().hash(markerIcon) ^
+      const DeepCollectionEquality().hash(markerIconResto);
 
   @override
   $MapaDesplegadoStateCopyWith<MapaDesplegadoState> get copyWith =>
@@ -1418,8 +1611,13 @@ class _$MapaDesplegadoState implements MapaDesplegadoState {
     @required Result failure(String message),
     @required Result loading(),
     @required
-        Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles,
-            LatLng tapPosition, UserEntity usuario),
+        Result mapaDesplegado(
+            LatLng latLong,
+            ArbolesEntity arboles,
+            LatLng tapPosition,
+            UserEntity usuario,
+            BitmapDescriptor markerIcon,
+            BitmapDescriptor markerIconResto),
   }) {
     assert(initial != null);
     assert(desplegandoArbolesCercanos != null);
@@ -1427,7 +1625,8 @@ class _$MapaDesplegadoState implements MapaDesplegadoState {
     assert(failure != null);
     assert(loading != null);
     assert(mapaDesplegado != null);
-    return mapaDesplegado(latLong, arboles, tapPosition, usuario);
+    return mapaDesplegado(
+        latLong, arboles, tapPosition, usuario, markerIcon, markerIconResto);
   }
 
   @override
@@ -1438,13 +1637,19 @@ class _$MapaDesplegadoState implements MapaDesplegadoState {
     Result coordenadasObtenidas(LatLng latLng),
     Result failure(String message),
     Result loading(),
-    Result mapaDesplegado(LatLng latLong, ArbolesEntity arboles,
-        LatLng tapPosition, UserEntity usuario),
+    Result mapaDesplegado(
+        LatLng latLong,
+        ArbolesEntity arboles,
+        LatLng tapPosition,
+        UserEntity usuario,
+        BitmapDescriptor markerIcon,
+        BitmapDescriptor markerIconResto),
     @required Result orElse(),
   }) {
     assert(orElse != null);
     if (mapaDesplegado != null) {
-      return mapaDesplegado(latLong, arboles, tapPosition, usuario);
+      return mapaDesplegado(
+          latLong, arboles, tapPosition, usuario, markerIcon, markerIconResto);
     }
     return orElse();
   }
@@ -1494,11 +1699,15 @@ abstract class MapaDesplegadoState implements ArbolMapaState {
       {@required LatLng latLong,
       ArbolesEntity arboles,
       LatLng tapPosition,
-      UserEntity usuario}) = _$MapaDesplegadoState;
+      UserEntity usuario,
+      BitmapDescriptor markerIcon,
+      BitmapDescriptor markerIconResto}) = _$MapaDesplegadoState;
 
   LatLng get latLong;
   ArbolesEntity get arboles;
   LatLng get tapPosition;
   UserEntity get usuario;
+  BitmapDescriptor get markerIcon;
+  BitmapDescriptor get markerIconResto;
   $MapaDesplegadoStateCopyWith<MapaDesplegadoState> get copyWith;
 }

@@ -246,8 +246,8 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
     var uri = Uri.parse(_url + "/bd/insertArbol.php");
     var request = http.MultipartRequest('POST', uri)
       ..fields["id_nfc_arbol"] = arbol.idNfcHistoria.last
-      ..fields["gui_arbol"] =
-          await buscaValoresIdentificadores(arbol, 'gui_arbol')
+      ..fields["gui_arbol"] = arbol.guiArbol
+      // await buscaValoresIdentificadores(arbol, 'gui_arbol')
       ..fields["id_entidad_arbol"] =
           await buscaValoresIdentificadores(arbol, 'id_entidad_arbol')
       ..fields["id_sector_entidad_arbol"] =
@@ -275,9 +275,8 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
           await buscaValoresIdentificadores(arbol, 'id_sintoma_arbol')
       ..fields["id_lugar_plaga_arbol"] =
           await buscaValoresIdentificadores(arbol, 'id_lugar_plaga_arbol')
-      ..fields["id_inclinacion_tronco_arbol"] =
-          await buscaValoresIdentificadores(
-              arbol, 'id_inclinacion_tronco_arbol')
+      ..fields["id_inclinacion_tronco_arbol"] = await buscaValoresIdentificadores(
+          arbol, 'id_inclinacion_tronco_arbol')
       ..fields["id_orientacion_inclinacion_arbol"] =
           await buscaValoresIdentificadores(
               arbol, 'id_orientacion_inclinacion_arbol')
@@ -294,8 +293,9 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
           "${arbol.geoReferenciaCapturaArbol.latitude.toString()},${arbol.geoReferenciaCapturaArbol.longitude.toString()}"
       ..fields["alerta_arbol"] = arbol.alertaArbol
       ..fields["revision_arbol"] = arbol.revisionArbol
-      ..fields["esquina_calle_arbol"] =
-          await buscaValoresIdentificadores(arbol, 'esquina_calle_arbol')
+      ..fields["esquina_calle_arbol"] = arbol.esquinaCalleArbol == "NO ES ESQUINA"
+          ? "NO ES ESQUINA"
+          : await buscaValoresIdentificadores(arbol, 'esquina_calle_arbol')
       ..fields["id_usuario_creacion_arbol"] =
           await buscaValoresIdentificadores(arbol, 'id_usuario_creacion_arbol')
       ..fields["id_usuario_modifica_arbol"] =

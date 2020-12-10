@@ -13,7 +13,7 @@ class IngresarGrabarArbolPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ingreso Arbol id'),
+        title: Text('Ingreso Arbol '),
       ),
       body: IngresarGrabarArbolFormWidget(
         idUnico: idNfc,

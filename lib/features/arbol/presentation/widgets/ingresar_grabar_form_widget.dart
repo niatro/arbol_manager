@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/form_local_source_sql.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/local_data_estructuras.dart';
@@ -8,10 +10,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 class IngresarGrabarArbolFormWidget extends StatefulWidget {
-  String idUnico;
-  LatLng posicionArbol;
+  final String idUnico;
+  final LatLng posicionArbol;
   IngresarGrabarArbolFormWidget({
     @required this.idUnico,
     @required this.posicionArbol,
@@ -26,10 +29,13 @@ class IngresarGrabarArbolFormWidget extends StatefulWidget {
 class _IngresarGrabarArbolFormWidgetState
     extends State<IngresarGrabarArbolFormWidget> {
   final _formKey = GlobalKey<FormState>();
+
   ArbolesEntity arbolesEntity = new ArbolesEntity(listaArbolEntity: []);
-  String guiArbol;
+  ArbolEntity _arbol;
+
+  String _guiArbol;
   int _idArbol;
-  List<dynamic> _idNfcHistoria;
+  List<dynamic> _idNfcHistoria = [];
   String _clienteArbol;
   String _zonaArbol;
   String _calleArbol;
@@ -58,8 +64,8 @@ class _IngresarGrabarArbolFormWidgetState
   String _usuarioModificaArbol;
   DateTime fechaCreacionArbol;
   DateTime _fechaUltimaModArbol;
-  bool _alertaArbol;
-  bool _revisionArbol;
+  bool _alertaArbol = false;
+  bool _revisionArbol = false;
   // List<dynamic> _fotosArbol;
   // List<dynamic> _fotosEnfermedad;
   int _countFotosArbol = 0;
@@ -68,22 +74,35 @@ class _IngresarGrabarArbolFormWidgetState
   FormLocalSourceSqlImpl databaseHelper = FormLocalSourceSqlImpl();
   EsquemaDataDeSQL referencia = EsquemaDataDeSQL();
   http.Client client = http.Client();
-  List<String> _fotosArbol = [];
-  List<String> _fotosEnfermedad = [];
+  List<String> _fotosArbolPath = [];
+  List<File> _fotosArbolFile;
+  List<String> _fotosEnfermedadPath = [];
+  List<File> _fotosEnfermedadFile;
   final picker = ImagePicker();
+  Uuid gui = Uuid();
+  bool _llenarEnfermedades = false;
 
-  Future<List<String>> tomarImagenArbol(ImagePicker picker) async {
+  Future<void> tomarImagenArbol(ImagePicker picker) async {
     var pickedImage = await picker.getImage(source: ImageSource.camera);
-    _fotosArbol.add(pickedImage.path);
-    _fotosArbol.forEach((foto) => print(foto));
-    return _fotosArbol;
+    String path = pickedImage.path;
+    setState(() {
+      _fotosArbolPath.add(path);
+      if (_fotosArbolPath.length > 3) {
+        _fotosArbolPath.removeAt(0);
+      }
+    });
   }
 
-  Future<List<String>> tomarImagenEnfermedad(ImagePicker picker) async {
+  Future<void> tomarImagenEnfermedad(ImagePicker picker) async {
     var pickedImage = await picker.getImage(source: ImageSource.camera);
-    _fotosEnfermedad.add(pickedImage.path);
-    _fotosEnfermedad.forEach((foto) => print(foto));
-    return _fotosEnfermedad;
+    String path = pickedImage.path;
+
+    setState(() {
+      _fotosEnfermedadPath.add(path);
+      if (_fotosEnfermedadPath.length > 1) {
+        _fotosEnfermedadPath.removeAt(0);
+      }
+    });
   }
 
   Future<List<Map<String, dynamic>>> campo(
@@ -129,7 +148,17 @@ class _IngresarGrabarArbolFormWidgetState
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.black45, width: 1.0),
                         borderRadius: BorderRadius.circular(5.0)),
-                    child: DropdownButton<String>(
+                    child: DropdownButtonFormField<String>(
+                      validator: (value) =>
+                          value == null ? 'Campo obligatorio' : null,
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                      ),
                       icon: Icon(FontAwesomeIcons.arrowCircleDown),
                       dropdownColor: Colors.green[50],
                       elevation: 5,
@@ -174,7 +203,17 @@ class _IngresarGrabarArbolFormWidgetState
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.black45, width: 1.0),
                         borderRadius: BorderRadius.circular(5.0)),
-                    child: DropdownButton<String>(
+                    child: DropdownButtonFormField<String>(
+                      validator: (value) =>
+                          value == null ? 'Campo obligatorio' : null,
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                      ),
                       icon: Icon(FontAwesomeIcons.arrowCircleDown),
                       dropdownColor: Colors.green[50],
                       elevation: 5,
@@ -224,7 +263,17 @@ class _IngresarGrabarArbolFormWidgetState
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.black45, width: 1.0),
                         borderRadius: BorderRadius.circular(5.0)),
-                    child: DropdownButton<String>(
+                    child: DropdownButtonFormField<String>(
+                      validator: (value) =>
+                          value == null ? 'Campo obligatorio' : null,
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                      ),
                       icon: Icon(FontAwesomeIcons.arrowCircleDown),
                       dropdownColor: Colors.green[50],
                       elevation: 5,
@@ -232,11 +281,14 @@ class _IngresarGrabarArbolFormWidgetState
                       hint: Text('Selecciona calle'),
                       value: _calleArbol,
                       items: listado.map((Map<String, dynamic> item) {
+                        // print('${item['calleTipo']}  / ${item['calleNombre']}');
+
                         String texto =
                             item['calleTipo'] + " / " + item['calleNombre'];
                         String valor = item['calleNombre'] +
                             "," +
-                            item['calleOrigenId'].toString();
+                            item['calleZonaId'].toString() +
+                            item['calleId'].toString();
                         return DropdownMenuItem(
                           child: Text(texto),
                           value: valor,
@@ -275,7 +327,15 @@ class _IngresarGrabarArbolFormWidgetState
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.black45, width: 1.0),
                         borderRadius: BorderRadius.circular(5.0)),
-                    child: DropdownButton<String>(
+                    child: DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                      ),
                       icon: Icon(FontAwesomeIcons.arrowCircleDown),
                       dropdownColor: Colors.green[50],
                       elevation: 5,
@@ -290,7 +350,7 @@ class _IngresarGrabarArbolFormWidgetState
                             item['calleOrigenId'].toString();
                         return DropdownMenuItem(
                           child: Text(texto),
-                          value: valor == null ? "NO ES ESQUINA" : valor,
+                          value: valor,
                         );
                       }).toList(),
                       onChanged: (String valorNuevo) {
@@ -320,6 +380,8 @@ class _IngresarGrabarArbolFormWidgetState
       validator: (String value) {
         if (!RegExp(r"^\d+$").hasMatch(value)) {
           return 'Ingresar un numero valido';
+        } else if (value.isEmpty) {
+          return 'Debe ingresar un valor';
         }
         return null;
       },
@@ -348,7 +410,17 @@ class _IngresarGrabarArbolFormWidgetState
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.black45, width: 1.0),
                         borderRadius: BorderRadius.circular(5.0)),
-                    child: DropdownButton<String>(
+                    child: DropdownButtonFormField<String>(
+                      validator: (value) =>
+                          value == null ? 'Campo obligatorio' : null,
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                      ),
                       icon: Icon(FontAwesomeIcons.arrowCircleDown),
                       dropdownColor: Colors.green[50],
                       elevation: 5,
@@ -356,9 +428,9 @@ class _IngresarGrabarArbolFormWidgetState
                       hint: Text('Selector de especie'),
                       value: _especieArbol,
                       items: listado.map((Map<String, dynamic> item) {
-                        String nombre = item['especieNombreComun'] +
+                        String nombre = item['especieNombreCientifico'] +
                             " / " +
-                            item['especieNombreCientifico'];
+                            item['especieNombreComun'];
                         String valor = item['especieNombreCientifico'];
                         return DropdownMenuItem(
                           child: Text(nombre),
@@ -392,6 +464,8 @@ class _IngresarGrabarArbolFormWidgetState
       validator: (String value) {
         if (!RegExp(r"^\d+$").hasMatch(value)) {
           return 'Ingresar un numero valido';
+        } else if (value.isEmpty) {
+          return 'Debe ingresar un valor';
         }
         return null;
       },
@@ -416,6 +490,8 @@ class _IngresarGrabarArbolFormWidgetState
       validator: (String value) {
         if (!RegExp(r"^[0-9]+(\.[0-9]{1,2})?$").hasMatch(value)) {
           return 'Ingresar un numero valido';
+        } else if (value.isEmpty) {
+          return 'Debe ingresar un valor';
         }
         return null;
       },
@@ -440,6 +516,8 @@ class _IngresarGrabarArbolFormWidgetState
       validator: (String value) {
         if (!RegExp(r"^[0-9]+(\.[0-9]{1,2})?$").hasMatch(value)) {
           return 'Ingresar un numero valido';
+        } else if (value.isEmpty) {
+          return 'Debe ingresar un valor';
         }
         return null;
       },
@@ -464,6 +542,8 @@ class _IngresarGrabarArbolFormWidgetState
       validator: (String value) {
         if (!RegExp(r"^[0-9]+(\.[0-9]{1,2})?$").hasMatch(value)) {
           return 'Ingresar un numero valido';
+        } else if (value.isEmpty) {
+          return 'Debe ingresar un valor';
         }
         return null;
       },
@@ -488,6 +568,8 @@ class _IngresarGrabarArbolFormWidgetState
       validator: (String value) {
         if (!RegExp(r"^[0-9]+(\.[0-9]{1,2})?$").hasMatch(value)) {
           return 'Ingresar un numero valido';
+        } else if (value.isEmpty) {
+          return 'Debe ingresar un valor';
         }
         return null;
       },
@@ -495,6 +577,62 @@ class _IngresarGrabarArbolFormWidgetState
         setState(() {
           _diametroCopaEoArbolMt = double.parse(valorNuevo);
         });
+      },
+    );
+  }
+
+  Widget _buildEstadoGeneralDropDown() {
+    return FutureBuilder(
+      future: campo(
+        nombreTabla: referencia.estadoGeneral.nombreTabla,
+        campoOrdenador: referencia.estadoGeneral.estadoGeneralDesc,
+      ),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        List<Map<String, dynamic>> listado = snapshot.data;
+        return snapshot.hasData
+            ? Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    padding: EdgeInsets.only(left: 8, right: 8),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black45, width: 1.0),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    child: DropdownButtonFormField<String>(
+                      validator: (value) =>
+                          value == null ? 'Campo obligatorio' : null,
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                      ),
+                      icon: Icon(FontAwesomeIcons.arrowCircleDown),
+                      dropdownColor: Colors.green[50],
+                      elevation: 5,
+                      isExpanded: true,
+                      hint: Text('Estado general'),
+                      value: _estadoGeneralArbol,
+                      items: listado.map((Map<String, dynamic> item) {
+                        String nombre = item['estadoGeneralDesc'];
+                        String valor = item['estadoGeneralDesc'];
+                        return DropdownMenuItem(
+                          child: Text(nombre),
+                          value: valor,
+                        );
+                      }).toList(),
+                      onChanged: (String valorNuevo) {
+                        setState(() {
+                          _estadoGeneralArbol = valorNuevo;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              )
+            : LoadingWhite();
       },
     );
   }
@@ -516,7 +654,17 @@ class _IngresarGrabarArbolFormWidgetState
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.black45, width: 1.0),
                         borderRadius: BorderRadius.circular(5.0)),
-                    child: DropdownButton<String>(
+                    child: DropdownButtonFormField<String>(
+                      validator: (value) =>
+                          value == null ? 'Campo obligatorio' : null,
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                      ),
                       icon: Icon(FontAwesomeIcons.arrowCircleDown),
                       dropdownColor: Colors.green[50],
                       elevation: 5,
@@ -533,6 +681,9 @@ class _IngresarGrabarArbolFormWidgetState
                       }).toList(),
                       onChanged: (String valorNuevo) {
                         setState(() {
+                          if (valorNuevo != "Sano") {
+                            _llenarEnfermedades = true;
+                          }
                           _estadoSanitarioArbol = valorNuevo;
                         });
                       },
@@ -562,7 +713,17 @@ class _IngresarGrabarArbolFormWidgetState
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.black45, width: 1.0),
                         borderRadius: BorderRadius.circular(5.0)),
-                    child: DropdownButton<String>(
+                    child: DropdownButtonFormField<String>(
+                      validator: (value) =>
+                          value == null ? 'Campo obligatorio' : null,
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                      ),
                       icon: Icon(FontAwesomeIcons.arrowCircleDown),
                       dropdownColor: Colors.green[50],
                       elevation: 5,
@@ -608,7 +769,17 @@ class _IngresarGrabarArbolFormWidgetState
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.black45, width: 1.0),
                         borderRadius: BorderRadius.circular(5.0)),
-                    child: DropdownButton<String>(
+                    child: DropdownButtonFormField<String>(
+                      validator: (value) =>
+                          value == null ? 'Campo obligatorio' : null,
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                      ),
                       icon: Icon(FontAwesomeIcons.arrowCircleDown),
                       dropdownColor: Colors.green[50],
                       elevation: 5,
@@ -829,7 +1000,7 @@ class _IngresarGrabarArbolFormWidgetState
         child: CheckboxListTile(
           title: Text('Alerta'),
           // secondary: Icon(Icons.check_box),
-          value: _alertaArbol == null ? false : _revisionArbol,
+          value: _alertaArbol == null ? false : _alertaArbol,
           onChanged: (bool value) {
             setState(() {
               _alertaArbol = value;
@@ -860,7 +1031,18 @@ class _IngresarGrabarArbolFormWidgetState
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.black45, width: 1.0),
                         borderRadius: BorderRadius.circular(5.0)),
-                    child: DropdownButton<String>(
+                    child: DropdownButtonFormField<String>(
+                      validator: (value) => _llenarEnfermedades == true
+                          ? 'Campo obligatorio'
+                          : null,
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                      ),
                       icon: Icon(FontAwesomeIcons.arrowCircleDown),
                       dropdownColor: Colors.green[50],
                       elevation: 5,
@@ -906,7 +1088,18 @@ class _IngresarGrabarArbolFormWidgetState
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.black45, width: 1.0),
                         borderRadius: BorderRadius.circular(5.0)),
-                    child: DropdownButton<String>(
+                    child: DropdownButtonFormField<String>(
+                      validator: (value) => _llenarEnfermedades == true
+                          ? 'Campo obligatorio'
+                          : null,
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                      ),
                       icon: Icon(FontAwesomeIcons.arrowCircleDown),
                       dropdownColor: Colors.green[50],
                       elevation: 5,
@@ -952,7 +1145,18 @@ class _IngresarGrabarArbolFormWidgetState
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.black45, width: 1.0),
                         borderRadius: BorderRadius.circular(5.0)),
-                    child: DropdownButton<String>(
+                    child: DropdownButtonFormField<String>(
+                      validator: (value) => _llenarEnfermedades == true
+                          ? 'Campo obligatorio'
+                          : null,
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                      ),
                       icon: Icon(FontAwesomeIcons.arrowCircleDown),
                       dropdownColor: Colors.green[50],
                       elevation: 5,
@@ -1006,7 +1210,6 @@ class _IngresarGrabarArbolFormWidgetState
                 const SizedBox(height: 8),
                 Text('Fecha modificacion'),
                 const SizedBox(height: 8),
-
                 _buildClientesDropDown(),
                 const SizedBox(height: 8),
                 _buildZonaDropDown(),
@@ -1029,6 +1232,8 @@ class _IngresarGrabarArbolFormWidgetState
                 const SizedBox(height: 8),
                 _buildDiametroCopaEoMtTextInput(),
                 const SizedBox(height: 8),
+                _buildEstadoGeneralDropDown(),
+                const SizedBox(height: 8),
                 _buildEstadoSanitarioDropDown(),
                 const SizedBox(height: 8),
                 _buildInclinacionArbolDropDown(),
@@ -1047,22 +1252,55 @@ class _IngresarGrabarArbolFormWidgetState
                 const SizedBox(height: 8),
                 _buildAlertaCheckBox(),
                 const SizedBox(height: 8),
-                Text('picker _fotosArbol'),
-                const SizedBox(height: 8),
-                Text('picker _fotosEnfermedad'),
-                const SizedBox(height: 8),
                 FlatButton(
                   padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
                   onPressed: () async {
-                    List<String> foto = await tomarImagenArbol(picker);
+                    await tomarImagenArbol(picker);
                     setState(() {
-                      _countFotosArbol = _fotosArbol.length;
-                      _fotosArbol.add(foto.last);
+                      _countFotosArbol = _fotosArbolPath.length;
+                      _fotosArbolFile = [];
+                      _fotosArbolPath.forEach((fotoPath) {
+                        _fotosArbolFile.add(File(fotoPath));
+                        print('se imprime el path de la foto $fotoPath');
+                      });
                     });
                   },
                   color: Colors.green[400],
                   child: Text('Sacar Foto Arbol ($_countFotosArbol)'),
                 ),
+
+                const SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black45, width: 2.0),
+                        borderRadius: BorderRadius.circular(10.0)),
+                    padding: EdgeInsets.all(8),
+                    child: Column(
+                      children: [
+                        if (_fotosArbolFile == null) ...[
+                          Text('No hay imagenes')
+                        ] else if (_fotosArbolFile.length == 1) ...[
+                          Image.file(_fotosArbolFile[0])
+                        ] else if (_fotosArbolFile.length == 2) ...[
+                          Image.file(_fotosArbolFile[0]),
+                          const SizedBox(height: 8),
+                          Image.file(_fotosArbolFile[1]),
+                        ] else if (_fotosArbolFile.length == 3) ...[
+                          Image.file(_fotosArbolFile[0]),
+                          const SizedBox(height: 8),
+                          Image.file(_fotosArbolFile[1]),
+                          const SizedBox(height: 8),
+                          Image.file(_fotosArbolFile[2]),
+                        ]
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 8),
+
                 Container(
                   color: Colors.yellow[600],
                   child: Padding(
@@ -1080,15 +1318,51 @@ class _IngresarGrabarArbolFormWidgetState
                         FlatButton(
                           padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
                           onPressed: () async {
-                            List<String> foto = await tomarImagenArbol(picker);
+                            await tomarImagenEnfermedad(picker);
                             setState(() {
-                              _countFotosArbol = _fotosEnfermedad.length;
-                              _fotosEnfermedad.add(foto.last);
+                              _countFotosEnfermedad =
+                                  _fotosEnfermedadPath.length;
+                              _fotosEnfermedadFile = [];
+                              _fotosEnfermedadPath.forEach((fotoPath) {
+                                _fotosEnfermedadFile.add(File(fotoPath));
+                              });
                             });
                           },
                           color: Colors.orange[400],
-                          child:
-                              Text('Sacar Foto Enfermedad ($_countFotosArbol)'),
+                          child: Text(
+                              'Sacar Foto Enfermedad ($_countFotosEnfermedad)'),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Colors.black45, width: 2.0),
+                                borderRadius: BorderRadius.circular(10.0)),
+                            padding: EdgeInsets.all(8),
+                            child: Column(
+                              children: [
+                                if (_fotosEnfermedadFile == null) ...[
+                                  Text('No hay imagenes')
+                                ] else if (_fotosEnfermedadFile.length ==
+                                    1) ...[
+                                  Image.file(_fotosEnfermedadFile[0])
+                                ] else if (_fotosEnfermedadFile.length ==
+                                    2) ...[
+                                  Image.file(_fotosEnfermedadFile[0]),
+                                  const SizedBox(height: 8),
+                                  Image.file(_fotosEnfermedadFile[1]),
+                                ] else if (_fotosEnfermedadFile.length ==
+                                    3) ...[
+                                  Image.file(_fotosEnfermedadFile[0]),
+                                  const SizedBox(height: 8),
+                                  Image.file(_fotosEnfermedadFile[1]),
+                                  const SizedBox(height: 8),
+                                  Image.file(_fotosEnfermedadFile[2]),
+                                ]
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -1096,10 +1370,68 @@ class _IngresarGrabarArbolFormWidgetState
                 ),
                 FlatButton(
                   onPressed: () {
+                    List<dynamic> _idNfcHistoriaUltimo = [];
+                    _idNfcHistoriaUltimo.add(widget.idUnico);
+                    if (_lugarPlaga != null &&
+                        _agentePatogeno != null &&
+                        _sintoma != null) {
+                      _llenarEnfermedades = false;
+                    }
+
                     if (!_formKey.currentState.validate()) {
                       return;
                     }
+
                     _formKey.currentState.save();
+                    if (_formKey.currentState.validate()) {
+                      setState(() {
+                        Enfermedad enfermedad = Enfermedad(
+                          sintoma: _sintoma,
+                          agentePatogeno: _agentePatogeno,
+                          lugarPlaga: _lugarPlaga,
+                        );
+                        _enfermedad = enfermedad;
+                        ArbolEntity arbol = ArbolEntity(
+                          guiArbol: gui.v1(),
+                          idArbol: null,
+                          idNfcHistoria: _idNfcHistoriaUltimo,
+                          clienteArbol: _clienteArbol,
+                          zonaArbol: _zonaArbol.split(",")[0],
+                          calleArbol: _calleArbol.split(",")[0],
+                          nCalleArbol: _nCalleArbol,
+                          esquinaCalleArbol:
+                              _esquinaCalleArbol ?? "No es esquina",
+                          especieArbol: _especieArbol,
+                          diametroTroncoArbolCm: _diametroTroncoArbolCm,
+                          diametroCopaNsArbolMt: _diametroCopaNsArbolMt,
+                          diametroCopaEoArbolMt: _diametroCopaEoArbolMt,
+                          alturaArbolArbolMt: _alturaArbolArbolMt,
+                          alturaCopaArbolMt: _alturaCopaArbolMt,
+                          estadoGeneralArbol: _estadoGeneralArbol,
+                          estadoSanitarioArbol: _estadoSanitarioArbol,
+                          enfermedad: _enfermedad,
+                          inclinacionTroncoArbol: _inclinacionTroncoArbol,
+                          orientacionInclinacionArbol:
+                              _orientacionInclinacionArbol,
+                          obsArbolHistoria: [_obsArbolHistoria],
+                          accionObsArbol: _accionObsArbol ?? "Sin acciones",
+                          segundaAccionObsArbol:
+                              _segundaAccionObsArbol ?? "Sin acciones",
+                          terceraAccionObsArbol:
+                              _terceraAccionObsArbol ?? "Sin acciones",
+                          geoReferenciaCapturaArbol: widget.posicionArbol,
+                          nombreUsuarioCreacionArbol: null,
+                          usuarioModificaArbol: null,
+                          fechaCreacionArbol: DateTime.now(),
+                          fechaUltimaModArbol: DateTime.now(),
+                          alertaArbol: _alertaArbol.toString(),
+                          revisionArbol: _revisionArbol.toString(),
+                          fotosArbol: _fotosArbolPath,
+                          fotosEnfermedad: _fotosEnfermedadPath,
+                        );
+                        _arbol = arbol;
+                      });
+                    }
                   },
                   color: Colors.green,
                   child: Text('Grabar Datos'),

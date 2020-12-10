@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/arbol_mapa/arbol_mapa_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/auth/auth_bloc.dart';
@@ -8,11 +11,22 @@ import 'package:flutterapparbol/features/arbol/presentation/routes/router.gr.dar
 import 'package:flutterapparbol/features/arbol/presentation/widgets/google_map_widget.dart';
 import 'package:flutterapparbol/features/arbol/presentation/widgets/loading_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:ui' as ui;
 
 import '../../../../injection_auto.dart';
 
 class CatastradorMapaIntegrado extends StatelessWidget {
   BitmapDescriptor customIcon;
+
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))
+        .buffer
+        .asUint8List();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,18 +98,19 @@ class CatastradorMapaIntegrado extends StatelessWidget {
                 }),
                 floatingActionButton: FloatingActionButton(
                   onPressed: () async {
+                    final Uint8List markerIconResto = await getBytesFromAsset(
+                        'assets/images/arbolito_128.png', 100);
+                    var iconResto = BitmapDescriptor.fromBytes(markerIconResto);
                     await context.bloc<ArbolMapaBloc>().add(
                           ArbolMapaEvent.getArbolesCercanosEvent(
-                              state.maybeWhen(mapaDesplegado: (l, a, p, u) {
+                              state.maybeWhen(
+                                  mapaDesplegado: (l, a, p, u, i, ir) {
                                 return "-33.39848065129757,-70.59791651315805";
-
-                                // return l.latitude.toString() +
-                                //     ',' +
-                                //     l.longitude.toString();
                               }, orElse: () {
                                 return "-33.37679954804514,-70.56944723226297";
                               }),
-                              50),
+                              50,
+                              iconResto),
                         );
                   },
                   child: Icon(Icons.add),

@@ -12,6 +12,7 @@ class ListaMarcadoresDeArbolesCreacion {
   factory ListaMarcadoresDeArbolesCreacion.desarrollo(
       {ArbolesEntity arboles,
       BitmapDescriptor icono,
+      BitmapDescriptor iconoResto,
       BuildContext context,
       ArbolMapaState state,
       LatLng tapPos,
@@ -25,6 +26,7 @@ class ListaMarcadoresDeArbolesCreacion {
         onTap: () {
           new InfoAccionArbolPie(
                   context: context,
+                  iconMarkerResto: iconoResto,
                   state: state,
                   tapPos: tapPos,
                   localizacion: localizacion,
@@ -40,8 +42,7 @@ class ListaMarcadoresDeArbolesCreacion {
             position: arboles.listaArbolEntity[0].geoReferenciaCapturaArbol,
             draggable: true,
             // icon: customIcon
-            icon: BitmapDescriptor.defaultMarkerWithHue(
-                BitmapDescriptor.hueGreen),
+            icon: icono,
             infoWindow: _infoWindow,
           ),
         ]);
@@ -59,14 +60,14 @@ class ListaMarcadoresDeArbolesCreacion {
               markerId: MarkerId(uuid.v4()),
               position: arbol.geoReferenciaCapturaArbol,
               draggable: true,
-              icon: BitmapDescriptor.defaultMarkerWithHue(
-                  BitmapDescriptor.hueGreen),
+              icon: icono,
               infoWindow: _infoWindow,
             ));
           } else {
             result.add(Marker(
               markerId: MarkerId(uuid.v4()),
               position: arbol.geoReferenciaCapturaArbol,
+              icon: iconoResto,
               infoWindow: InfoWindow(
                 title: arbol.idArbol.toString(),
                 snippet: arbol.especieArbol,

@@ -15,12 +15,14 @@ import '../../../../injection_auto.dart';
 
 class InfoAccionArbolPie {
   final BuildContext context;
+  final BitmapDescriptor iconMarkerResto;
   final ArbolMapaState state;
   final LatLng tapPos;
   final LatLng localizacion;
   final ArbolesEntity arboles;
   InfoAccionArbolPie(
       {@required this.context,
+      this.iconMarkerResto,
       this.state,
       this.tapPos,
       this.localizacion,
@@ -192,14 +194,17 @@ class InfoAccionArbolPie {
 
                       context.bloc<ArbolMapaBloc>().add(
                             ArbolMapaEvent.getArbolesCercanosEvent(
-                                state.maybeWhen(mapaDesplegado: (l, a, p, u) {
-                                  return tapPos.latitude.toString() +
-                                      ',' +
-                                      tapPos.longitude.toString();
-                                }, orElse: () {
-                                  return "-33.37679954804514,-70.56944723226297";
-                                }),
-                                50),
+                              state.maybeWhen(
+                                  mapaDesplegado: (l, a, p, u, i, ir) {
+                                return tapPos.latitude.toString() +
+                                    ',' +
+                                    tapPos.longitude.toString();
+                              }, orElse: () {
+                                return "-33.37679954804514,-70.56944723226297";
+                              }),
+                              50,
+                              iconMarkerResto,
+                            ),
                           );
                     },
                     child: const Text(
