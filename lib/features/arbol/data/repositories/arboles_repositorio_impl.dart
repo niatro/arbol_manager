@@ -221,4 +221,21 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
       return Left(ConexionFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, UserEntity>> getUserInfo({String password}) async {
+    if (await netWorkInfo.isConnected) {
+      try {
+        UserEntity usuario =
+            await remoteDataSource.getUserInfoRemoteData(password: password);
+        return Right(usuario);
+      } on ServerException {
+        return left(ServerFailure());
+      } on PassException {
+        return left(PassNoExisteFailure());
+      }
+    } else {
+      return Left(ConexionFailure());
+    }
+  }
 }

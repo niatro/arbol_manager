@@ -38,6 +38,7 @@ abstract class ArbolesRemoteDataSource {
   Future<bool> actualizarBaseDatosFormularios();
   Future<bool> updateArbolRemoteData({ArbolEntity arbol});
   Future<UserEntity> loginRemoteData({String password, String rut});
+  Future<UserEntity> getUserInfoRemoteData({String password});
 }
 
 @LazySingleton(as: ArbolesRemoteDataSource)
@@ -90,6 +91,34 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
     );
 
 //    print('el body de esto es ${response.body}');
+    if (response.statusCode == 200) {
+      if (response.body != '[]') {
+        final List<Map> jsonMaped =
+            List<Map<String, dynamic>>.from(json.decode(response.body));
+        if (jsonMaped.toString() != '[]') {
+          final UserEntityModel usuario =
+              UserEntityModel.fromJson(jsonMaped[0]);
+          return usuario;
+        } else {
+          throw PassException();
+        }
+      } else {
+        throw PassException();
+      }
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<UserEntity> getUserInfoRemoteData({String password}) async {
+    final response = await client.post(
+      _url + "/bd/getUserInfo.php",
+      body: {
+        "password_usuario": password,
+      },
+    );
+
     if (response.statusCode == 200) {
       if (response.body != '[]') {
         final List<Map> jsonMaped =

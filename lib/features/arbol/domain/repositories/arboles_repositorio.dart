@@ -37,6 +37,8 @@ abstract class ArbolesRepositorio {
       {ArbolesEntity arboles, int nArbol});
   Future<Either<Failure, UserEntity>> login({String password, String rut});
 
+  Future<Either<Failure, UserEntity>> getUserInfo({String password});
+
 // Los métodos abajo deberían ir en el layer de presentación
 /*Future<Either<Failure, Success>> agregarArbolPorNFC(String idNFC);
   Future<Either<Failure, Success>> agregarArbolPorMapa(String idRandomNFC);
