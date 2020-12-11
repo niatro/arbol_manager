@@ -10,19 +10,23 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../domain/entities/user_entity.dart';
 import '../pages/home_catastrador.dart';
 import '../pages/ingresar_grabar_arbol_form.dart';
+import '../pages/password_perfil.dart';
 import '../pages/sign_in_page.dart';
 import '../splash/splash_page.dart';
 
 class Routes {
   static const String splashPage = '/';
   static const String signInPage = '/sign-in-page';
+  static const String passwordPerfil = '/password-perfil';
   static const String homeCatastrador = '/home-catastrador';
   static const String ingresarGrabarArbolPage = '/ingresar-grabar-arbol-page';
   static const all = <String>{
     splashPage,
     signInPage,
+    passwordPerfil,
     homeCatastrador,
     ingresarGrabarArbolPage,
   };
@@ -34,6 +38,7 @@ class Router extends RouterBase {
   final _routes = <RouteDef>[
     RouteDef(Routes.splashPage, page: SplashPage),
     RouteDef(Routes.signInPage, page: SignInPage),
+    RouteDef(Routes.passwordPerfil, page: PasswordPerfil),
     RouteDef(Routes.homeCatastrador, page: HomeCatastrador),
     RouteDef(Routes.ingresarGrabarArbolPage, page: IngresarGrabarArbolPage),
   ];
@@ -52,9 +57,16 @@ class Router extends RouterBase {
         settings: data,
       );
     },
-    HomeCatastrador: (data) {
+    PasswordPerfil: (data) {
       return MaterialPageRoute<dynamic>(
-        builder: (context) => HomeCatastrador(),
+        builder: (context) => PasswordPerfil(),
+        settings: data,
+      );
+    },
+    HomeCatastrador: (data) {
+      final args = data.getArgs<HomeCatastradorArguments>(nullOk: false);
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => HomeCatastrador(usuario: args.usuario),
         settings: data,
       );
     },
@@ -82,8 +94,15 @@ extension RouterExtendedNavigatorStateX on ExtendedNavigatorState {
 
   Future<dynamic> pushSignInPage() => push<dynamic>(Routes.signInPage);
 
-  Future<dynamic> pushHomeCatastrador() =>
-      push<dynamic>(Routes.homeCatastrador);
+  Future<dynamic> pushPasswordPerfil() => push<dynamic>(Routes.passwordPerfil);
+
+  Future<dynamic> pushHomeCatastrador({
+    @required UserEntity usuario,
+  }) =>
+      push<dynamic>(
+        Routes.homeCatastrador,
+        arguments: HomeCatastradorArguments(usuario: usuario),
+      );
 
   Future<dynamic> pushIngresarGrabarArbolPage({
     @required String idNfc,
@@ -100,6 +119,12 @@ extension RouterExtendedNavigatorStateX on ExtendedNavigatorState {
 /// ************************************************************************
 /// Arguments holder classes
 /// *************************************************************************
+
+/// HomeCatastrador arguments holder class
+class HomeCatastradorArguments {
+  final UserEntity usuario;
+  HomeCatastradorArguments({@required this.usuario});
+}
 
 /// IngresarGrabarArbolPage arguments holder class
 class IngresarGrabarArbolPageArguments {

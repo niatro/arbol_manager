@@ -1268,7 +1268,6 @@ class _IngresarGrabarArbolFormWidgetState
                   color: Colors.green[400],
                   child: Text('Sacar Foto Arbol ($_countFotosArbol)'),
                 ),
-
                 const SizedBox(height: 8),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -1298,9 +1297,7 @@ class _IngresarGrabarArbolFormWidgetState
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 8),
-
                 Container(
                   color: Colors.yellow[600],
                   child: Padding(
@@ -1436,8 +1433,6 @@ class _IngresarGrabarArbolFormWidgetState
                   color: Colors.green,
                   child: Text('Grabar Datos'),
                 ),
-
-                // we will work in here
               ],
             )
           ],

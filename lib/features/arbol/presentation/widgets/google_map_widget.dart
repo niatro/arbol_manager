@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterapparbol/features/arbol/application/arbol_mapa/arbol_mapa_bloc.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
+import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:flutterapparbol/features/arbol/presentation/widgets/lista_marcadores_de_arboles_creacion.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +14,8 @@ class GoogleMapWidget extends StatelessWidget {
   final ArbolMapaState state;
   final MapaDesplegadoState s;
   final BuildContext context;
+  final BitmapDescriptor customIcon;
+  final UserEntity usuario;
 
   const GoogleMapWidget({
     Key key,
@@ -20,9 +23,8 @@ class GoogleMapWidget extends StatelessWidget {
     @required this.s,
     @required this.context,
     @required this.customIcon,
+    @required this.usuario,
   }) : super(key: key);
-
-  final BitmapDescriptor customIcon;
 
   Future<Uint8List> getBytesFromAsset(String path, int width) async {
     ByteData data = await rootBundle.load(path);
@@ -36,6 +38,7 @@ class GoogleMapWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('llego al widget final $usuario');
     return GoogleMap(
       initialCameraPosition: CameraPosition(
         target: state.maybeMap(

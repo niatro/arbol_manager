@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/arbol_mapa/arbol_mapa_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/auth/auth_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/nfc/nfc_bloc.dart';
+import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:flutterapparbol/features/arbol/presentation/routes/router.gr.dart';
 import 'package:flutterapparbol/features/arbol/presentation/widgets/google_map_widget.dart';
 import 'package:flutterapparbol/features/arbol/presentation/widgets/loading_widget.dart';
@@ -16,6 +17,8 @@ import 'dart:ui' as ui;
 import '../../../../injection_auto.dart';
 
 class CatastradorMapaIntegrado extends StatelessWidget {
+  final UserEntity usuario;
+  CatastradorMapaIntegrado({@required this.usuario});
   BitmapDescriptor customIcon;
 
   Future<Uint8List> getBytesFromAsset(String path, int width) async {
@@ -53,7 +56,7 @@ class CatastradorMapaIntegrado extends StatelessWidget {
           ),
           BlocListener<ArbolMapaBloc, ArbolMapaState>(
             listener: (context, state) {
-              state.maybeMap(orElse: null);
+              state.maybeMap(orElse: () {});
             },
           )
         ],
@@ -89,6 +92,7 @@ class CatastradorMapaIntegrado extends StatelessWidget {
                     s: s,
                     context: context,
                     customIcon: customIcon,
+                    usuario: usuario,
                   );
                 }, loading: (_) {
                   return LoadingWhite();

@@ -4,12 +4,13 @@ import 'package:flutterapparbol/features/arbol/application/arbol_mapa/arbol_mapa
 import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:flutterapparbol/features/arbol/presentation/widgets/catastrador_mapa.dart';
 import 'package:flutterapparbol/features/arbol/presentation/widgets/catastrador_mapa_integrado.dart';
+import 'package:flutterapparbol/features/arbol/presentation/widgets/cliente_mapa_integrado.dart';
 
 import '../../../../injection_auto.dart';
 
-class HomeCatastrador extends StatelessWidget {
+class HomeCliente extends StatelessWidget {
   final UserEntity usuario;
-  const HomeCatastrador({@required this.usuario});
+  const HomeCliente({@required this.usuario});
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -18,7 +19,7 @@ class HomeCatastrador extends StatelessWidget {
             create: (context) => getIt<ArbolMapaBloc>(),
           ),
         ],
-        child: CatastradorMapaIntegrado(
+        child: ClienteMapaIntegrado(
           usuario: usuario,
         ));
   }
