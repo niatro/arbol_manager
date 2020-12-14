@@ -12,7 +12,8 @@ import 'package:flutterapparbol/features/arbol/presentation/splash/splash_page.d
     MaterialRoute(page: SignInPage),
     MaterialRoute(page: PasswordPerfil),
     MaterialRoute(page: HomeCatastrador),
-    MaterialRoute(page: IngresarGrabarArbolPage)
+    MaterialRoute(page: IngresarGrabarArbolPage),
+    MaterialRoute(page: HomeCliente)
   ],
   generateNavigationHelperExtension: true,
 )

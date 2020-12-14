@@ -125,16 +125,5 @@ class CatastradorMapaIntegrado extends StatelessWidget {
     );
   }
 
-  _createMarker(BuildContext context) {
-    print('aqui ok');
 
-    if (customIcon == null) {
-      ImageConfiguration configuration = createLocalImageConfiguration(context);
-      BitmapDescriptor.fromAssetImage(configuration, 'assets/tree_256.png')
-          .then((icon) {
-        customIcon = icon;
-      });
-      print(customIcon);
-    }
-  }
 }

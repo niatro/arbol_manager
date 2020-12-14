@@ -54,6 +54,8 @@ class ArbolesRepositorioImpl implements ArbolesRepositorio {
       } on ServerException {
         return Left(ServerFailure());
       }
+    } else {
+      return (Left(ConexionFailure()));
     }
   }
 

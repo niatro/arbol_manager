@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterapparbol/core/error/exceptions.dart';
+import 'package:flutterapparbol/features/arbol/application/auth/auth_bloc.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/arboles_remote_data_source.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/form_local_source_sql.dart';
 import 'package:flutterapparbol/features/arbol/data/datasources/local_data_estructuras.dart';
@@ -33,77 +35,102 @@ class _PasswordPerfilState extends State<PasswordPerfil> {
       client: client,
       referencia: referencia,
     );
-    return Scaffold(
-      body: Form(
-        key: _formKey,
-        child: Container(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                const SizedBox(height: 50),
-                Text('$_mensage'),
-                const SizedBox(height: 8),
-                TextFormField(
-                  validator: (String value) {
-                    if (value.length < 6) {
-                      return 'Tu password es muy cortp';
-                    } else if (value.isEmpty) {
-                      return 'Debe ingresar un valor';
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                      hintText: "La misma que usaste al inicio",
-                      labelText: "repite contraseña",
-                      icon: Icon(
-                        Icons.security,
-                        color: Colors.black87,
-                      )),
-                  keyboardType: TextInputType.name,
-                  onSaved: (String valorNuevo) {
-                    setState(() {
-                      _password = valorNuevo;
-                    });
-                  },
-                ),
-                const SizedBox(height: 8),
-                FlatButton(
-                  onPressed: () async {
-                    if (!_formKey.currentState.validate()) {
-                      return;
-                    }
-                    _formKey.currentState.save();
-                    if (_formKey.currentState.validate()) {
-                      try {
-                        UserEntity user = await remoteDataSource
-                            .getUserInfoRemoteData(password: _password);
-                        if (user.detallePerfilUser == "Admin" ||
-                            user.detallePerfilUser == "Capturador") {
-                          ExtendedNavigator.of(context).push(
-                              Routes.homeCatastrador,
-                              arguments:
-                                  HomeCatastradorArguments(usuario: user));
-                        }
-                      } on PassException {
-                        setState(() {
-                          _mensage = "Contraseña incorrecta";
-                        });
-                      } on ServerException {
-                        setState(() {
-                          _mensage = "Problemas con el servidor";
-                        });
-                      }
-                    }
-                  },
-                  color: Colors.green,
-                  child: Text('Ingresar'),
-                ),
-              ],
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        state.maybeMap(
+          unauthenticated: (_) =>
+              ExtendedNavigator.of(context).replace(Routes.signInPage),
+          orElse: () {},
+        );
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Verificar'),
+            leading: IconButton(
+              icon: Icon(Icons.exit_to_app),
+              onPressed: () {
+                context.bloc<AuthBloc>().add(const AuthEvent.signedOut());
+              },
             ),
           ),
-        ),
-      ),
+          body: Form(
+            key: _formKey,
+            child: Container(
+              child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 50),
+                      Text('$_mensage'),
+                      const SizedBox(height: 30),
+                      TextFormField(
+                        validator: (String value) {
+                          if (value.length < 6) {
+                            return 'Tu password es muy cortp';
+                          } else if (value.isEmpty) {
+                            return 'Debe ingresar un valor';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.lock),
+                          hintText: "La misma que usaste al inicio",
+                          labelText: "repite contraseña",
+                        ),
+                        autocorrect: false,
+                        obscureText: true,
+                        keyboardType: TextInputType.name,
+                        onSaved: (String valorNuevo) {
+                          setState(() {
+                            _password = valorNuevo;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      FlatButton(
+                        onPressed: () async {
+                          if (!_formKey.currentState.validate()) {
+                            return;
+                          }
+                          _formKey.currentState.save();
+                          if (_formKey.currentState.validate()) {
+                            try {
+                              UserEntity user = await remoteDataSource
+                                  .getUserInfoRemoteData(password: _password);
+                              if (user.detallePerfilUser == "Admin" ||
+                                  user.detallePerfilUser == "Capturador") {
+                                ExtendedNavigator.of(context).push(
+                                    Routes.homeCatastrador,
+                                    arguments: HomeCatastradorArguments(
+                                        usuario: user));
+                              } else if (user.detallePerfilUser ==
+                                  "Visualizador") {
+                                ExtendedNavigator.of(context).push(
+                                    Routes.homeCliente,
+                                    arguments:
+                                        HomeClienteArguments(usuario: user));
+                              }
+                            } on PassException {
+                              setState(() {
+                                _mensage = "Contraseña incorrecta";
+                              });
+                            } on ServerException {
+                              setState(() {
+                                _mensage = "Problemas con el servidor";
+                              });
+                            }
+                          }
+                        },
+                        color: Colors.green,
+                        child: Text('Ingresar'),
+                      ),
+                    ],
+                  )),
+            ),
+          ),
+        );
+      },
     );
   }
 }

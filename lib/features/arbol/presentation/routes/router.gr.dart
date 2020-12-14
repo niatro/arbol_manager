@@ -12,6 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../domain/entities/user_entity.dart';
 import '../pages/home_catastrador.dart';
+import '../pages/home_cliente.dart';
 import '../pages/ingresar_grabar_arbol_form.dart';
 import '../pages/password_perfil.dart';
 import '../pages/sign_in_page.dart';
@@ -23,12 +24,14 @@ class Routes {
   static const String passwordPerfil = '/password-perfil';
   static const String homeCatastrador = '/home-catastrador';
   static const String ingresarGrabarArbolPage = '/ingresar-grabar-arbol-page';
+  static const String homeCliente = '/home-cliente';
   static const all = <String>{
     splashPage,
     signInPage,
     passwordPerfil,
     homeCatastrador,
     ingresarGrabarArbolPage,
+    homeCliente,
   };
 }
 
@@ -41,6 +44,7 @@ class Router extends RouterBase {
     RouteDef(Routes.passwordPerfil, page: PasswordPerfil),
     RouteDef(Routes.homeCatastrador, page: HomeCatastrador),
     RouteDef(Routes.ingresarGrabarArbolPage, page: IngresarGrabarArbolPage),
+    RouteDef(Routes.homeCliente, page: HomeCliente),
   ];
   @override
   Map<Type, AutoRouteFactory> get pagesMap => _pagesMap;
@@ -82,6 +86,13 @@ class Router extends RouterBase {
         settings: data,
       );
     },
+    HomeCliente: (data) {
+      final args = data.getArgs<HomeClienteArguments>(nullOk: false);
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => HomeCliente(usuario: args.usuario),
+        settings: data,
+      );
+    },
   };
 }
 
@@ -114,6 +125,14 @@ extension RouterExtendedNavigatorStateX on ExtendedNavigatorState {
         arguments: IngresarGrabarArbolPageArguments(
             idNfc: idNfc, posArbol: posArbol, key: key),
       );
+
+  Future<dynamic> pushHomeCliente({
+    @required UserEntity usuario,
+  }) =>
+      push<dynamic>(
+        Routes.homeCliente,
+        arguments: HomeClienteArguments(usuario: usuario),
+      );
 }
 
 /// ************************************************************************
@@ -133,4 +152,10 @@ class IngresarGrabarArbolPageArguments {
   final Key key;
   IngresarGrabarArbolPageArguments(
       {@required this.idNfc, @required this.posArbol, this.key});
+}
+
+/// HomeCliente arguments holder class
+class HomeClienteArguments {
+  final UserEntity usuario;
+  HomeClienteArguments({@required this.usuario});
 }
