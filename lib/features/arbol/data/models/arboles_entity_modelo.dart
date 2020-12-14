@@ -225,11 +225,9 @@ class ArbolEntityModelo extends ArbolEntity {
       estadoGeneralArbol: json["estadoGeneralArbol"],
       estadoSanitarioArbol: json["estadoSanitarioArbol"],
       enfermedad: Enfermedad(
-        sintoma: json['sintoma'] == "" ? "Sin sintoma" : json['sintoma'],
-        lugarPlaga: json['lugarPlaga'] == "" ? "Sin plaga" : json['lugarPlaga'],
-        agentePatogeno: json['agentePatogeno'] == ""
-            ? "Sin agente patogeno"
-            : json['agentePatogeno'],
+        sintoma: json['sintoma'],
+        lugarPlaga: json['lugarPlaga'],
+        agentePatogeno: json['agentePatogeno'],
       ),
 
       inclinacionTroncoArbol: json["inclinacionTroncoArbol"],

@@ -5,9 +5,11 @@ import 'package:flutterapparbol/core/error/failure.dart';
 import 'package:flutterapparbol/core/usecases/usecase.dart';
 import 'package:flutterapparbol/core/util/input_converter.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
+import 'package:flutterapparbol/features/arbol/domain/entities/idnfc_entity.dart';
 
 import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:flutterapparbol/features/arbol/domain/usecases/comprobar_idnfc_usecase.dart';
+import 'package:flutterapparbol/features/arbol/domain/usecases/get_arbol_por_idnfc_usecase.dart';
 import 'package:flutterapparbol/features/arbol/domain/usecases/get_arboles_cercanos_usecase.dart';
 import 'package:flutterapparbol/features/arbol/domain/usecases/get_coordenadas_usecase.dart';
 import 'package:flutterapparbol/features/arbol/domain/usecases/leer_idnfc_usecase.dart';
@@ -25,6 +27,7 @@ part 'arbol_mapa_state.dart';
 @injectable
 class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
   final GetArbolesCercanosUseCase getArbolesCercanosUseCase;
+  final GetArbolPorIdNFCUseCase getArbolPorIdNfcUseCase;
   final ComprobarIdNfcUseCase comprobarIdNFCUseCase;
   final LeerIdNfcUseCase leerIdNfcUseCase;
   final GetCoordUseCase getCoordUseCase;
@@ -33,18 +36,21 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
 
   ArbolMapaBloc(
       {@required GetArbolesCercanosUseCase arbolesCercanosUseCase,
+      @required GetArbolPorIdNFCUseCase arbolPorIdNfcUseCase,
       @required ComprobarIdNfcUseCase comprobarIdNFCUseCase,
       @required LeerIdNfcUseCase leerIdNfcUseCase,
       @required GetCoordUseCase getCoordUseCase,
       @required InputConverterStrToLatLng inputConverter,
       @required InputConverterIdNFCToStr inputConverterFromIdNFCToStr})
       : assert(arbolesCercanosUseCase != null),
+        assert(arbolPorIdNfcUseCase != null),
         assert(comprobarIdNFCUseCase != null),
         assert(leerIdNfcUseCase != null),
         assert(getCoordUseCase != null),
         assert(inputConverter != null),
         assert(inputConverterFromIdNFCToStr != null),
         getArbolesCercanosUseCase = arbolesCercanosUseCase,
+        getArbolPorIdNfcUseCase = arbolPorIdNfcUseCase,
         comprobarIdNFCUseCase = comprobarIdNFCUseCase,
         leerIdNfcUseCase = leerIdNfcUseCase,
         getCoordUseCase = getCoordUseCase,
@@ -74,7 +80,7 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
               (failure) async* {
                 print(
                     'En Arbol_bloc getArbolesCercanosEvent se produjo un failure, temporalmente /n '
-                    ' hice que en vez de la falla se despliegue el mapa la falla registrada es: $_mapFailureToMessage(failure)');
+                    ' hice que en vez de la falla se despliegue el mapa la falla registrada es: ${_mapFailureToMessage(failure)}');
 //                yield ArbolMapaState.failure(
 //                    message: _mapFailureToMessage(failure));
                 yield ArbolMapaState.mapaDesplegado(latLong: coordenada);
@@ -85,8 +91,8 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
                     latLong: coordenada,
                     arboles: arboles,
                     markerIconResto: e.markerIconResto);
-//                yield ArbolMapaState.desplegandoArbolesCercanos(
-//                    arboles: arboles, coordenada: coordenada);
+                // yield ArbolMapaState.desplegandoArbolesCercanos(
+                //     arboles: arboles, coordenada: coordenada);
               },
             );
           },
@@ -207,3 +213,31 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
     return arbolVacioPosicion;
   }
 }
+
+//  getArbolPorIdNfcEvent: (e) async* {
+//     String _idNfc;
+//     yield LoadingMapaState();
+//     final failureOrIdNfcEntity =
+//         await leerIdNfcUseCase(Params(idUsuario: "12"));
+//     yield* failureOrIdNfcEntity.fold((failure) async* {
+//       print(
+//           'En Arbol_bloc getArbolPorIdNfcEvent al intentar leerIdNfcUseCase,  falla registrada es: ${_mapFailureToMessage(failure)}');
+//     }, (NfcEntity) async* {
+//       _idNfc = NfcEntity.idNfc;
+//       final failureOrSuccess =
+//           await comprobarIdNFCUseCase(Params(idNFC: NfcEntity.idNfc));
+//       failureOrSuccess.fold((failure) async* {
+//         print(
+//             'En Arbol_bloc getArbolPorIdNfcEvent al intentar comprobarIdNFCUseCase,  falla registrada es: ${_mapFailureToMessage(failure)}');
+//       }, (success) async* {
+//         final failureOrArboles =
+//             await getArbolPorIdNfcUseCase(Params(idNFC: _idNfc));
+//             failureOrArboles.fold((failure) {
+//               print(
+//             'En Arbol_bloc getArbolPorIdNfcEvent al intentar getArbolPorIdNfcUseCase,  falla registrada es: ${_mapFailureToMessage(failure)}');
+//             }, (arbol) {
+
+//             })
+//       });
+//     });
+//   },

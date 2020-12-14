@@ -93,6 +93,7 @@ Future<GetIt> $initGetIt(
       ));
   gh.factory<ArbolMapaBloc>(() => ArbolMapaBloc(
         arbolesCercanosUseCase: get<GetArbolesCercanosUseCase>(),
+        arbolPorIdNfcUseCase: get<GetArbolPorIdNFCUseCase>(),
         comprobarIdNFCUseCase: get<ComprobarIdNfcUseCase>(),
         leerIdNfcUseCase: get<LeerIdNfcUseCase>(),
         getCoordUseCase: get<GetCoordUseCase>(),

@@ -9,8 +9,8 @@ import 'package:flutterapparbol/features/arbol/application/auth/auth_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/nfc/nfc_bloc.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:flutterapparbol/features/arbol/presentation/routes/router.gr.dart';
-import 'package:flutterapparbol/features/arbol/presentation/widgets/google_map_cliente_widget.dart';
 import 'package:flutterapparbol/features/arbol/presentation/widgets/google_map_widget.dart';
+import 'package:flutterapparbol/features/arbol/presentation/widgets/google_mapa_cliente_widget.dart';
 import 'package:flutterapparbol/features/arbol/presentation/widgets/loading_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
@@ -34,6 +34,7 @@ class ClienteMapaIntegrado extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('entramos al mapa del cliente');
     return MultiBlocProvider(
       providers: [
         BlocProvider<ArbolMapaBloc>(
@@ -88,7 +89,7 @@ class ClienteMapaIntegrado extends StatelessWidget {
                 body: state.maybeMap(initial: (_) {
                   return LoadingWhite();
                 }, mapaDesplegado: (s) {
-                  return GoogleMapClienteWidget(
+                  return GoogleMapaClienteWidget(
                     state: state,
                     s: s,
                     context: context,
@@ -130,6 +131,7 @@ class ClienteMapaIntegrado extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         FloatingActionButton(
+                          heroTag: null,
                           onPressed: () {},
                           child: Icon(Icons.wifi),
                         ),

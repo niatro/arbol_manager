@@ -140,10 +140,10 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
 
   @override
   Future<ArbolesEntityModelo> getArbolPorIdNFCRemoteData({String idNFC}) async {
-    final response = await client.post( 
-      _url + "/bd/getArbolPorIdNfc.php",
+    final response = await client.post(
+      _url + "/bd/getArbolPorIdNFC.php",
       body: {
-        "idNfc": idNFC,
+        "idNFC": idNFC,
       },
     );
     return _getArbolesOrFailureDeAcuerdoToServerResponse(response);

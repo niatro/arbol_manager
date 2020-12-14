@@ -10,14 +10,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:ui' as ui;
 
-class GoogleMapClienteWidget extends StatelessWidget {
+class GoogleMapaClienteWidget extends StatelessWidget {
   final ArbolMapaState state;
   final MapaDesplegadoState s;
   final BuildContext context;
   final BitmapDescriptor customIcon;
   final UserEntity usuario;
 
-  const GoogleMapClienteWidget({
+  const GoogleMapaClienteWidget({
     Key key,
     @required this.state,
     @required this.s,
