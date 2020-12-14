@@ -9,6 +9,7 @@ import 'package:flutterapparbol/features/arbol/application/auth/auth_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/nfc/nfc_bloc.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:flutterapparbol/features/arbol/presentation/routes/router.gr.dart';
+import 'package:flutterapparbol/features/arbol/presentation/widgets/google_map_cliente_widget.dart';
 import 'package:flutterapparbol/features/arbol/presentation/widgets/google_map_widget.dart';
 import 'package:flutterapparbol/features/arbol/presentation/widgets/loading_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -87,7 +88,7 @@ class ClienteMapaIntegrado extends StatelessWidget {
                 body: state.maybeMap(initial: (_) {
                   return LoadingWhite();
                 }, mapaDesplegado: (s) {
-                  return GoogleMapWidget(
+                  return GoogleMapClienteWidget(
                     state: state,
                     s: s,
                     context: context,
@@ -100,30 +101,46 @@ class ClienteMapaIntegrado extends StatelessWidget {
                   return Text(
                       'Algo salio mal intentando mostrar el mapa $state');
                 }),
-                floatingActionButton: FloatingActionButton(
-                  onPressed: () async {
-                    final Uint8List markerIconResto = await getBytesFromAsset(
-                        'assets/images/arbolito_128.png', 100);
-                    var iconResto = BitmapDescriptor.fromBytes(markerIconResto);
-                    await context.bloc<ArbolMapaBloc>().add(
-                          ArbolMapaEvent.getArbolesCercanosEvent(
-                              state.maybeWhen(
-                                  mapaDesplegado: (l, a, p, u, i, ir) {
-                                return "-33.39848065129757,-70.59791651315805";
-                              }, orElse: () {
-                                return "-33.37679954804514,-70.56944723226297";
-                              }),
-                              50,
-                              iconResto),
-                        );
-                  },
-                  child: Icon(Icons.add),
+                floatingActionButton: Row(
+                  children: [
+                    const SizedBox(width: 20),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        FloatingActionButton(
+                          onPressed: () async {
+                            final Uint8List markerIconResto =
+                                await getBytesFromAsset(
+                                    'assets/images/arbolito_128.png', 100);
+                            var iconResto =
+                                BitmapDescriptor.fromBytes(markerIconResto);
+                            await context.bloc<ArbolMapaBloc>().add(
+                                  ArbolMapaEvent.getArbolesCercanosEvent(
+                                      state.maybeWhen(
+                                          mapaDesplegado: (l, a, p, u, i, ir) {
+                                        return "-33.39848065129757,-70.59791651315805";
+                                      }, orElse: () {
+                                        return "-33.37679954804514,-70.56944723226297";
+                                      }),
+                                      50,
+                                      iconResto),
+                                );
+                          },
+                          child: Icon(Icons.add),
+                        ),
+                        const SizedBox(height: 8),
+                        FloatingActionButton(
+                          onPressed: () {},
+                          child: Icon(Icons.wifi),
+                        ),
+                        const SizedBox(width: 8),
+                      ],
+                    ),
+                  ],
                 ));
           },
         ),
       ),
     );
   }
-
-
 }
