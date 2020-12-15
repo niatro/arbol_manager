@@ -223,11 +223,16 @@ class ArbolEntityModelo extends ArbolEntity {
       alturaArbolArbolMt: double.parse(json["alturaArbolArbolMt"]),
       alturaCopaArbolMt: double.parse(json["alturaCopaArbolMt"]),
       estadoGeneralArbol: json["estadoGeneralArbol"],
-      estadoSanitarioArbol: json["estadoSanitarioArbol"],
+      estadoSanitarioArbol: json["estadoSanitarioArbol"] != ""
+          ? json['estadoSanitarioArbol']
+          : 'No definido',
       enfermedad: Enfermedad(
-        sintoma: json['sintoma'],
-        lugarPlaga: json['lugarPlaga'],
-        agentePatogeno: json['agentePatogeno'],
+        sintoma: json['sintoma'] != "" ? json['sintoma'] : 'Sin sintomas',
+        lugarPlaga:
+            json['lugarPlaga'] != "" ? json['lugarPlaga'] : 'No corresponde',
+        agentePatogeno: json['agentePatogeno'] != ""
+            ? json['agentePatogeno']
+            : 'Sin agentes patogenos',
       ),
 
       inclinacionTroncoArbol: json["inclinacionTroncoArbol"],

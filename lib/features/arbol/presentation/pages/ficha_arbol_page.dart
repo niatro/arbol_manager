@@ -9,6 +9,20 @@ class FichaArbolPage extends StatelessWidget {
     @required this.arbol,
   }) : super(key: key);
 
+  Widget Tarjeta(String text) {
+    return Card(
+        child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 14,
+          color: Colors.grey[800],
+        ),
+      ),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     print(
@@ -18,41 +32,137 @@ class FichaArbolPage extends StatelessWidget {
         title: const Text('detalles'),
       ),
       body: Center(
-        child: Column(
-          children: [
-            // Text(arbol.fotosArbol[0].toString().replaceAll("\"", '')),
-            if (arbol.fotosArbol == null) ...[
-              Text('No hay imagenes')
-            ] else if (arbol.fotosArbol.length == 1) ...[
-              InteractiveViewer(
-                  child: Image.network(
-                '$urlProduccion/img_arboles/${arbol.fotosArbol[0].replaceAll("\"", '')}',
-                // loadingBuilder: (context, child, progress) {
-                //   return progress == null ? child : CircularProgressIndicator();
-                // },
-              )),
-            ] else if (arbol.fotosArbol.length == 2) ...[
-              Image.network(
-                '$urlProduccion+"/img_arboles/"+${arbol.fotosArbol[0]}',
-              ),
-              const SizedBox(height: 8),
-              Image.network(
-                '$urlProduccion+"/img_arboles/"+{arbol.fotosArbol[1]}',
-              ),
-            ] else if (arbol.fotosArbol.length == 3) ...[
-              Image.network(
-                '$urlProduccion+"/img_arboles/"+${arbol.fotosArbol[0]}',
-              ),
-              const SizedBox(height: 8),
-              Image.network(
-                '$urlProduccion+"/img_arboles/"+${arbol.fotosArbol[1]}',
-              ),
-              const SizedBox(height: 8),
-              Image.network(
-                '$urlProduccion+"/img_arboles/"+${arbol.fotosArbol[2]}',
-              ),
-            ]
-          ],
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                if (arbol.fotosArbol == null) ...[
+                  Text('No hay imagenes')
+                ] else if (arbol.fotosArbol.length == 1) ...[
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InteractiveViewer(
+                          child: Image.network(
+                        '$urlProduccion/img_arboles/${arbol.fotosArbol[0].replaceAll("\"", '')}',
+                        loadingBuilder: (context, child, progress) {
+                          return progress == null
+                              ? child
+                              : CircularProgressIndicator();
+                        },
+                      )),
+                    ),
+                  ),
+                ] else if (arbol.fotosArbol.length == 2) ...[
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InteractiveViewer(
+                        child: Image.network(
+                          '$urlProduccion/img_arboles/${arbol.fotosArbol[0].replaceAll("\"", '')}',
+                          loadingBuilder: (context, child, progress) {
+                            return progress == null
+                                ? child
+                                : CircularProgressIndicator();
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InteractiveViewer(
+                        child: Image.network(
+                          '$urlProduccion/img_arboles/${arbol.fotosArbol[1].replaceAll("\"", '')}',
+                          loadingBuilder: (context, child, progress) {
+                            return progress == null
+                                ? child
+                                : CircularProgressIndicator();
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ] else if (arbol.fotosArbol.length == 3) ...[
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InteractiveViewer(
+                        child: Image.network(
+                          '$urlProduccion/img_arboles/${arbol.fotosArbol[0].replaceAll("\"", '')}',
+                          loadingBuilder: (context, child, progress) {
+                            return progress == null
+                                ? child
+                                : CircularProgressIndicator();
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InteractiveViewer(
+                        child: Image.network(
+                          '$urlProduccion/img_arboles/${arbol.fotosArbol[1].replaceAll("\"", '')}',
+                          loadingBuilder: (context, child, progress) {
+                            return progress == null
+                                ? child
+                                : CircularProgressIndicator();
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InteractiveViewer(
+                        child: Image.network(
+                          '$urlProduccion/img_arboles/${arbol.fotosArbol[2].replaceAll("\"", '')}',
+                          loadingBuilder: (context, child, progress) {
+                            return progress == null
+                                ? child
+                                : CircularProgressIndicator();
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+                Tarjeta(
+                    'ESPECIE:   ${arbol.especieArbol} / Numero ID = ${arbol.idArbol.toString()} / Estado General = ${arbol.estadoGeneralArbol} '),
+                Tarjeta(
+                    'DIRECCION:   ${arbol.calleArbol}  ${arbol.nCalleArbol.toString()} / Esquina = ${arbol.esquinaCalleArbol.toString()} / ${arbol.zonaArbol}'),
+                Tarjeta(
+                    'DASOMETRIA:   Altura (m) = ${arbol.alturaArbolArbolMt.toString()} / DAP (cm) = ${arbol.diametroTroncoArbolCm.toString()} / Altura Inicio Copa (m) = ${arbol.alturaCopaArbolMt.toString()} / Diametro Copa NS (m) = ${arbol.diametroCopaNsArbolMt.toString()} / Diametro Copa EO (m) = ${arbol.diametroCopaEoArbolMt.toString()}'),
+                Tarjeta(
+                    'HISTORIAL OBSERVACIONES: ${arbol.obsArbolHistoria.map((e) => e)}  FECHA CREACION: ${arbol.fechaCreacionArbol.toString()}  /  FECHA ULTIMA MOD: ${arbol.fechaUltimaModArbol.toString()}'),
+                Tarjeta(
+                    'ESTADO SANITARIO:   General = ${arbol.estadoSanitarioArbol} / ENFERMEDAD: Agente Patogeno = ${arbol.enfermedad.agentePatogeno} / Sintoma = ${arbol.enfermedad.sintoma} / Localizacion = ${arbol.enfermedad.lugarPlaga}'),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InteractiveViewer(
+                      child: Image.network(
+                        '$urlProduccion/img_arboles/${arbol.fotosEnfermedad[0].replaceAll("\"", '')}',
+                        loadingBuilder: (context, child, progress) {
+                          return progress == null
+                              ? child
+                              : CircularProgressIndicator();
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

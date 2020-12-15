@@ -1,3 +1,5 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:flutterapparbol/features/arbol/presentation/routes/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapparbol/features/arbol/application/arbol_mapa/arbol_mapa_bloc.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
@@ -71,7 +73,10 @@ class ListaMarcadoresDeArbolesCreacion {
               infoWindow: InfoWindow(
                 title: arbol.idArbol.toString(),
                 snippet: arbol.especieArbol,
-                onTap: () {},
+                onTap: () {
+                  ExtendedNavigator.of(context)
+                      .pushFichaArbolPage(arbol: arbol);
+                },
               ),
             ));
           }

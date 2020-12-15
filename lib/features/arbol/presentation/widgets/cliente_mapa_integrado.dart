@@ -9,8 +9,6 @@ import 'package:flutterapparbol/features/arbol/application/auth/auth_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/nfc/nfc_bloc.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:flutterapparbol/features/arbol/presentation/routes/router.gr.dart';
-import 'package:flutterapparbol/features/arbol/presentation/pages/ficha_arbol_page.dart';
-import 'package:flutterapparbol/features/arbol/presentation/widgets/google_map_widget.dart';
 import 'package:flutterapparbol/features/arbol/presentation/widgets/google_mapa_cliente_widget.dart';
 import 'package:flutterapparbol/features/arbol/presentation/widgets/loading_widget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
