@@ -214,30 +214,4 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
   }
 }
 
-//  getArbolPorIdNfcEvent: (e) async* {
-//     String _idNfc;
-//     yield LoadingMapaState();
-//     final failureOrIdNfcEntity =
-//         await leerIdNfcUseCase(Params(idUsuario: "12"));
-//     yield* failureOrIdNfcEntity.fold((failure) async* {
-//       print(
-//           'En Arbol_bloc getArbolPorIdNfcEvent al intentar leerIdNfcUseCase,  falla registrada es: ${_mapFailureToMessage(failure)}');
-//     }, (NfcEntity) async* {
-//       _idNfc = NfcEntity.idNfc;
-//       final failureOrSuccess =
-//           await comprobarIdNFCUseCase(Params(idNFC: NfcEntity.idNfc));
-//       failureOrSuccess.fold((failure) async* {
-//         print(
-//             'En Arbol_bloc getArbolPorIdNfcEvent al intentar comprobarIdNFCUseCase,  falla registrada es: ${_mapFailureToMessage(failure)}');
-//       }, (success) async* {
-//         final failureOrArboles =
-//             await getArbolPorIdNfcUseCase(Params(idNFC: _idNfc));
-//             failureOrArboles.fold((failure) {
-//               print(
-//             'En Arbol_bloc getArbolPorIdNfcEvent al intentar getArbolPorIdNfcUseCase,  falla registrada es: ${_mapFailureToMessage(failure)}');
-//             }, (arbol) {
 
-//             })
-//       });
-//     });
-//   },

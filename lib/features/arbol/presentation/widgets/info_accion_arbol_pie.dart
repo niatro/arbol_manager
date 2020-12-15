@@ -58,13 +58,6 @@ class InfoAccionArbolPie {
                                     return context.bloc<NfcBloc>().add(
                                         NfcEvent.verificadoIdNfc(
                                             value.nfcEntity.idNfc));
-                                    // Navigator.push(context,
-                                    //     MaterialPageRoute(builder: (context) {
-                                    //   return new NfcInfo(
-                                    //     nfcEntity: value.nfcEntity,
-                                    //     state: state,
-                                    //   );
-                                    // }));
 
                                     //TODO: mostrar otro showModalBottom
                                   },
@@ -188,10 +181,6 @@ class InfoAccionArbolPie {
                 Expanded(
                   child: RaisedButton(
                     onPressed: () {
-                      print(' En BOTON CERCA el CONTEXT que entra es $context');
-                      print(' En BOTON CERCA el ESTADO que entra es $state');
-                      print(tapPos);
-
                       context.bloc<ArbolMapaBloc>().add(
                             ArbolMapaEvent.getArbolesCercanosEvent(
                               state.maybeWhen(

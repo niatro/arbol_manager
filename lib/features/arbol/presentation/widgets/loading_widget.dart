@@ -61,3 +61,18 @@ class LoadingDualRing extends StatelessWidget {
     );
   }
 }
+
+class LoadingPulse extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.transparent,
+      child: Center(
+        child: SpinKitPulse(
+          color: Colors.blue[800],
+          size: 60.0,
+        ),
+      ),
+    );
+  }
+}

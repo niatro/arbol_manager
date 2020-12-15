@@ -10,7 +10,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../domain/entities/arboles_entity.dart';
 import '../../domain/entities/user_entity.dart';
+import '../pages/ficha_arbol_page.dart';
 import '../pages/home_catastrador.dart';
 import '../pages/home_cliente.dart';
 import '../pages/ingresar_grabar_arbol_form.dart';
@@ -25,6 +27,7 @@ class Routes {
   static const String homeCatastrador = '/home-catastrador';
   static const String ingresarGrabarArbolPage = '/ingresar-grabar-arbol-page';
   static const String homeCliente = '/home-cliente';
+  static const String fichaArbolPage = '/ficha-arbol-page';
   static const all = <String>{
     splashPage,
     signInPage,
@@ -32,6 +35,7 @@ class Routes {
     homeCatastrador,
     ingresarGrabarArbolPage,
     homeCliente,
+    fichaArbolPage,
   };
 }
 
@@ -45,6 +49,7 @@ class Router extends RouterBase {
     RouteDef(Routes.homeCatastrador, page: HomeCatastrador),
     RouteDef(Routes.ingresarGrabarArbolPage, page: IngresarGrabarArbolPage),
     RouteDef(Routes.homeCliente, page: HomeCliente),
+    RouteDef(Routes.fichaArbolPage, page: FichaArbolPage),
   ];
   @override
   Map<Type, AutoRouteFactory> get pagesMap => _pagesMap;
@@ -93,6 +98,16 @@ class Router extends RouterBase {
         settings: data,
       );
     },
+    FichaArbolPage: (data) {
+      final args = data.getArgs<FichaArbolPageArguments>(nullOk: false);
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => FichaArbolPage(
+          key: args.key,
+          arbol: args.arbol,
+        ),
+        settings: data,
+      );
+    },
   };
 }
 
@@ -133,6 +148,15 @@ extension RouterExtendedNavigatorStateX on ExtendedNavigatorState {
         Routes.homeCliente,
         arguments: HomeClienteArguments(usuario: usuario),
       );
+
+  Future<dynamic> pushFichaArbolPage({
+    Key key,
+    @required ArbolEntity arbol,
+  }) =>
+      push<dynamic>(
+        Routes.fichaArbolPage,
+        arguments: FichaArbolPageArguments(key: key, arbol: arbol),
+      );
 }
 
 /// ************************************************************************
@@ -158,4 +182,11 @@ class IngresarGrabarArbolPageArguments {
 class HomeClienteArguments {
   final UserEntity usuario;
   HomeClienteArguments({@required this.usuario});
+}
+
+/// FichaArbolPage arguments holder class
+class FichaArbolPageArguments {
+  final Key key;
+  final ArbolEntity arbol;
+  FichaArbolPageArguments({this.key, @required this.arbol});
 }

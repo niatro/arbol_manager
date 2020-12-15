@@ -140,12 +140,14 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
 
   @override
   Future<ArbolesEntityModelo> getArbolPorIdNFCRemoteData({String idNFC}) async {
+    print('en getArbol: $idNFC');
     final response = await client.post(
-      _url + "/bd/getArbolPorIdNFC.php",
+      _url + "/bd/getArbolPorIdNfc.php",
       body: {
         "idNFC": idNFC,
       },
     );
+    print(response.body);
     return _getArbolesOrFailureDeAcuerdoToServerResponse(response);
   }
 
@@ -155,7 +157,8 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
       final List<Map> jsonMaped =
           List<Map<String, dynamic>>.from(json.decode(response.body));
       final ArbolesEntityModelo arbolesEntityModelo =
-          ArbolesEntityModelo.fromJson(parsedListMapFromJson: jsonMaped);
+          ArbolesEntityModelo.fromJsonImportServer(
+              parsedListMapFromJson: jsonMaped);
       return arbolesEntityModelo;
     } else {
       throw ServerException();
@@ -164,6 +167,7 @@ class ArbolesRemoteDataSourceImpl extends ArbolesRemoteDataSource {
 
   @override
   Future<bool> verificarSiExisteIdNfcRemoteData({String idNFC}) async {
+    print('en verificar: $idNFC');
     final response = await client.post(
       _url + "/bd/comprobarIdNFC.php",
       body: {

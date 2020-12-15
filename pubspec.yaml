@@ -97,5 +97,7 @@ flutter:
   assets:
     - assets/images/tree_256.png
     - assets/images/arbolito_128.png
+    - assets/images/Logo-App.png
+
 
 

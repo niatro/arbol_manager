@@ -38,6 +38,13 @@ class _$NfcEventTearOff {
       idNfc,
     );
   }
+
+// ignore: unused_element
+  leerVerificarConseguirEvent leerVerificarConseguir(UserEntity usuario) {
+    return leerVerificarConseguirEvent(
+      usuario,
+    );
+  }
 }
 
 /// @nodoc
@@ -52,6 +59,7 @@ mixin _$NfcEvent {
     @required Result verificadoIdNfc(String idNfc),
     @required Result escribirdNfc(String idNfc),
     @required Result arbolConseguidoPorIdNfc(String idNfc),
+    @required Result leerVerificarConseguir(UserEntity usuario),
   });
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
@@ -59,6 +67,7 @@ mixin _$NfcEvent {
     Result verificadoIdNfc(String idNfc),
     Result escribirdNfc(String idNfc),
     Result arbolConseguidoPorIdNfc(String idNfc),
+    Result leerVerificarConseguir(UserEntity usuario),
     @required Result orElse(),
   });
   @optionalTypeArgs
@@ -68,6 +77,7 @@ mixin _$NfcEvent {
     @required Result escribirdNfc(EscribirdNfcEvent value),
     @required
         Result arbolConseguidoPorIdNfc(ArbolConseguidoPorIdNfcEvent value),
+    @required Result leerVerificarConseguir(leerVerificarConseguirEvent value),
   });
   @optionalTypeArgs
   Result maybeMap<Result extends Object>({
@@ -75,6 +85,7 @@ mixin _$NfcEvent {
     Result verificadoIdNfc(VerificadoIdNfcEvent value),
     Result escribirdNfc(EscribirdNfcEvent value),
     Result arbolConseguidoPorIdNfc(ArbolConseguidoPorIdNfcEvent value),
+    Result leerVerificarConseguir(leerVerificarConseguirEvent value),
     @required Result orElse(),
   });
 }
@@ -136,11 +147,13 @@ class _$LeidoNfcEvent implements LeidoNfcEvent {
     @required Result verificadoIdNfc(String idNfc),
     @required Result escribirdNfc(String idNfc),
     @required Result arbolConseguidoPorIdNfc(String idNfc),
+    @required Result leerVerificarConseguir(UserEntity usuario),
   }) {
     assert(leidoNfc != null);
     assert(verificadoIdNfc != null);
     assert(escribirdNfc != null);
     assert(arbolConseguidoPorIdNfc != null);
+    assert(leerVerificarConseguir != null);
     return leidoNfc();
   }
 
@@ -151,6 +164,7 @@ class _$LeidoNfcEvent implements LeidoNfcEvent {
     Result verificadoIdNfc(String idNfc),
     Result escribirdNfc(String idNfc),
     Result arbolConseguidoPorIdNfc(String idNfc),
+    Result leerVerificarConseguir(UserEntity usuario),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -168,11 +182,13 @@ class _$LeidoNfcEvent implements LeidoNfcEvent {
     @required Result escribirdNfc(EscribirdNfcEvent value),
     @required
         Result arbolConseguidoPorIdNfc(ArbolConseguidoPorIdNfcEvent value),
+    @required Result leerVerificarConseguir(leerVerificarConseguirEvent value),
   }) {
     assert(leidoNfc != null);
     assert(verificadoIdNfc != null);
     assert(escribirdNfc != null);
     assert(arbolConseguidoPorIdNfc != null);
+    assert(leerVerificarConseguir != null);
     return leidoNfc(this);
   }
 
@@ -183,6 +199,7 @@ class _$LeidoNfcEvent implements LeidoNfcEvent {
     Result verificadoIdNfc(VerificadoIdNfcEvent value),
     Result escribirdNfc(EscribirdNfcEvent value),
     Result arbolConseguidoPorIdNfc(ArbolConseguidoPorIdNfcEvent value),
+    Result leerVerificarConseguir(leerVerificarConseguirEvent value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -262,11 +279,13 @@ class _$VerificadoIdNfcEvent implements VerificadoIdNfcEvent {
     @required Result verificadoIdNfc(String idNfc),
     @required Result escribirdNfc(String idNfc),
     @required Result arbolConseguidoPorIdNfc(String idNfc),
+    @required Result leerVerificarConseguir(UserEntity usuario),
   }) {
     assert(leidoNfc != null);
     assert(verificadoIdNfc != null);
     assert(escribirdNfc != null);
     assert(arbolConseguidoPorIdNfc != null);
+    assert(leerVerificarConseguir != null);
     return verificadoIdNfc(idNfc);
   }
 
@@ -277,6 +296,7 @@ class _$VerificadoIdNfcEvent implements VerificadoIdNfcEvent {
     Result verificadoIdNfc(String idNfc),
     Result escribirdNfc(String idNfc),
     Result arbolConseguidoPorIdNfc(String idNfc),
+    Result leerVerificarConseguir(UserEntity usuario),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -294,11 +314,13 @@ class _$VerificadoIdNfcEvent implements VerificadoIdNfcEvent {
     @required Result escribirdNfc(EscribirdNfcEvent value),
     @required
         Result arbolConseguidoPorIdNfc(ArbolConseguidoPorIdNfcEvent value),
+    @required Result leerVerificarConseguir(leerVerificarConseguirEvent value),
   }) {
     assert(leidoNfc != null);
     assert(verificadoIdNfc != null);
     assert(escribirdNfc != null);
     assert(arbolConseguidoPorIdNfc != null);
+    assert(leerVerificarConseguir != null);
     return verificadoIdNfc(this);
   }
 
@@ -309,6 +331,7 @@ class _$VerificadoIdNfcEvent implements VerificadoIdNfcEvent {
     Result verificadoIdNfc(VerificadoIdNfcEvent value),
     Result escribirdNfc(EscribirdNfcEvent value),
     Result arbolConseguidoPorIdNfc(ArbolConseguidoPorIdNfcEvent value),
+    Result leerVerificarConseguir(leerVerificarConseguirEvent value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -389,11 +412,13 @@ class _$EscribirdNfcEvent implements EscribirdNfcEvent {
     @required Result verificadoIdNfc(String idNfc),
     @required Result escribirdNfc(String idNfc),
     @required Result arbolConseguidoPorIdNfc(String idNfc),
+    @required Result leerVerificarConseguir(UserEntity usuario),
   }) {
     assert(leidoNfc != null);
     assert(verificadoIdNfc != null);
     assert(escribirdNfc != null);
     assert(arbolConseguidoPorIdNfc != null);
+    assert(leerVerificarConseguir != null);
     return escribirdNfc(idNfc);
   }
 
@@ -404,6 +429,7 @@ class _$EscribirdNfcEvent implements EscribirdNfcEvent {
     Result verificadoIdNfc(String idNfc),
     Result escribirdNfc(String idNfc),
     Result arbolConseguidoPorIdNfc(String idNfc),
+    Result leerVerificarConseguir(UserEntity usuario),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -421,11 +447,13 @@ class _$EscribirdNfcEvent implements EscribirdNfcEvent {
     @required Result escribirdNfc(EscribirdNfcEvent value),
     @required
         Result arbolConseguidoPorIdNfc(ArbolConseguidoPorIdNfcEvent value),
+    @required Result leerVerificarConseguir(leerVerificarConseguirEvent value),
   }) {
     assert(leidoNfc != null);
     assert(verificadoIdNfc != null);
     assert(escribirdNfc != null);
     assert(arbolConseguidoPorIdNfc != null);
+    assert(leerVerificarConseguir != null);
     return escribirdNfc(this);
   }
 
@@ -436,6 +464,7 @@ class _$EscribirdNfcEvent implements EscribirdNfcEvent {
     Result verificadoIdNfc(VerificadoIdNfcEvent value),
     Result escribirdNfc(EscribirdNfcEvent value),
     Result arbolConseguidoPorIdNfc(ArbolConseguidoPorIdNfcEvent value),
+    Result leerVerificarConseguir(leerVerificarConseguirEvent value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -521,11 +550,13 @@ class _$ArbolConseguidoPorIdNfcEvent implements ArbolConseguidoPorIdNfcEvent {
     @required Result verificadoIdNfc(String idNfc),
     @required Result escribirdNfc(String idNfc),
     @required Result arbolConseguidoPorIdNfc(String idNfc),
+    @required Result leerVerificarConseguir(UserEntity usuario),
   }) {
     assert(leidoNfc != null);
     assert(verificadoIdNfc != null);
     assert(escribirdNfc != null);
     assert(arbolConseguidoPorIdNfc != null);
+    assert(leerVerificarConseguir != null);
     return arbolConseguidoPorIdNfc(idNfc);
   }
 
@@ -536,6 +567,7 @@ class _$ArbolConseguidoPorIdNfcEvent implements ArbolConseguidoPorIdNfcEvent {
     Result verificadoIdNfc(String idNfc),
     Result escribirdNfc(String idNfc),
     Result arbolConseguidoPorIdNfc(String idNfc),
+    Result leerVerificarConseguir(UserEntity usuario),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -553,11 +585,13 @@ class _$ArbolConseguidoPorIdNfcEvent implements ArbolConseguidoPorIdNfcEvent {
     @required Result escribirdNfc(EscribirdNfcEvent value),
     @required
         Result arbolConseguidoPorIdNfc(ArbolConseguidoPorIdNfcEvent value),
+    @required Result leerVerificarConseguir(leerVerificarConseguirEvent value),
   }) {
     assert(leidoNfc != null);
     assert(verificadoIdNfc != null);
     assert(escribirdNfc != null);
     assert(arbolConseguidoPorIdNfc != null);
+    assert(leerVerificarConseguir != null);
     return arbolConseguidoPorIdNfc(this);
   }
 
@@ -568,6 +602,7 @@ class _$ArbolConseguidoPorIdNfcEvent implements ArbolConseguidoPorIdNfcEvent {
     Result verificadoIdNfc(VerificadoIdNfcEvent value),
     Result escribirdNfc(EscribirdNfcEvent value),
     Result arbolConseguidoPorIdNfc(ArbolConseguidoPorIdNfcEvent value),
+    Result leerVerificarConseguir(leerVerificarConseguirEvent value),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -584,6 +619,145 @@ abstract class ArbolConseguidoPorIdNfcEvent implements NfcEvent {
 
   String get idNfc;
   $ArbolConseguidoPorIdNfcEventCopyWith<ArbolConseguidoPorIdNfcEvent>
+      get copyWith;
+}
+
+/// @nodoc
+abstract class $leerVerificarConseguirEventCopyWith<$Res> {
+  factory $leerVerificarConseguirEventCopyWith(
+          leerVerificarConseguirEvent value,
+          $Res Function(leerVerificarConseguirEvent) then) =
+      _$leerVerificarConseguirEventCopyWithImpl<$Res>;
+  $Res call({UserEntity usuario});
+}
+
+/// @nodoc
+class _$leerVerificarConseguirEventCopyWithImpl<$Res>
+    extends _$NfcEventCopyWithImpl<$Res>
+    implements $leerVerificarConseguirEventCopyWith<$Res> {
+  _$leerVerificarConseguirEventCopyWithImpl(leerVerificarConseguirEvent _value,
+      $Res Function(leerVerificarConseguirEvent) _then)
+      : super(_value, (v) => _then(v as leerVerificarConseguirEvent));
+
+  @override
+  leerVerificarConseguirEvent get _value =>
+      super._value as leerVerificarConseguirEvent;
+
+  @override
+  $Res call({
+    Object usuario = freezed,
+  }) {
+    return _then(leerVerificarConseguirEvent(
+      usuario == freezed ? _value.usuario : usuario as UserEntity,
+    ));
+  }
+}
+
+/// @nodoc
+class _$leerVerificarConseguirEvent implements leerVerificarConseguirEvent {
+  const _$leerVerificarConseguirEvent(this.usuario) : assert(usuario != null);
+
+  @override
+  final UserEntity usuario;
+
+  @override
+  String toString() {
+    return 'NfcEvent.leerVerificarConseguir(usuario: $usuario)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is leerVerificarConseguirEvent &&
+            (identical(other.usuario, usuario) ||
+                const DeepCollectionEquality().equals(other.usuario, usuario)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(usuario);
+
+  @override
+  $leerVerificarConseguirEventCopyWith<leerVerificarConseguirEvent>
+      get copyWith => _$leerVerificarConseguirEventCopyWithImpl<
+          leerVerificarConseguirEvent>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  Result when<Result extends Object>({
+    @required Result leidoNfc(),
+    @required Result verificadoIdNfc(String idNfc),
+    @required Result escribirdNfc(String idNfc),
+    @required Result arbolConseguidoPorIdNfc(String idNfc),
+    @required Result leerVerificarConseguir(UserEntity usuario),
+  }) {
+    assert(leidoNfc != null);
+    assert(verificadoIdNfc != null);
+    assert(escribirdNfc != null);
+    assert(arbolConseguidoPorIdNfc != null);
+    assert(leerVerificarConseguir != null);
+    return leerVerificarConseguir(usuario);
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeWhen<Result extends Object>({
+    Result leidoNfc(),
+    Result verificadoIdNfc(String idNfc),
+    Result escribirdNfc(String idNfc),
+    Result arbolConseguidoPorIdNfc(String idNfc),
+    Result leerVerificarConseguir(UserEntity usuario),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (leerVerificarConseguir != null) {
+      return leerVerificarConseguir(usuario);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  Result map<Result extends Object>({
+    @required Result leidoNfc(LeidoNfcEvent value),
+    @required Result verificadoIdNfc(VerificadoIdNfcEvent value),
+    @required Result escribirdNfc(EscribirdNfcEvent value),
+    @required
+        Result arbolConseguidoPorIdNfc(ArbolConseguidoPorIdNfcEvent value),
+    @required Result leerVerificarConseguir(leerVerificarConseguirEvent value),
+  }) {
+    assert(leidoNfc != null);
+    assert(verificadoIdNfc != null);
+    assert(escribirdNfc != null);
+    assert(arbolConseguidoPorIdNfc != null);
+    assert(leerVerificarConseguir != null);
+    return leerVerificarConseguir(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  Result maybeMap<Result extends Object>({
+    Result leidoNfc(LeidoNfcEvent value),
+    Result verificadoIdNfc(VerificadoIdNfcEvent value),
+    Result escribirdNfc(EscribirdNfcEvent value),
+    Result arbolConseguidoPorIdNfc(ArbolConseguidoPorIdNfcEvent value),
+    Result leerVerificarConseguir(leerVerificarConseguirEvent value),
+    @required Result orElse(),
+  }) {
+    assert(orElse != null);
+    if (leerVerificarConseguir != null) {
+      return leerVerificarConseguir(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class leerVerificarConseguirEvent implements NfcEvent {
+  const factory leerVerificarConseguirEvent(UserEntity usuario) =
+      _$leerVerificarConseguirEvent;
+
+  UserEntity get usuario;
+  $leerVerificarConseguirEventCopyWith<leerVerificarConseguirEvent>
       get copyWith;
 }
 

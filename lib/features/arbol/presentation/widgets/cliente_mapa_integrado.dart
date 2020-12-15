@@ -9,6 +9,7 @@ import 'package:flutterapparbol/features/arbol/application/auth/auth_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/nfc/nfc_bloc.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:flutterapparbol/features/arbol/presentation/routes/router.gr.dart';
+import 'package:flutterapparbol/features/arbol/presentation/pages/ficha_arbol_page.dart';
 import 'package:flutterapparbol/features/arbol/presentation/widgets/google_map_widget.dart';
 import 'package:flutterapparbol/features/arbol/presentation/widgets/google_mapa_cliente_widget.dart';
 import 'package:flutterapparbol/features/arbol/presentation/widgets/loading_widget.dart';
@@ -119,7 +120,7 @@ class ClienteMapaIntegrado extends StatelessWidget {
                                   ArbolMapaEvent.getArbolesCercanosEvent(
                                       state.maybeWhen(
                                           mapaDesplegado: (l, a, p, u, i, ir) {
-                                        return "-33.39848065129757,-70.59791651315805";
+                                        return "${p.latitude}.${p.longitude}";
                                       }, orElse: () {
                                         return "-33.37679954804514,-70.56944723226297";
                                       }),
@@ -130,10 +131,32 @@ class ClienteMapaIntegrado extends StatelessWidget {
                           child: Icon(Icons.add),
                         ),
                         const SizedBox(height: 8),
-                        FloatingActionButton(
-                          heroTag: null,
-                          onPressed: () {},
-                          child: Icon(Icons.wifi),
+                        BlocProvider<NfcBloc>(
+                          create: (context) => getIt<NfcBloc>(),
+                          child: BlocConsumer<NfcBloc, NfcState>(
+                            listener: (context, state) {},
+                            builder: (context, state) {
+                              return state.maybeMap((value) {
+                                if (value.arbol != null) {
+                                  ExtendedNavigator.of(context)
+                                      .pushFichaArbolPage(
+                                          arbol: value
+                                              .arbol.listaArbolEntity.last);
+                                }
+                                return FloatingActionButton(
+                                  heroTag: null,
+                                  onPressed: () {
+                                    return context.bloc<NfcBloc>().add(
+                                        NfcEvent.leerVerificarConseguir(
+                                            usuario));
+                                  },
+                                  child: Icon(Icons.wifi),
+                                );
+                              }, loadingNfcState: (_) {
+                                return LoadingPulse();
+                              }, orElse: () {});
+                            },
+                          ),
                         ),
                         const SizedBox(width: 8),
                       ],
