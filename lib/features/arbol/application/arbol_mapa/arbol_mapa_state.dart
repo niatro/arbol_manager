@@ -22,5 +22,7 @@ abstract class ArbolMapaState with _$ArbolMapaState {
     UserEntity usuario,
     BitmapDescriptor markerIcon,
     BitmapDescriptor markerIconResto,
+    MapType mapType,
+    bool mostrar,
   }) = MapaDesplegadoState;
 }

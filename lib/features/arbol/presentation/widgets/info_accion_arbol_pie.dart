@@ -184,7 +184,7 @@ class InfoAccionArbolPie {
                       context.bloc<ArbolMapaBloc>().add(
                             ArbolMapaEvent.getArbolesCercanosEvent(
                               state.maybeWhen(
-                                  mapaDesplegado: (l, a, p, u, i, ir) {
+                                  mapaDesplegado: (l, a, p, u, i, ir, mt, ver) {
                                 return tapPos.latitude.toString() +
                                     ',' +
                                     tapPos.longitude.toString();

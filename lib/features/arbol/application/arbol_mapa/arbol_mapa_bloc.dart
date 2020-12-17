@@ -125,6 +125,7 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
             tapPosition: e.tapPosicion,
             markerIcon: e.markerIcon,
             markerIconResto: e.markerIconResto,
+            mapType: e.mapType,
           );
         } else {
           ArbolEntity arbolVacioPosicion = _generarArbolMarcador(e.tapPosicion);
@@ -138,6 +139,26 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
             tapPosition: e.tapPosicion,
             markerIcon: e.markerIcon,
             markerIconResto: e.markerIconResto,
+            mapType: e.mapType,
+          );
+        }
+      },
+      cambiarMapa: (e) async* {
+        if (e.cambiar == true) {
+          yield ArbolMapaState.mapaDesplegado(
+            latLong: e.localizacion,
+            arboles: e.arboles,
+            markerIcon: e.markerIcon,
+            markerIconResto: e.markerIconResto,
+            mapType: MapType.normal,
+          );
+        } else {
+          yield ArbolMapaState.mapaDesplegado(
+            latLong: e.localizacion,
+            arboles: e.arboles,
+            markerIcon: e.markerIcon,
+            markerIconResto: e.markerIconResto,
+            mapType: MapType.satellite,
           );
         }
       },
@@ -213,5 +234,3 @@ class ArbolMapaBloc extends Bloc<ArbolMapaEvent, ArbolMapaState> {
     return arbolVacioPosicion;
   }
 }
-
-

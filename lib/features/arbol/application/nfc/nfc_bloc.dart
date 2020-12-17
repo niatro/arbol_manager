@@ -63,9 +63,10 @@ class NfcBloc extends Bloc<NfcEvent, NfcState> {
 
           yield* failureOrSuccess.fold((failure) async* {
             print(
-                'En nfc_bloc getArbolPorIdNfcEvent al intentar comprobarIdNFCUseCase falla id ya registrado');
+                'En nfc_bloc getArbolPorIdNfcEvent al intentar comprobarIdNFCUseCase falla id ');
           }, (success) async* {
-            if (success = true) {
+            print('En nfc_bloc al verificar si existe chip $success');
+            if (success == true) {
               final failureOrArboles =
                   await getArbolPorIdNFCUseCase(Params(idNFC: _idNfc));
               print(
@@ -87,8 +88,8 @@ class NfcBloc extends Bloc<NfcEvent, NfcState> {
               yield NfcState(
                 nfcEntity: NfcEntity,
                 arbol: null,
-                estaRegistrado: true,
-                showErrorMessages: false,
+                estaRegistrado: false,
+                showErrorMessages: true,
                 failure: null,
               );
             }

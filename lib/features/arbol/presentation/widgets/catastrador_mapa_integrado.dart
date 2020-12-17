@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterapparbol/core/constants/lista_de_arboles_test.dart';
 import 'package:flutterapparbol/features/arbol/application/arbol_mapa/arbol_mapa_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/auth/auth_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/nfc/nfc_bloc.dart';
@@ -54,15 +55,17 @@ class CatastradorMapaIntegrado extends StatelessWidget {
               );
             },
           ),
-          BlocListener<ArbolMapaBloc, ArbolMapaState>(
-            listener: (context, state) {
-              state.maybeMap(orElse: () {});
-            },
-          )
+          // BlocListener<ArbolMapaBloc, ArbolMapaState>(
+          //   listener: (context, state) {
+          //     state.maybeMap(orElse: () {});
+          //   },
+          // )
         ],
         child: BlocConsumer<ArbolMapaBloc, ArbolMapaState>(
           listener: (context, state) {
             state.maybeMap(
+              initial: (_) {},
+              loading: (_) {},
               coordenadasObtenidas: (_) {},
               desplegandoArbolesCercanos: (s) {
                 return s;
@@ -76,13 +79,90 @@ class CatastradorMapaIntegrado extends StatelessWidget {
           builder: (context, state) {
             return Scaffold(
                 appBar: AppBar(
-                  title: const Text('Modulo Catastrador'),
+                  title: const Text('Catastrador'),
+                  centerTitle: true,
                   leading: IconButton(
                     icon: Icon(Icons.exit_to_app),
                     onPressed: () {
                       context.bloc<AuthBloc>().add(const AuthEvent.signedOut());
                     },
                   ),
+                  actions: <Widget>[
+                    IconButton(
+                        icon: Icon(Icons.map_outlined),
+                        onPressed: () async {
+                          final Uint8List _markerIcon = await getBytesFromAsset(
+                              'assets/images/tree_256.png', 200);
+                          var _icon = BitmapDescriptor.fromBytes(_markerIcon);
+                          await context
+                              .bloc<ArbolMapaBloc>()
+                              .add(ArbolMapaEvent.cambiarMapa(
+                                localizacion: state.maybeWhen(mapaDesplegado:
+                                    (l, a, p, u, i, ir, mt, ver) {
+                                  return l;
+                                }, orElse: () {
+                                  return LatLng(
+                                      -33.37679954804514, -70.56944723226297);
+                                }),
+                                cambiar: true,
+                                markerIcon: state.maybeWhen(mapaDesplegado:
+                                    (l, a, p, u, i, ir, mt, ver) {
+                                  return i;
+                                }, orElse: () {
+                                  return customIcon;
+                                }),
+                                markerIconResto: state.maybeWhen(mapaDesplegado:
+                                    (l, a, p, u, i, ir, mt, ver) {
+                                  return ir;
+                                }, orElse: () {
+                                  return customIcon;
+                                }),
+                                arboles: state.maybeWhen(mapaDesplegado:
+                                    (l, a, p, u, i, ir, mt, ver) {
+                                  return a;
+                                }, orElse: () {
+                                  return arbolesEntityTest;
+                                }),
+                              ));
+                        }),
+                    IconButton(
+                        icon: Icon(Icons.satellite_outlined),
+                        onPressed: () async {
+                          final Uint8List _markerIcon = await getBytesFromAsset(
+                              'assets/images/tree_256.png', 200);
+                          var _icon = BitmapDescriptor.fromBytes(_markerIcon);
+                          await context
+                              .bloc<ArbolMapaBloc>()
+                              .add(ArbolMapaEvent.cambiarMapa(
+                                localizacion: state.maybeWhen(mapaDesplegado:
+                                    (l, a, p, u, i, ir, mt, ver) {
+                                  return l;
+                                }, orElse: () {
+                                  return LatLng(
+                                      -33.37679954804514, -70.56944723226297);
+                                }),
+                                cambiar: false,
+                                markerIcon: state.maybeWhen(mapaDesplegado:
+                                    (l, a, p, u, i, ir, mt, ver) {
+                                  return i;
+                                }, orElse: () {
+                                  return customIcon;
+                                }),
+                                markerIconResto: state.maybeWhen(mapaDesplegado:
+                                    (l, a, p, u, i, ir, mt, ver) {
+                                  return ir;
+                                }, orElse: () {
+                                  return customIcon;
+                                }),
+                                arboles: state.maybeWhen(mapaDesplegado:
+                                    (l, a, p, u, i, ir, mt, ver) {
+                                  return a;
+                                }, orElse: () {
+                                  return arbolesEntityTest;
+                                }),
+                              ));
+                        }),
+                  ],
                 ),
                 body: state.maybeMap(initial: (_) {
                   return LoadingWhite();
@@ -93,6 +173,7 @@ class CatastradorMapaIntegrado extends StatelessWidget {
                     context: context,
                     customIcon: customIcon,
                     usuario: usuario,
+                    mapType: s.mapType,
                   );
                 }, loading: (_) {
                   return LoadingWhite();
@@ -108,7 +189,7 @@ class CatastradorMapaIntegrado extends StatelessWidget {
                     await context.bloc<ArbolMapaBloc>().add(
                           ArbolMapaEvent.getArbolesCercanosEvent(
                               state.maybeWhen(
-                                  mapaDesplegado: (l, a, p, u, i, ir) {
+                                  mapaDesplegado: (l, a, p, u, i, ir, mt, ver) {
                                 return "-33.39848065129757,-70.59791651315805";
                               }, orElse: () {
                                 return "-33.37679954804514,-70.56944723226297";
@@ -123,18 +204,5 @@ class CatastradorMapaIntegrado extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  _createMarker(BuildContext context) {
-    print('aqui ok');
-
-    if (customIcon == null) {
-      ImageConfiguration configuration = createLocalImageConfiguration(context);
-      BitmapDescriptor.fromAssetImage(configuration, 'assets/tree_256.png')
-          .then((icon) {
-        customIcon = icon;
-      });
-      print(customIcon);
-    }
   }
 }

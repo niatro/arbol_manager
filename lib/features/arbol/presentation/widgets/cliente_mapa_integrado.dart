@@ -1,9 +1,13 @@
 import 'dart:typed_data';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:flushbar/flushbar_helper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterapparbol/core/constants/lista_de_arboles_test.dart';
 import 'package:flutterapparbol/features/arbol/application/arbol_mapa/arbol_mapa_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/auth/auth_bloc.dart';
 import 'package:flutterapparbol/features/arbol/application/nfc/nfc_bloc.dart';
@@ -33,7 +37,6 @@ class ClienteMapaIntegrado extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('entramos al mapa del cliente');
     return MultiBlocProvider(
       providers: [
         BlocProvider<ArbolMapaBloc>(
@@ -77,13 +80,89 @@ class ClienteMapaIntegrado extends StatelessWidget {
           builder: (context, state) {
             return Scaffold(
                 appBar: AppBar(
-                  title: const Text('Modulo Municipal'),
+                  title: const Text('Vitacura'),
                   leading: IconButton(
                     icon: Icon(Icons.exit_to_app),
                     onPressed: () {
                       context.bloc<AuthBloc>().add(const AuthEvent.signedOut());
                     },
                   ),
+                  actions: <Widget>[
+                    IconButton(
+                        icon: Icon(Icons.map_outlined),
+                        onPressed: () async {
+                          final Uint8List _markerIcon = await getBytesFromAsset(
+                              'assets/images/tree_256.png', 200);
+                          var _icon = BitmapDescriptor.fromBytes(_markerIcon);
+                          await context
+                              .bloc<ArbolMapaBloc>()
+                              .add(ArbolMapaEvent.cambiarMapa(
+                                localizacion: state.maybeWhen(mapaDesplegado:
+                                    (l, a, p, u, i, ir, mt, ver) {
+                                  return l;
+                                }, orElse: () {
+                                  return LatLng(
+                                      -33.37679954804514, -70.56944723226297);
+                                }),
+                                cambiar: true,
+                                markerIcon: state.maybeWhen(mapaDesplegado:
+                                    (l, a, p, u, i, ir, mt, ver) {
+                                  return i;
+                                }, orElse: () {
+                                  return customIcon;
+                                }),
+                                markerIconResto: state.maybeWhen(mapaDesplegado:
+                                    (l, a, p, u, i, ir, mt, ver) {
+                                  return ir;
+                                }, orElse: () {
+                                  return customIcon;
+                                }),
+                                arboles: state.maybeWhen(mapaDesplegado:
+                                    (l, a, p, u, i, ir, mt, ver) {
+                                  return a;
+                                }, orElse: () {
+                                  return arbolesEntityTest;
+                                }),
+                              ));
+                        }),
+                    IconButton(
+                        icon: Icon(Icons.satellite_outlined),
+                        onPressed: () async {
+                          final Uint8List _markerIcon = await getBytesFromAsset(
+                              'assets/images/tree_256.png', 200);
+                          var _icon = BitmapDescriptor.fromBytes(_markerIcon);
+                          await context
+                              .bloc<ArbolMapaBloc>()
+                              .add(ArbolMapaEvent.cambiarMapa(
+                                localizacion: state.maybeWhen(mapaDesplegado:
+                                    (l, a, p, u, i, ir, mt, ver) {
+                                  return l;
+                                }, orElse: () {
+                                  return LatLng(
+                                      -33.37679954804514, -70.56944723226297);
+                                }),
+                                cambiar: false,
+                                markerIcon: state.maybeWhen(mapaDesplegado:
+                                    (l, a, p, u, i, ir, mt, ver) {
+                                  return i;
+                                }, orElse: () {
+                                  return customIcon;
+                                }),
+                                markerIconResto: state.maybeWhen(mapaDesplegado:
+                                    (l, a, p, u, i, ir, mt, ver) {
+                                  return ir;
+                                }, orElse: () {
+                                  return customIcon;
+                                }),
+                                arboles: state.maybeWhen(mapaDesplegado:
+                                    (l, a, p, u, i, ir, mt, ver) {
+                                  return a;
+                                }, orElse: () {
+                                  return arbolesEntityTest;
+                                }),
+                              ));
+                        }),
+                  ],
                 ),
                 body: state.maybeMap(initial: (_) {
                   return LoadingWhite();
@@ -94,6 +173,7 @@ class ClienteMapaIntegrado extends StatelessWidget {
                     context: context,
                     customIcon: customIcon,
                     usuario: usuario,
+                    mapType: s.mapType,
                   );
                 }, loading: (_) {
                   return LoadingWhite();
@@ -108,25 +188,31 @@ class ClienteMapaIntegrado extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         FloatingActionButton(
+                          child: Icon(Icons.add),
                           onPressed: () async {
                             final Uint8List markerIconResto =
                                 await getBytesFromAsset(
                                     'assets/images/arbolito_128.png', 100);
-                            var iconResto =
+                            var _iconMarkerResto =
                                 BitmapDescriptor.fromBytes(markerIconResto);
                             await context.bloc<ArbolMapaBloc>().add(
                                   ArbolMapaEvent.getArbolesCercanosEvent(
-                                      state.maybeWhen(
-                                          mapaDesplegado: (l, a, p, u, i, ir) {
-                                        return "${p.latitude}.${p.longitude}";
+                                      state.maybeWhen(mapaDesplegado:
+                                          (l, a, p, u, i, ir, mt, ver) {
+                                        print(p);
+                                        print(l);
+                                        if (p != null) {
+                                          return "${p.latitude},${p.longitude}";
+                                        } else {
+                                          return "${l.latitude},${l.longitude}";
+                                        }
                                       }, orElse: () {
                                         return "-33.37679954804514,-70.56944723226297";
                                       }),
                                       50,
-                                      iconResto),
+                                      _iconMarkerResto),
                                 );
                           },
-                          child: Icon(Icons.add),
                         ),
                         const SizedBox(height: 8),
                         BlocProvider<NfcBloc>(
@@ -140,6 +226,10 @@ class ClienteMapaIntegrado extends StatelessWidget {
                                       .pushFichaArbolPage(
                                           arbol: value
                                               .arbol.listaArbolEntity.last);
+                                } else if (value.showErrorMessages == true) {
+                                  // FlushbarHelper.createError(
+                                  //         message: 'no registrado')
+                                  //     .show(context);
                                 }
                                 return FloatingActionButton(
                                   heroTag: null,

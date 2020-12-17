@@ -7,6 +7,13 @@ abstract class ArbolMapaEvent with _$ArbolMapaEvent {
     int distancia,
     BitmapDescriptor markerIconResto,
   ) = GetArbolesCercanosEvent;
+  const factory ArbolMapaEvent.cambiarMapa({
+    LatLng localizacion,
+    bool cambiar,
+    ArbolesEntity arboles,
+    BitmapDescriptor markerIcon,
+    BitmapDescriptor markerIconResto,
+  }) = cambiarMapaEvent;
   const factory ArbolMapaEvent.getCoordenadasEvent() = GetCoordenadasEvent;
   const factory ArbolMapaEvent.onTapPantalla({
     LatLng tapPosicion,
@@ -14,5 +21,6 @@ abstract class ArbolMapaEvent with _$ArbolMapaEvent {
     LatLng localizacion,
     BitmapDescriptor markerIcon,
     BitmapDescriptor markerIconResto,
+    MapType mapType,
   }) = OnTapPantallaEvent;
 }

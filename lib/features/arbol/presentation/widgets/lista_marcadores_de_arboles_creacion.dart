@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutterapparbol/features/arbol/domain/entities/user_entity.dart';
 import 'package:flutterapparbol/features/arbol/presentation/routes/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapparbol/features/arbol/application/arbol_mapa/arbol_mapa_bloc.dart';
 import 'package:flutterapparbol/features/arbol/domain/entities/arboles_entity.dart';
 import 'package:flutterapparbol/features/arbol/presentation/widgets/info_accion_arbol_pie.dart';
+import 'package:flutterapparbol/features/arbol/presentation/widgets/info_accion_arbol_pie_cliente.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -11,14 +13,16 @@ class ListaMarcadoresDeArbolesCreacion {
   List<Marker> listaMarcadores;
   ListaMarcadoresDeArbolesCreacion({@required this.listaMarcadores});
 
-  factory ListaMarcadoresDeArbolesCreacion.desarrollo(
-      {ArbolesEntity arboles,
-      BitmapDescriptor icono,
-      BitmapDescriptor iconoResto,
-      BuildContext context,
-      ArbolMapaState state,
-      LatLng tapPos,
-      LatLng localizacion}) {
+  factory ListaMarcadoresDeArbolesCreacion.desarrollo({
+    ArbolesEntity arboles,
+    BitmapDescriptor icono,
+    BitmapDescriptor iconoResto,
+    BuildContext context,
+    ArbolMapaState state,
+    LatLng tapPos,
+    LatLng localizacion,
+    UserEntity usuario,
+  }) {
     final List<Marker> result = [];
     int sizeLista = arboles.listaArbolEntity.length;
     Uuid uuid = Uuid();
@@ -26,14 +30,29 @@ class ListaMarcadoresDeArbolesCreacion {
     final _infoWindow = InfoWindow(
         title: "Acciones",
         onTap: () {
-          new InfoAccionArbolPie(
-                  context: context,
-                  iconMarkerResto: iconoResto,
-                  state: state,
-                  tapPos: tapPos,
-                  localizacion: localizacion,
-                  arboles: arboles)
-              .mostrarFichaArbol(context, state, tapPos, localizacion, arboles);
+          print(usuario.detallePerfilUser);
+          if (usuario.detallePerfilUser == "Capturador" ||
+              usuario.detallePerfilUser == "Admin") {
+            new InfoAccionArbolPie(
+                    context: context,
+                    iconMarkerResto: iconoResto,
+                    state: state,
+                    tapPos: tapPos,
+                    localizacion: localizacion,
+                    arboles: arboles)
+                .mostrarFichaArbol(
+                    context, state, tapPos, localizacion, arboles);
+          } else if (usuario.detallePerfilUser == "Visualizador") {
+            new InfoAccionArbolPieCliente(
+                    context: context,
+                    iconMarkerResto: iconoResto,
+                    state: state,
+                    tapPos: tapPos,
+                    localizacion: localizacion,
+                    arboles: arboles)
+                .mostrarFichaArbol(
+                    context, state, tapPos, localizacion, arboles);
+          }
         });
 
     if (arboles.listaArbolEntity != []) {

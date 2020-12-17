@@ -16,15 +16,17 @@ class GoogleMapaClienteWidget extends StatelessWidget {
   final BuildContext context;
   final BitmapDescriptor customIcon;
   final UserEntity usuario;
+  final MapType mapType;
 
-  const GoogleMapaClienteWidget({
-    Key key,
-    @required this.state,
-    @required this.s,
-    @required this.context,
-    @required this.customIcon,
-    @required this.usuario,
-  }) : super(key: key);
+  const GoogleMapaClienteWidget(
+      {Key key,
+      @required this.state,
+      @required this.s,
+      @required this.context,
+      @required this.customIcon,
+      @required this.usuario,
+      this.mapType})
+      : super(key: key);
 
   Future<Uint8List> getBytesFromAsset(String path, int width) async {
     ByteData data = await rootBundle.load(path);
@@ -40,6 +42,9 @@ class GoogleMapaClienteWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     print('llego al widget final $usuario');
     return GoogleMap(
+      mapType: mapType,
+      myLocationEnabled: true,
+      myLocationButtonEnabled: true,
       initialCameraPosition: CameraPosition(
         target: state.maybeMap(
           mapaDesplegado: (s) {
@@ -66,6 +71,7 @@ class GoogleMapaClienteWidget extends StatelessWidget {
               localizacion: s.latLong,
               markerIcon: icon,
               markerIconResto: iconResto,
+              mapType: this.mapType,
             ));
       },
       markers: Set.of(
@@ -77,11 +83,9 @@ class GoogleMapaClienteWidget extends StatelessWidget {
           state: s,
           tapPos: s.tapPosition,
           localizacion: s.latLong,
+          usuario: usuario,
         ).listaMarcadores,
       ),
-      mapType: MapType.normal,
-      myLocationEnabled: true,
-      myLocationButtonEnabled: true,
     );
   }
 }
